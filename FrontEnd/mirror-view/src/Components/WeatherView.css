@@ -1,10 +1,18 @@
 .weatherView {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 .weather {
+    /* background-color: black; */
+    display: flex;
+    text-align: end;
+    width: 25%;
+    padding: 40px;
 }
 .clock {
-
+    width: 25%;
+    padding: 40px;
 }
-
+.weather-icon {
+    width: 30%;
+}
