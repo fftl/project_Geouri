@@ -1,7 +1,6 @@
 import axios from 'axios';
 import "./WeatherView.css";
 import React, { useEffect, useState } from "react";
-axios.defaults.withCredentials = true;
 
 const dateBuilder = (d) => {
   let months = [
@@ -25,6 +24,18 @@ const dateBuilder = (d) => {
   let date = d.getDate();
   return `${year}/${month}/${date}/${day}`;
 };
+
+const API_URL = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
+const API_KEY = '69uzLTxIhDhe0%2B7h1abUTcvqeldVAy3%2F7YKCfz40fXd3Ryi66MqoOW9zKkQb8hNl0As20EIqaKg0rEUmc6dk%2FA%3D%3D';
+
+axios({
+  method:'get',
+  url: `${API_URL}?serviceKey=${API_KEY}&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20230126&base_time=0600&nx=37&ny=127`,
+}).then((res) => {
+    console.log(res?.data.response.body.items)
+}).catch((er) => {
+    console.log(er)
+})
 
 const today = new Date();
 
@@ -64,18 +75,7 @@ function WeatherView() {
     }
     return today.getDate()
   }
-  const base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
-
-  axios({
-    method:'get',
-    url: `${base_url}?serviceKey=${process.env.REACT_APP_WEATHER_API_KEY}&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20230126&base_time=0600&nx=37&ny=127`,
-  }
-  ).then((res) => {
-    console.log(res);
-    setWeather(res.data)
-  }).catch((err) => {
-    console.log(err)
-  })
+  
 
   return (
     <div className='weatherView'>
