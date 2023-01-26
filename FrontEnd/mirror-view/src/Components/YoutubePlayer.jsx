@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import Youtube from "./Youtube";
 
 function YoutubePlayer(){
     const API_URL = `https://www.googleapis.com/youtube/v3/playlistItems?`;
@@ -14,26 +15,20 @@ function YoutubePlayer(){
             method:'get',
             url: `${API_URL}part=snippet&playlistId=${playlistId}&maxResults=50&key=${API_KEY}`,
         }).then((res) => {
-            const list = res?.data?.items;
-            const new_list = list.map((x) => x?.snippet.resourceId.videoId); 
-            setPlayList([new_list])
+            const list = res.data.items;
+            // const new_list = list.map((x) => x?.snippet.resourceId.videoId); 
+            // setPlayList([new_list])
+            setPlayList(list)
         }).catch((err) => {
             console.log(err)
         })
         
     }, [])
-    
-    const videoList = playList.map((id) => {
-        
-        return (
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        )
-    })
-    
+
     return (
         <React.Fragment>
             <div>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/UExwaDJ4Y1QyQ0pBSXpmX09rY1ZZanc4cWh4N3d5eEVfRC41NkI0NEY2RDEwNTU3Q0M2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <Youtube playList={playList}/>
             </div>
         </React.Fragment>
     )
