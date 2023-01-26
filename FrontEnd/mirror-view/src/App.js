@@ -1,12 +1,14 @@
 import React from "react";
 import "./App.css";
-import Home from "./Pages/Home";
+import WeatherView from "./Components/WeatherView";
+import Youtube from "./Components/Youtube";
 
 function App() {
   return (
-    <React.Fragment>
-      <Home />
-    </React.Fragment>
+    <div>
+      <WeatherView />
+      <Youtube />
+    </div>
   );
 }
 

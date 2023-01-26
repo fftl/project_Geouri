@@ -9,6 +9,10 @@ import sun from "../assets/weatherIcons/039-sun.png";
 import windy from "../assets/weatherIcons/010-windy.png";
 import React, { useState } from "react";
 
+const api = {
+  key: process.env.REACT_APP_WEATHER_API,
+  base: "http://api.openweathermap.org/data/2.5/",
+};
 const dateBuilder = (d) => {
   let months = [
     "01",
@@ -93,6 +97,8 @@ function WeatherView() {
   })
 
 
+
+  //   let iconurl = "http://openweathermap.org/img/w/" + icon + ".png";
 
   return (
     <div className='weatherView'>
