@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const api = {
-  key: "***REMOVED***",
+  //   key: "***REMOVED***",
+  key: process.env.REACT_APP_WEATHER_API,
   base: "http://api.openweathermap.org/data/2.5/",
 };
 const dateBuilder = (d) => {
@@ -31,6 +32,7 @@ function WeatherView() {
   const city = "Seoul";
   const url = `${api.base}weather?q=${city}&appid=${api.key}`;
   const [weather, setWeather] = useState("");
+  //   const [icon, setIcon] = useState("");
   axios.get(url).then((responseData) => {
     const data = responseData.data;
     setWeather({
@@ -39,13 +41,18 @@ function WeatherView() {
       main: data.weather[0].main,
       loading: false,
     });
+    // setIcon(data.weather[0].icon);
+    // console.log(data.weather[0].icon);
   });
+
+  //   let iconurl = "http://openweathermap.org/img/w/" + icon + ".png";
 
   return (
     <div>
       <h1>{city}</h1>
       <h2>{(weather.temperature - 273.15).toFixed(2)}</h2>
       <h2>{dateBuilder(new Date())}</h2>
+      {/* <img src={iconurl} /> */}
     </div>
   );
 }
