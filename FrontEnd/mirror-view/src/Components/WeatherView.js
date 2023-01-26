@@ -1,12 +1,7 @@
 import axios from 'axios';
+import "./WeatherView.css";
 import React, { useEffect, useState } from "react";
 axios.defaults.withCredentials = true;
-
-
-const api = {
-  key: '69uzLTxIhDhe0%2B7h1abUTcvqeldVAy3%2F7YKCfz40fXd3Ryi66MqoOW9zKkQb8hNl0As20EIqaKg0rEUmc6dk%2FA%3D%3D',
-  base: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst0",
-};
 
 const dateBuilder = (d) => {
   let months = [
@@ -69,22 +64,11 @@ function WeatherView() {
     }
     return today.getDate()
   }
+  const base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
 
   axios({
     method:'get',
-    url: api.base,
-    withCredentials: true,
-    data: {
-      serviceKey: api.key,
-      pageNo: 1,
-      numOfRows: 1000,
-      dataType: 'JSON',
-      base_date: `${today.getFullYear()}${month()}${date()-1}`,
-      base_time: `0500`,
-      // mock data 
-      nx: 37,
-      ny: 127
-    }
+    url: `${base_url}?serviceKey=${process.env.REACT_APP_WEATHER_API_KEY}&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20230126&base_time=0600&nx=37&ny=127`,
   }
   ).then((res) => {
     console.log(res);
@@ -92,30 +76,19 @@ function WeatherView() {
   }).catch((err) => {
     console.log(err)
   })
-  // axios.get(url).then((responseData) => {
-  //   const data = responseData.data;
-  //   console.log(data)
-  //   // setWeather({
-  //   //   id: data.weather[0].id,
-  //   //   temperature: data.main.temp,
-  //   //   main: data.weather[0].main,
-  //   //   loading: false,
-  //   // });
-  
-  // );
 
   return (
-    <>
-      <div>
+    <div className='weatherView'>
+      <div className='clock'>
         <h1>날짜시간</h1>
         <h2>{dateBuilder(new Date())}</h2>
         <h2>{clock}</h2>
       </div>
-      <div>
+      <div className='weather'>
         <h1>날씨</h1>
         <h2>{(weather.temperature - 273.15).toFixed(2)}</h2>
       </div>
-    </>
+    </div>
   );
 }
 
