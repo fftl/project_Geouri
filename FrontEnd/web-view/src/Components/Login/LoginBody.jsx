@@ -1,7 +1,7 @@
 import React from "react";
-import { useRef } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as userActions } from "../../Redux/modules/user";
 import "./Login.css";
 
 // 아이디, 비밀번호 input, 자동로그인 input, login btn
@@ -18,24 +18,24 @@ function LoginBody(){
     // const [password, setPassword] = useState("");
     const [checkAutoLogin, setCheckAutoLogin] = useState(false);
 
-    const emailInput = useRef(null);
-    const passwordInput = useRef(null);
-    const checkLoginInput = useRef(null);
-
     const onReset = () => {
         setInputs({
             email: '',
             password: '',
         })
     }
-
+    const dispatch = useDispatch();
+    
     const onClick = () => {
-        const email = inputs.email;
-        const pwd = inputs.password;
-        
+        const userInfo = {
+            email : inputs.email,
+            password : inputs.password,
+        }   
+        dispatch(userActions.login(userInfo));
+
     }
 
-    // email 유효성 검사 해야해
+    // email 유효성 검사해야해
     // const renderErrorMessage = (name) =>
     //     name === errorMessages.name && (
     //         <div className="error">{errorMessages.message}</div>

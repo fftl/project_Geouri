@@ -7,3 +7,7 @@
 .login-btn-box{
     width: 100%;
 }
+.autoLogin-box{
+    justify-content: center;
+    display: flex;
+}
