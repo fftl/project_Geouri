@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { LoginBody } from "../Components";
+import { RegisterUser } from "../Components/SignUp/RegisterUser";
+import { actionCreators as userActions } from "../Redux/modules/user";
 
 function SignUp(props) {
   const dispatch = useDispatch();
@@ -48,13 +49,20 @@ function SignUp(props) {
       checked: checked,
     };
 
-    dispatch(LoginBody(body)).then((res) => {
-      if (res.payload.success) {
+    dispatch(userActions.registerUser(body)).then((res)=>{
+      if(res.payload.success){
         props.history.push("/login");
-      } else {
-        alert("Error");
+      }else{
+        alert("Error")
       }
-    });
+    })
+    // dispatch(RegisterUser(body)).then((res) => {
+    //   if (res.payload.success) {
+    //     props.history.push("/login");
+    //   } else {
+    //     alert("Error");
+    //   }
+    // });
   };
 
   return (

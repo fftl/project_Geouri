@@ -1,4 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction, handleActions } from "redux-actions";
 
 //Action TYPE
 const LOGIN = "user/LOGIN";
@@ -8,25 +8,29 @@ const login = createAction(LOGIN);
 
 //InitialState
 const initialState = {
-    user : null,
-}
+  user: null,
+};
 
 const userReducer = handleActions({
-    [LOGIN] : (state, action) => ({ user: state.user })
-})
-export default function reducer(state = initialState, action = {}){
-    switch (action.type) {
-        case "user/LOGIN": {
-            console.log(action);
-            return {...state, user:action.type}
-        }
-        default :
-            return state;
+  [LOGIN]: (state, action) => ({ user: state.user }),
+});
+export default function reducer(state = initialState, action = {}) {
+  switch (action.type) {
+    case "user/LOGIN": {
+      console.log(action);
+      return { ...state, user: action.type };
     }
+    case "user/REGISTER_USER": {
+      return { ...state, register: action.payload };
+    }
+    default:
+      return state;
+  }
 }
 
 const actionCreators = {
-    login, 
-}
+  login,
+  registerUser,
+};
 
 export { actionCreators };
