@@ -1,37 +1,41 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import Youtube from "./Youtube";
+import React from "react";
 
 function YoutubePlayer(){
-    const API_URL = `https://www.googleapis.com/youtube/v3/playlistItems?`;
-    const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
     const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
-    const [playList, setPlayList] = useState([]);
-
-    useEffect(() => {
-        
-        axios({
-            method:'get',
-            url: `${API_URL}part=snippet&playlistId=${playlistId}&maxResults=50&key=${API_KEY}`,
-        }).then((res) => {
-            const list = res.data.items;
-            // const new_list = list.map((x) => x?.snippet.resourceId.videoId); 
-            // setPlayList([new_list])
-            setPlayList(list)
-        }).catch((err) => {
-            console.log(err)
-        })
-        
-    }, [])
+    // mute 해주거나
+    const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&mute=1&autoplay=1&loop=1`
+    // unmute 하거나
+    const url2 = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1`
 
     return (
-        <React.Fragment>
-            <div>
-                <Youtube playList={playList}/>
-            </div>
-        </React.Fragment>
+        <>
+            <iframe  
+                id="ytplayer" 
+                type="text/html" 
+                width="640" height="360"
+                src={url}></iframe>
+        </>
     )
 }
 
 export default YoutubePlayer;
+
+    // const API_URL = `https://www.googleapis.com/youtube/v3/playlistItems?`;
+    // const API_KEY = '***REMOVED***';
+    // const [playList, setPlayList] = useState([]);
+
+    // useEffect(() => {
+    //     axios({
+    //         method:'get',
+    //         url: `${API_URL}part=snippet&playlistId=${playlistId}&maxResults=50&key=${API_KEY}`,
+    //     }).then((res) => {
+    //         const list = res.data.items;
+    //         const videoIdList = list.map((item) => {
+    //             return item.snippet.resourceId.videoId
+    //         })
+    //         setPlayList([...playList, videoIdList])
+    //     }).catch((err) => {
+    //         console.log(err)
+    //     })
+        
+    // }, [])
