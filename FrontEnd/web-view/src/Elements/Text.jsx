@@ -1,8 +1,11 @@
 import React from "react";
 
 function Text(props){
+    const { children } = props;
     return (
-        <p></p>
+        <p style={{display:"flex"}}>
+            { children }
+        </p>
     )   
 }
 
