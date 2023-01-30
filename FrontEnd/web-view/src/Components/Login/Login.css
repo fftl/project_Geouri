@@ -1,0 +1,16 @@
+.login-form-div{
+    /* display: flex; */
+}
+.input-box{
+    width: 100%;
+}
+.login-btn-box{
+    width: 100%;
+}
+.errorEmail{
+    color: red;
+    padding: 4px 8px;
+}
+.noErrEmail{
+    padding: 12px 8px;
+}
