@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import { useState, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { asyncLogin } from '../../Redux/modules/user';
 import { Button } from '@mui/material';
+=======
+import React from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as userActions } from "../../Redux/modules/user";
+>>>>>>> feature/fe-signup
 import "./Login.css";
 
 // [영어와 숫자 포함]@[영문만].[영문만 2~3글자] 
@@ -21,11 +28,16 @@ function LoginBody(){
 
     const [checkAutoLogin, setCheckAutoLogin] = useState(false);
 
+<<<<<<< HEAD
     const onReset = useCallback(() => {
+=======
+    const onReset = () => {
+>>>>>>> feature/fe-signup
         setInputs({
             email: '',
             password: '',
         })
+<<<<<<< HEAD
     }, [email, password])
 
 
@@ -45,6 +57,26 @@ function LoginBody(){
         }
     }
     
+=======
+    }
+    const dispatch = useDispatch();
+    
+    const onClick = () => {
+        const userInfo = {
+            email : inputs.email,
+            password : inputs.password,
+        }   
+        dispatch(userActions.login(userInfo));
+
+    }
+
+    // email 유효성 검사해야해
+    // const renderErrorMessage = (name) =>
+    //     name === errorMessages.name && (
+    //         <div className="error">{errorMessages.message}</div>
+    //     );
+
+>>>>>>> feature/fe-signup
     return (
         <>
             <form action="" id="login-form">

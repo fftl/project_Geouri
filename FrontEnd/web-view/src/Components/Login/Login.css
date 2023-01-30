@@ -7,10 +7,16 @@
 .login-btn-box{
     width: 100%;
 }
+<<<<<<< HEAD
 .errorEmail{
     color: red;
     padding: 4px 8px;
 }
 .noErrEmail{
     padding: 12px 8px;
+=======
+.autoLogin-box{
+    justify-content: center;
+    display: flex;
+>>>>>>> feature/fe-signup
 }
