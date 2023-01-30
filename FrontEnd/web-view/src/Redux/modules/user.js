@@ -81,6 +81,7 @@ const userReducer = handleActions({
   [LOGIN]: (state, action) => ({ user: state.user }),
   [REGISTER_USER]: (state, action) => ({ user: state.user }),
 });
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case "user/LOGIN": {
