@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -24,4 +26,6 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "userKey")
     private User user;
+    @OneToMany(mappedBy = "member")
+    private List<Snapshot> snapshotList = new ArrayList<>();
 }
