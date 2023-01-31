@@ -53,10 +53,10 @@ def handle_client(client_socket, client_sockets, addr):
             cmd = data.decode();
             print('>> Received from ' + addr[0], ':', addr[1], cmd)
 
-
-            hellomsg = "hello"
-            for client in client_sockets:
-                client.send(hellomsg.encode())
+            if cmd == 'newperson':
+                test = "테스트 메세지입니다."
+                for client in client_sockets:
+                    client.send(test.encode())
 
 
 
