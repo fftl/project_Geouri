@@ -1,19 +1,77 @@
 import socket
-import argparse
+import requests
 import threading
+import face_recog_module
 import time
 
-host = "127.0.0.1"
-port = 4000
+host = 'localhost'
+port = 9998
+
+
+class FacerecogModule:
+    def recog(self):
+        output = face_recog_module.face_recognitiontest()
+        datas = {'name': output}
+        url = "http://i8a201.p.ssafy.io:8080/test"
+
+        output = ""
+        try:
+            response = requests.post(url, data=datas)
+            output = response.text
+            print(output)
+
+        except requests.exceptions.Timeout as errd:
+            print("Timeout Error : ", errd)
+
+        except requests.exceptions.ConnectionError as errc:
+            print("Error Connecting : ", errc)
+
+        except requests.exceptions.HTTPError as errb:
+            print("Http Error : ", errb)
+
+        # Any Error except upper exception
+        except requests.exceptions.RequestException as erra:
+            print("AnyException : ", erra)
+
+        return output
+
 
 def handle_client(client_socket, addr):
     print("접속한 클라이언트의 주소 입니다. : ", addr)
-    user = client_socket.recv(1024)
-    string = "안녕하세요? %s 님"%user.decode()
-    client_socket.sendall(string.encode())
-    print("1초 후 클라이언트가 종료됩니다.")
-    time.sleep(1)
+
+    while True:
+        try:
+            data = client_socket.recv(1024)
+            if not data:
+                print('>> Disconnected by ' + addr[0], ':', addr[1])
+                break
+
+            cmd = data.decode();
+            print('>> Received from ' + addr[0], ':', addr[1], cmd)
+
+            if cmd == 'newperson':
+                detected_person = FacerecogModule()
+
+                print(detected_person.recog())
+
+
+        except ConnectionResetError as e:
+            print('>> Disconnected by ' + addr[0], ':', addr[1])
+            break
+
     client_socket.close()
+
+
+
+
+
+
+
+    # string = "안녕하세요? %s 님"%user.decode()
+    # client_socket.sendall(string.encode())
+    # print("1초 후 클라이언트가 종료됩니다.")
+    # time.sleep(1)
+    # client_socket.close()
 
 def accept_func():
     global server_socket
@@ -24,7 +82,6 @@ def accept_func():
     #ip주소와 port번호를 함께 socket에 바인드 한다.
     #포트의 범위는 1-65535 사이의 숫자를 사용할 수 있다.
     server_socket.bind((host, port))
-
     #서버가 최대 5개의 클라이언트의 접속을 허용한다.
     server_socket.listen(5)
 
@@ -44,15 +101,4 @@ def accept_func():
 
 
 if __name__ == '__main__':
-    #parser와 관련된 메서드 정리된 블로그 : https://docs.python.org/ko/3/library/argparse.html
-    #description - 인자 도움말 전에 표시할 텍스트 (기본값: none)
-    #help - 인자가 하는 일에 대한 간단한 설명.
-    parser = argparse.ArgumentParser(description="\nJoo's server\n-p port\n")
-    parser.add_argument('-p', help="port")
-
-    args = parser.parse_args()
-    try:
-        port = int(args.p)
-    except:
-        pass
     accept_func()
