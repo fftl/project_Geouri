@@ -8,18 +8,19 @@ function YoutubePlayer() {
   // unmute 하거나
   const url2 = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1`;
 
-  return (
-    <div className="container" style={{ position: "absolute", zIndex: "90" }}>
-      <iframe
-        title="ytplayer"
-        id="ytplayer"
-        type="text/html"
-        width="1000"
-        height="700"
-        src={url}
-      ></iframe>
-    </div>
-  );
+    return (
+        <>
+          <div className="ytplayer-iframe-div">
+            <iframe  
+                className="ytplayer-iframe"
+                title="ytplayer"
+                id="ytplayer" 
+                type="text/html" 
+                width="640" height="360"
+                src={url}></iframe>
+          </div>
+        </>
+    )
 }
 
 export default YoutubePlayer;

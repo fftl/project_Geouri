@@ -95,17 +95,17 @@ function WeatherView() {
 
 
   return (
-    <div className='weatherView'>
+    <div className='header'>
       <div className='clock'>
-        <h2>{dateBuilder(new Date())}</h2>
-        <h2>{clockBuilder(new Date())}</h2>
+        <p>{dateBuilder(new Date())}</p>
+        <p>{clockBuilder(new Date())}</p>
       </div>
       <div className='weather'>
         <div>
           <img className='weather-icon' src={icon} alt="weather-icon"/>
         </div>
-        <h2>{weather}</h2>
-        <h2>{temp}℃</h2>
+        <p>{weather}</p>
+        <p>{temp}℃</p>
       </div>
     </div>
   );

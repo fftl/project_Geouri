@@ -1,18 +1,20 @@
-.weatherView {
+.header {
     display: flex;
-    justify-content: space-between;
+    height: 10%;
+    position: relative;
+}
+.clock {
+    display: grid;
+    height: 100%;
 }
 .weather {
     /* background-color: black; */
-    display: flex;
-    text-align: end;
-    width: 25%;
-    padding: 40px;
-}
-.clock {
-    width: 25%;
-    padding: 40px;
+    /* position: absolute; */
+    display: grid;
+    height: 100%;
 }
 .weather-icon {
-    width: 30%;
+    position: absolute;
+    top: 0%;
+    height: 100%;
 }

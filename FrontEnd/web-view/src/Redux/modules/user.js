@@ -5,11 +5,11 @@ import { handleActions } from "redux-actions";
 
 //Action TYPE
 const LOGIN = "user/LOGIN";
-const REGISTER_USER = "user/REGISTER_USER";
+const SIGNUP = "user/SIGNUP";
 
 // Action creator
 const login = createAction(LOGIN);
-const registerUser = createAction(REGISTER_USER);
+const signup = createAction(SIGNUP);
 
 //InitialState
 const initialState = {
@@ -74,18 +74,24 @@ const userSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 //영현이~
+=======
+>>>>>>> cf088a45eee3a4b60090b6970d07e1ce2936b490
 const userReducer = handleActions({
   [LOGIN]: (state, action) => ({ user: state.user }),
-  [REGISTER_USER]: (state, action) => ({ user: state.user }),
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> cf088a45eee3a4b60090b6970d07e1ce2936b490
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case "user/LOGIN": {
       console.log(action);
       return { ...state, user: action.type };
     }
-    case "user/REGISTER_USER": {
+    case "user/SIGNUP": {
       return { ...state, register: action.payload };
     }
     default:
@@ -95,7 +101,7 @@ function reducer(state = initialState, action = {}) {
 
 const actionCreators = {
   login,
-  registerUser,
+  signup,
 };
 
 export { actionCreators };

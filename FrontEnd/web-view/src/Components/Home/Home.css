@@ -1,0 +1,4 @@
+.member-div {
+    display: grid;
+    grid-template-rows: 1fr 0.2fr;
+}
