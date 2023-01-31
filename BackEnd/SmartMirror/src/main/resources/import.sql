@@ -1,0 +1,1 @@
+insert 'KidsScript' values("")
