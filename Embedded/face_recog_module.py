@@ -70,7 +70,8 @@ class FaceRecog():
 
         return frame
 
-def face_recognitiontest():
+
+def detected_face():
     face_recog = FaceRecog()
     while not face_recog.found_face:
         face_recog.get_frame()
