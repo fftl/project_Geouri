@@ -1,14 +1,18 @@
 import React from "react";
+import Effect from "../Components/Effect";
 import HomeHeader from "../Components/HomeHeader";
-import YoutubePlayer from "../Components/YoutubePlayer";
+import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
+import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 
-function Home () {
-    return (
-        <React.Fragment>
-            <HomeHeader />
-            <YoutubePlayer />
-        </React.Fragment>
-    )
+function Home() {
+  return (
+    <React.Fragment>
+      <HomeHeader />
+      <Effect />
+      {/* <WashHandsVideo /> */}
+      <BrushTeethVideo />
+    </React.Fragment>
+  );
 }
 
 export default Home;
