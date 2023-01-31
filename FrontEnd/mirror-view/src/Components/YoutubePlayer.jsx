@@ -1,4 +1,5 @@
 import React from "react";
+import "./YoutubePlayer.css";
 
 function YoutubePlayer(){
     const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
@@ -9,12 +10,15 @@ function YoutubePlayer(){
 
     return (
         <>
+          <div className="ytplayer-iframe-div">
             <iframe  
+                className="ytplayer-iframe"
                 title="ytplayer"
                 id="ytplayer" 
                 type="text/html" 
                 width="640" height="360"
                 src={url}></iframe>
+          </div>
         </>
     )
 }
