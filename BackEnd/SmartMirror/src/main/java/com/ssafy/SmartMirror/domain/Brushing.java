@@ -16,5 +16,5 @@ import javax.persistence.Id;
 public class Brushing {
     @Id
     private Long memberKey; // 멤버 기본키
-    private String brushingTime;
+    private String brushingTime; // 양치 시간
 }

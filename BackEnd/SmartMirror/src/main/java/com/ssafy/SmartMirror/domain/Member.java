@@ -22,7 +22,7 @@ public class Member {
     private String nickname;
     private String birth;
     private String faceImage;
-    private boolean kidsMods;
+    private boolean kidsMode;
     @ManyToOne
     @JoinColumn(name = "userKey")
     private User user;
