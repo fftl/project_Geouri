@@ -1,3 +1,12 @@
+'''
+    (py3) $ pip install opencv-python
+    (py3) $ pip install opencv-contrib-python
+    (py3) $ pip install cmake (dlib설치 오류 해결)
+    (py3) $ pip install dlib
+    (py3) $ pip install face_recognition
+    (py3) $ pip install flask
+'''
+
 import face_recognition
 import cv2
 import os
