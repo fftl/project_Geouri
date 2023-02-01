@@ -1,9 +1,5 @@
-function Kids () {
-    return (
-        <>
-        
-        </>
-    )
+function Kids() {
+  return <></>;
 }
 
 export default Kids;
