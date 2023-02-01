@@ -8,36 +8,41 @@ import requests
 class FacerecogModule:
     def recog(self):
         output = face_recog_module.detected_face()
-        datas = {'name': output}
-        url = "http://i8a201.p.ssafy.io:8080/test"
+        # datas = {'name': output}
+        # url = "http://i8a201.p.ssafy.io:8080/test"
+        #
+        # output = ""
+        # try:
+        #     response = requests.post(url, data=datas)
+        #     output = response.text
+        #     print(output)
+        #
+        # except requests.exceptions.Timeout as errd:
+        #     print("Timeout Error : ", errd)
+        #
+        # except requests.exceptions.ConnectionError as errc:
+        #     print("Error Connecting : ", errc)
+        #
+        # except requests.exceptions.HTTPError as errb:
+        #     print("Http Error : ", errb)
+        #
+        # # Any Error except upper exception
+        # except requests.exceptions.RequestException as erra:
+        #     print("AnyException : ", erra)
 
-        output = ""
-        try:
-            response = requests.post(url, data=datas)
-            output = response.text
-            print(output)
-
-        except requests.exceptions.Timeout as errd:
-            print("Timeout Error : ", errd)
-
-        except requests.exceptions.ConnectionError as errc:
-            print("Error Connecting : ", errc)
-
-        except requests.exceptions.HTTPError as errb:
-            print("Http Error : ", errb)
-
-        # Any Error except upper exception
-        except requests.exceptions.RequestException as erra:
-            print("AnyException : ", erra)
-
-        json_object = { "user_name" : output}
-        json_string = json.dumps(json_object)
-        return json_string
+        return output
 
 
 def sendInfo(msg):
+
+    json_object = {
+        "cmd": "face_name",
+        "content": msg,
+    }
+    json_string = json.dumps(json_object)
+
     ws = create_connection("ws://localhost:9998")
-    ws.send(msg)
+    ws.send(json_string)
     ws.close()
 
 
