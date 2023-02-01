@@ -3,13 +3,15 @@ import time
 
 import websockets
 async def connect():
-    while True:
-        async with websockets.connect("ws://127.0.0.1:9998/") as websocket:
-            await websocket.send("react")
-            await asyncio.sleep(1)
-            print("client")
+
+    async with websockets.connect("ws://127.0.0.1:9998/") as websocket:
+        await websocket.send("react")
+        await asyncio.sleep(1)
+        print("client")
+        while True:
             response = await websocket.recv()
             print(response)
+
 
 
 if __name__ == "__main__":
