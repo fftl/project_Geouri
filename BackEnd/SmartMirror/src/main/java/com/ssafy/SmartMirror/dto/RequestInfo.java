@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @Getter
-public class InfoDto {
+public class RequestInfo {
     private String serialNumber;
     private Long memberKey;
 
