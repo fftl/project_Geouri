@@ -13,7 +13,7 @@ function YoutubePlayer(){
                 title="ytplayer"
                 id="ytplayer" 
                 type="text/html" 
-                width="640" height="360"
+                width="44%" height="83"
                 src={url}></iframe>
         </>
     )
