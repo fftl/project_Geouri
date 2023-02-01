@@ -1,2 +1,4 @@
-package com.ssafy.SmartMirror.service;public class SnapshotService {
+package com.ssafy.SmartMirror.service;
+
+public class SnapshotService {
 }

@@ -4,18 +4,18 @@ import com.ssafy.SmartMirror.service.KidsScriptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/kidsScript")
+@RequestMapping("/mirror")
 @RestController
-public class KidsScriptController {
+public class MirrorController {
 
     private KidsScriptService kidsScriptService;
 
     @Autowired
-    public KidsScriptController(KidsScriptService kidsScriptService) {
+    public MirrorController(KidsScriptService kidsScriptService) {
         this.kidsScriptService = kidsScriptService;
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/kidsScript/insert")
     public int insertKidsScript(@RequestParam("script") String script){
         System.out.println(script);
         int res = kidsScriptService.saveKidsScript(script);
