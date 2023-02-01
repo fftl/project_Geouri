@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-  actionCreators,
-  actionCreators as userActions,
-} from "../Redux/modules/user";
-import "../Components/SignUp/SignUp.css";
+import { RegisterUser } from "../Components/SignUp/RegisterUser";
+import { actionCreators as userActions } from "../Redux/modules/user";
 
 function SignUp(props) {
   const dispatch = useDispatch();
@@ -52,56 +49,47 @@ function SignUp(props) {
       checked: checked,
     };
 
-    dispatch(actionCreators.signup(body)).then((res) => {
-      if (res.payload.success) {
+    dispatch(userActions.registerUser(body)).then((res)=>{
+      if(res.payload.success){
         props.history.push("/login");
-      } else {
-        alert("Error");
+      }else{
+        alert("Error")
       }
-    });
+    })
+    // dispatch(RegisterUser(body)).then((res) => {
+    //   if (res.payload.success) {
+    //     props.history.push("/login");
+    //   } else {
+    //     alert("Error");
+    //   }
+    // });
   };
 
   return (
     <div>
-      <h1>회원가입</h1>
-      <form onSubmit={onSubmitHandler} className="signup-form">
-        <div className="signup-form-email">
-          <label htmlFor="email">Email</label>
-          <input type="email" value={email} onChange={onEmailHandler} />
-        </div>
-        <div className="signup-form-password">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={onPasswordHandler}
-          />
-        </div>
-        <div className="signup-form-confirmPassword">
-          <label htmlFor="confirmPassword">Password 확인</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={onConfirmPasswordHandler}
-          />
-        </div>
-        <div className="signup-form-name">
-          <label htmlFor="name">이름</label>
-          <input type="text" value={name} onChange={onNameHandler} />
-        </div>
-        <div className="signup-form-birthday">
-          <label htmlFor="birthday">생년월일</label>
-          <input type="text" value={birthday} onChange={onBirthdayHandler} />
-        </div>
+      <form>
+        <label htmlFor="email">Email</label>
+        <input type="email" value={email} onChange={onEmailHandler} />
+        <label htmlFor="password">Password</label>
+        <input type="password" value={password} onChange={onPasswordHandler} />
+        <label htmlFor="confirmPassword">Password 확인</label>
+        <input
+          type="password"
+          value={confirmPassword}
+          onChange={onConfirmPasswordHandler}
+        />
+        <label htmlFor="name">이름</label>
+        <input type="text" value={name} onChange={onNameHandler} />
+        <label htmlFor="birthday">생년월일</label>
+        <input type="text" value={birthday} onChange={onBirthdayHandler} />
         <br />
-        <div className="terms">
+        <div>
           이용약관, 개인정보 수집 및 이용,위치정보 이용약관(선택), 프로모션 안내
           메일 수신(선택)에 모두 동의합니다.
         </div>
-        <div className="signup-form-agree">
-          <input id="agree" type="checkbox" onChange={onCheckedHandler}></input>
-          <label htmlFor="agree">동의합니다</label>
-        </div>
+        <input type="checkbox" onChange={onCheckedHandler}>
+          동의합니다
+        </input>
         <button onClick={onSubmitHandler}>회원 가입</button>
       </form>
     </div>
