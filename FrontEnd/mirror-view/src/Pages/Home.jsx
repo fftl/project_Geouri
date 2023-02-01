@@ -1,16 +1,19 @@
 import React from "react";
-import Effect from "../Components/Effect";
-import HomeHeader from "../Components/HomeHeader";
-import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
-import WashHandsVideo from "../Components/Kids/WashHandsVideo";
+import { useSelector } from 'react-redux';
+import { HomeHeader } from "../Components";
+import { General, Kids } from './index';
 
 function Home() {
-  return (
+    // const is_child = useSelector(state => state.is_child);
+
+    return (
     <React.Fragment>
       <HomeHeader />
-      <Effect />
-      {/* <WashHandsVideo /> */}
-      <BrushTeethVideo />
+      {/* { is_child ? 
+        <Kids></Kids> : 
+        <General></General>
+      } */}
+      <General></General>
     </React.Fragment>
   );
 }
