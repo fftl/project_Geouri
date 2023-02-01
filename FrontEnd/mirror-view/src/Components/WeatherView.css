@@ -1,20 +1,20 @@
 .header {
-    display: flex;
-    height: 10%;
-    position: relative;
+  display: flex;
+  height: 20%;
+  position: relative;
 }
 .clock {
-    display: grid;
-    height: 100%;
+  display: grid;
+  height: 100%;
 }
 .weather {
-    /* background-color: black; */
-    /* position: absolute; */
-    display: grid;
-    height: 100%;
+  /* background-color: black; */
+  /* position: absolute; */
+  display: grid;
+  height: 100%;
 }
 .weather-icon {
-    position: absolute;
-    top: 0%;
-    height: 100%;
+  position: absolute;
+  top: 0%;
+  height: 100%;
 }
