@@ -2,27 +2,20 @@ import { useEffect, useState } from "react";
 
 const Socket = () => {
     
-    const webSocket = new WebSocket("ws://localhost:8765");
-
-    const openSocket = () => {
-        webSocket.onopen = () => {
-            console.log('open')
-        }
-    }
-    // const ws = new WebSocket("ws://localhost:9998");
+    const webSocket = new WebSocket("ws://localhost:9998");
 
     const [text,setText] = useState("");
     const [socket, setSocket] = useState(false);
     
-    useEffect(() => {
-        if(socket === false){
+    // useEffect(() => {
+    //     if(socket === false){
             
-        webSocket.onopen = () => {
-            setSocket(true)
-            console.log('open')
-        }
-        }
-    }, [socket]);
+    //     webSocket.onopen = () => {
+    //         setSocket(true)
+    //         console.log('open')
+    //     }
+    //     }
+    // }, [socket]);
 
     // 소켓 서버로 부터 메시지가 오면 호출되는 함수.
     webSocket.onmessage = function(message){
@@ -61,34 +54,6 @@ const Socket = () => {
         webSocket.send("Hello") // 서버에 데이터 전송
     }
     
-    // const setMessageRecived = (data) => {
-    //     const chat = document.createElement("msg");
-    //     const msg = document.createTextNode(data)
-    //     chat.appendChild(msg)
-
-    //     const chatLog = document.getElementById("receive-msg");
-    //     chatLog.appendChild(chat)
-    // }
-    // useEffect(() => {
-    //     initSocketConnection();
-    //     return () => {
-    //         disconnectSocket();
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     socket.on("receive_message", (data) => {
-    //       setMessageRecived(data.message);
-    //     });
-    //   }, [socket]);
-
-    // const sendMsg = () => {
-    //     // const a = JSON.parse(text)
-    //     // ws.send(text);
-    //     sendSocketMessage(text)
-    // }
-
-    // ws.onmessage = receiveMsg
 
     return (
         <>
