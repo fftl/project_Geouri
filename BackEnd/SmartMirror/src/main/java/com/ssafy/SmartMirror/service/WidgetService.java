@@ -1,2 +1,4 @@
-package com.ssafy.SmartMirror.service;public class WidgetService {
+package com.ssafy.SmartMirror.service;
+
+public class WidgetService {
 }

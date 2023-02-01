@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class AdultResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long responseKey;
+    private Long adultResponseKey;
     private Long resKey;
     private Long reqKey;
     private int reaction;
