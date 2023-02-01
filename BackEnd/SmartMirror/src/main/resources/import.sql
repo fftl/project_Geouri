@@ -24,6 +24,11 @@ insert into visit (member_key, visit_time) values (1, '2023-01-31 08:00:00');
 
 -- 양치기록
 insert into brushing (member_key, brushing_time) values (1, '2023-01-31 08:02:31');
+insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:02:31');
+insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:03:31');
+insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:04:31');
+insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:05:31');
+insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:06:31');
 
 -- 법정동코드
 insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 37.4893497823, 126.7297474239);

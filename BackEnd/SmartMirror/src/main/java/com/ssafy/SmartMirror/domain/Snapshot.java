@@ -21,8 +21,8 @@ public class Snapshot {
     private String img;
     private String created;
 
-    @JoinColumn(name="memberKey")
     @ManyToOne
+    @JoinColumn(referencedColumnName = "member_key", name = "memberKey")
     private Member member;
 
 
