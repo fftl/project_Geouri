@@ -1,4 +1,25 @@
 package com.ssafy.SmartMirror.service;
 
+import com.ssafy.SmartMirror.domain.Member;
+import com.ssafy.SmartMirror.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
 public class MemberService {
+
+    private MemberRepository memberRepository;
+
+    @Autowired
+    public MemberService(MemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    }
+
+    public Member findByMemberKey(Long memberKey) {
+        // member_key 에 해당하는 멤버 정보 DB 에서 read
+        Member member = memberRepository.findById(memberKey).orElse(null);
+        return member;
+    }
 }
