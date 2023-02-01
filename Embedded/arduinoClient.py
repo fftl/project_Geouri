@@ -66,10 +66,10 @@ if __name__ == '__main__':
 
             print(distance, detect_cnt, person_detected)
             if person_detected is False:
-                if distance < 15:
+                if distance < 20:
                     detect_cnt = detect_cnt + 1
             else:
-                if distance > 15:
+                if distance > 20:
                     detect_cnt = detect_cnt + 1
 
             if detect_cnt > 3:
