@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Getter
 @Entity
-public class Script {
+public class AdultScript {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
