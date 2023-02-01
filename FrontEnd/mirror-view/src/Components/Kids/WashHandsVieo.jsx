@@ -4,7 +4,7 @@ const WashHandsVideo = () => {
   return (
     <div className="container">
       <ReactPlayer
-        url={process.env.PUBLIC_URL + "../videos/handwash.mp4"}
+        url={process.env.PUBLIC_URL + "./videos/handwash.mp4"}
         width="1000px"
         height="700px"
         playing={true}

@@ -58,6 +58,7 @@ function Effect() {
     });
   }, 500);
 
-  return <div class="bg_heart"></div>;
+  return <div className="bg_heart"></div>;
 }
+
 export default Effect;
