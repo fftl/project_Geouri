@@ -1,5 +1,5 @@
 import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
-import WashHandsVideo from "../Components/Kids/WashHandsVieo";
+import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from '../Components/Kids/Effect';
 
 function Kids() {
