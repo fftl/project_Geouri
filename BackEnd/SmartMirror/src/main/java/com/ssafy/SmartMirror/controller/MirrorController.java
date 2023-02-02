@@ -70,10 +70,14 @@ public class MirrorController {
             if (getScriptDto.getReqKey() == 0) {
 
                 //3. 시간에 맞는 인사말 가져오기
-                int helloType = whatTime(LocalDateTime.now().getHour());
-                System.out.println("nowWhatTime, hello type은? >> " + helloType);
+//                int helloType = whatTime(LocalDateTime.now().getHour());
+                int helloType = 1; //아침 상황 테스트
+                //int helloType = 2; //점심 상황 테스트
+                //int helloType = 3; //저녁 상황 테스트
+                //int helloType = 4; //평상 상황 테스트
+
+                System.out.println("log - nowWhatTime, hello type은? >> " + helloType);
                 List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(getScriptDto.getReqKey(), getScriptDto.getReaction(), helloType);
-                System.out.println("가능한 질문 개수는 > " + kidsResponseList.size());
 
                 //가져온 응답할 수 있는 리스트 중에서 일단은 첫번째 응답을 사용(나중엔 랜덤)
                 //응답을 가지고 script 멘트를 조회합니다.
@@ -95,13 +99,12 @@ public class MirrorController {
 
                 return new ResponseEntity(responseDefault, HttpStatus.OK);
 
-                /** 첫 질문이 아닐 때 if (req_key != 0) */
-
+            /** 첫 질문이 아닐 때 if (req_key != 0) */
             } else {
 
                 //현재 시간의 정보와 마지막 양치 기록의 시간을 확인하여 양치 여부를 판단합니다.
                 LocalDateTime now = LocalDateTime.now();
-                System.out.println(now.toString());
+                System.out.println("log - 현재시간 : > " + now.toString());
                 int year = now.getYear();
                 int month = now.getMonthValue();
                 int day = now.getDayOfMonth();
@@ -114,17 +117,17 @@ public class MirrorController {
                 String[] times = date[1].split(":");
                 int brushingDaysSum = Integer.parseInt(days[0]) + Integer.parseInt(days[1]) + Integer.parseInt(days[2]);
 
+                /** 오늘 날짜에 양치한 기록이 하나라도 있다면!  */
                 if(daysSum == brushingDaysSum) {
                     int historyType = whatTime(Integer.parseInt(times[0]));
                     int nowType = whatTime(now.getHour());
 
-                    //양치기록의 시간 타입과 현재의 시간 타입이 같다면
-                    //손을 씻어야 합니다.
+                    /** 마지막 양치 기록과 현재 시간의 시간 타입이 같다면 양치를 이미 한 것!
+                     *  손씻기를 제안합니다! 손씻기 제안 resType == 7
+                     * */
                     if(historyType==nowType){
-                        System.out.println("손씻어야해!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
+                        System.out.println("log - 양치를 이미 했으므로 손씻기를 제안합니다.");
                         List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(getScriptDto.getReqKey(), getScriptDto.getReaction(), getScriptDto.getType());
-                        System.out.println("가능한 질문 개수는 > " + kidsResponseList.size());
 
                         //질문을 무사히 가져왔다면!
                         if(kidsResponseList.size()>0){
@@ -144,14 +147,17 @@ public class MirrorController {
                                     .data(responseScript)
                                     .build();
 
+                            return new ResponseEntity(responseDefault, HttpStatus.OK);
                         } else {
                             return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
                         }
-                    } else {
-                        System.out.println("양치하자@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-                        List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(getScriptDto.getReqKey(), getScriptDto.getReaction(), getScriptDto.getType());
-                        System.out.println("가능한 질문 개수는 > " + kidsResponseList.size());
+                    /** 오늘 양치를 하긴 했지만, 지금 시간타임이 아니었으므로 양치를 해야합니다.
+                     *  양치를 제안! 양치 제안 resType == 5
+                     * */
+                    } else {
+                        System.out.println("log - 이번 시간타임에는 양치를 하지 않았으므로 양치를 제안합니다.");
+                        List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(getScriptDto.getReqKey(), getScriptDto.getReaction(),  getScriptDto.getType());
 
                         //질문을 무사히 가져왔다면!
                         if(kidsResponseList.size()>0){
@@ -171,15 +177,17 @@ public class MirrorController {
                                     .data(responseScript)
                                     .build();
 
+                            return new ResponseEntity(responseDefault, HttpStatus.OK);
                         } else {
                             return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
                         }
                     }
+                    /** 오늘의 날짜에 양치한 기록이 아직 남아있지 않습니다!
+                     *  양치를 제안! 양치 제안 resType == 5
+                     * */
                 } else {
-                    System.out.println("오늘 처음 양치하넹##############################################################################################################################");
-
+                    System.out.println("log - 오늘 한번도 양치를 하지 않았습니다. 양치를 제안합니다.");
                     List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(getScriptDto.getReqKey(), getScriptDto.getReaction(), getScriptDto.getType());
-                    System.out.println("가능한 질문 개수는 > " + kidsResponseList.size());
 
                     //질문을 무사히 가져왔다면!
                     if(kidsResponseList.size()>0){
@@ -199,14 +207,12 @@ public class MirrorController {
                                 .data(responseScript)
                                 .build();
 
+                        return new ResponseEntity(responseDefault, HttpStatus.OK);
                     } else {
                         return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
                     }
                 }
-
-                return new ResponseEntity("여기까지 도달헀다?", HttpStatus.OK);
             }
-
         } else {
             return new ResponseEntity("어른 서비스는 아직 만들지 못했어요..", HttpStatus.OK);
         }
