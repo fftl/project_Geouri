@@ -5,11 +5,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Setter
 @Getter
-public class RequestKidsGetScript {
+public class RequestGetScript {
     private String serialNumber;
     private Long memberKey;
-    private Long scriptKey;
+    private Long reqKey;
     private int reaction;
+    private int type;
 }

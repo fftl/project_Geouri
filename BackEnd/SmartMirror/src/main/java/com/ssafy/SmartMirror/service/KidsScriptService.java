@@ -14,6 +14,7 @@ public class KidsScriptService {
         this.kidsScriptRepository = kidsScriptRepository;
     }
 
+    //어린이 스크립트 추가하기
     public int saveKidsScript(String script){
         //KidsScript 객체를 새로 생성
         KidsScript kidsScript = KidsScript.builder()
@@ -26,5 +27,12 @@ public class KidsScriptService {
 
         //reseponse 의 key값을 int로 변환하여 반환!
         return response.getScriptKey().intValue();
+    }
+
+    //어린이 스크립트 조회하기
+    public KidsScript getKidsScript(Long scriptKey){
+        System.out.println("getKidsScript, scriptKey >> " +scriptKey);
+        KidsScript kidsScript = kidsScriptRepository.findById(scriptKey).get();
+        return kidsScript;
     }
 }

@@ -23,5 +23,5 @@ public class KidsResponse {
     private Long resKey ;
     private Long reqKey;
     private int reaction;
-    private int type;
+    private int resType;
 }

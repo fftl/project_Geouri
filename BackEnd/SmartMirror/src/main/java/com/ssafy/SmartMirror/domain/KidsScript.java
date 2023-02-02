@@ -20,4 +20,5 @@ public class KidsScript {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scriptKey;
     private String script;
+    private int type;
 }
