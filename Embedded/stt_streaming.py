@@ -6,6 +6,7 @@ from websocket import create_connection
 from google.cloud import speech
 import pyaudio  # 파이썬에서 오디오 입력 사용
 import queue
+import json
 
 # Audio recording parameters
 RATE = 16000
@@ -100,8 +101,13 @@ def listen_print_loop(responses):
         else:   # 확정된 transcript라면
             print(transcript + overwrite_chars)
 
+            audio_data = {
+                "cmd": "voice_input",
+                "content": transcript.strip(),
+            }
+
             ws = create_connection("ws://localhost:9998")
-            ws.send(transcript)
+            ws.send(json.dumps(audio_data))
             ws.close()
 
 
