@@ -2,7 +2,7 @@ import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
 import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from "../Components/Kids/Effect";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Kids() {
   const member_info = useSelector(state => state?.member?.info);
@@ -24,7 +24,7 @@ function Kids() {
         <div class="arrow_box">안녕, {member_info?.name}아! {member_info.greeting}! 이를 닦아볼까?</div>
       : null
       }
-      {play_hand_wash_video ? (
+      {play_teeth_video ? (
         <div>
           <Effect />
           <WashHandsVideo />

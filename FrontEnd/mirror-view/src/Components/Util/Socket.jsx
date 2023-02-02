@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Socket = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
     //webSocket 통신
@@ -26,16 +27,18 @@ const Socket = () => {
   // 소켓을 통해 메시지가 전달된 경우, 실행되는 함수
   webSocket.onmessage = function (message) {
     if ( message.data === 'kid' ){
-      useHistory
       // store에 member정보를 dispatch 하여 넣기
       dispatch()
+      navigate('/kid')
     } else if ( message.data === 'adult'){
       // store에 member정보를 dispatch 하여 넣기
       dispatch()
+      navigate('/general')
     } else if ( message.data === 'wash_hand'){
-      dispatch
+      // store에 
+      dispatch()
     } else if ( message.data === 'brush_teeth'){
-      dispatch
+      dispatch()
     }
   
     const fileReader = new FileReader();
