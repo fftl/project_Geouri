@@ -70,21 +70,25 @@ if __name__ == '__main__':
             distance = float(response[:len(response) - 1].decode())
 
             print(distance, detect_cnt, person_detected)
-            if person_detected is False:
+            if person_detected is False: #newperson
                 if distance < 20:
                     detect_cnt = detect_cnt + 1
+
+                if detect_cnt > 3:
+                    facemodule = FacerecogModule()
+                    face_name = facemodule.recog()
+                    sendInfo(face_name)
+                    person_detected = not person_detected
+                    detect_cnt = 0
             else:
                 if distance > 20:
                     detect_cnt = detect_cnt + 1
 
-            if detect_cnt > 3:
-                if person_detected is False: #newperson
-                    facemodule = FacerecogModule()
-                    face_name = facemodule.recog()
-                    sendInfo(face_name)
-                else:
+                if detect_cnt > 10:
                     message = "leave"
                     sendInfo(message)
-                person_detected = not person_detected
-                detect_cnt = 0
+                    person_detected = not person_detected
+                    detect_cnt = 0
+
+
         time.sleep(0.5)

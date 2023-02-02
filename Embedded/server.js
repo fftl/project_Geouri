@@ -1,6 +1,6 @@
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer( { port: 9998 } );
-
+const rq = require('request');
 
 //접속되어 있는 모든 클라이언트들에게 동일한 메세지를 보내는 함수
 wss.broadcast = (message) => {
@@ -22,8 +22,25 @@ wss.on( 'connection', function(ws,request){
 
     const obj = JSON.parse(msg);
     const command = obj.cmd;
-    if(command == "face_name")
-        console.log("얼굴인식됨", obj.content)
+    if(command == "face_name"){
+      console.log("얼굴인식됨", obj.content)
+      const face_name = obj.content
+      
+      let options = {
+        uri: 'http://i8a201.p.ssafy.io/mirror/member',
+        method: 'POST',
+        body:{
+            "serialNumber": "A201_12345",
+            "memberKey": face_name
+        },
+        json:true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
+      };
+    
+      rq.post(options, function(err,httpResponse,body){
+          console.log(body)
+      });
+    }
+        
     else if(command === "person_leave")
         console.log("사람이 카메라 앞에서 없어짐.")
 
