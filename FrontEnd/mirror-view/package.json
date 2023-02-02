@@ -20,11 +20,8 @@
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
-<<<<<<< HEAD
     "redux-actions": "^2.6.5",
-=======
     "styled-components": "^5.3.6",
->>>>>>> c8a8e8436cc084e2052a9bfff92d1f3e98932af2
     "web-vitals": "^2.1.0",
     "yarn": "^1.22.19"
   },
