@@ -14,7 +14,7 @@ insert into widget (member_key, news, playlist, shot, calender) values (1, 1, 1,
 insert into playlist (member_key, link) values (1, "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy");
 
 -- 캘린더
-insert into calender (member_key, link) values (1, "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics");
+insert into calendar (member_key, link) values (1, "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics");
 
 -- 지역
 insert into region (member_key, dong_code) values (1, "2823710700");

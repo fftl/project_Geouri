@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Calender {
+public class Calendar {
     @Id
     private Long memberKey; // 멤버 기본키
     private String link;
