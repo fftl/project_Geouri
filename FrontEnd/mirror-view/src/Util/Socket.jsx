@@ -1,43 +1,53 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const Socket = () => {
-    
-    const webSocket = new WebSocket("ws://localhost:9998");
+  const dispatch = useDispatch();
 
-    const [text,setText] = useState("");
-    const [socket, setSocket] = useState(false);
-    
-    // useEffect(() => {
-    //     if(socket === false){
-            
-    //     webSocket.onopen = () => {
-    //         setSocket(true)
-    //         console.log('open')
-    //     }
-    //     }
-    // }, [socket]);
+    //webSocket 통신
+  const webSocket = new WebSocket("ws://localhost:9998");
 
-    // 소켓 서버로 부터 메시지가 오면 호출되는 함수.
-    webSocket.onmessage = function(message){
-    // 출력 area에 메시지를 표시한다.
-        console.log(message.data)
-        const div = document.getElementById('div')
-        const p = document.createElement('p')
-        p.innerText = message.data
-        div.appendChild(p)
+  // server에서 보내주는 메시지
+  const [message, setMessage] = useState(null);
+
+  // client에서 보낼 메시지
+  const [text, setText] = useState("");
+
+  // 소켓이 열려있는 상태일 때 계속 진행되는 함수
+  webSocket.onopen = function () {
+    // console.log(webSocket)
+    // console.log('open')
+  };
+  webSocket.onclose = function () {
+    // console.log("closed");
+  };
+
+  // 소켓을 통해 메시지가 전달된 경우, 실행되는 함수
+  webSocket.onmessage = function (message) {
+    if ( message.data === 'kid' ){
+      useHistory
+      // store에 member정보를 dispatch 하여 넣기
+      dispatch()
+    } else if ( message.data === 'adult'){
+      // store에 member정보를 dispatch 하여 넣기
+      dispatch()
+    } else if ( message.data === 'wash_hand'){
+      dispatch
+    } else if ( message.data === 'brush_teeth'){
+      dispatch
+    }
+  
+    const fileReader = new FileReader();
+    fileReader.onload = function (event) {
+      const arrayBuffer = event.target.result;
+      console.log(arrayBuffer);
+      // const dataview = new DataView(arrayBuffer);
+      // const answer = dataview.getFloat64(0);
+      // console.log(answer);
     };
-    // 소켓 접속이 끝나면 호출되는 함수
-    webSocket.onclose = () => {
-        setSocket(false)
-        console.log('close')
-        // Socket();
-        
-    };
-    // 소켓 통신 중에 에러가 발생되면 호출되는 함수
-    webSocket.onerror = () =>{
-        console.log('error')
-    
-    };
+    setMessage(message.data);
+  };
     // 서버로 메시지를 전송하는 함수
     function sendMessage(){
         // messageTextArea.value += "Send to Server => "+message.value+"\n";
@@ -47,22 +57,16 @@ const Socket = () => {
         //textMessage객체의 값 초기화
         setText("");
     }
-    function disconnect(){
-        webSocket.close();
-    }
-    function sayHi() {
-        webSocket.send("Hello") // 서버에 데이터 전송
-    }
     
 
     return (
         <>
-            <input type="text" onChange={e => setText(e.target.value)}/>
+            {/* <input type="text" onChange={e => setText(e.target.value)}/>
             {/* <button onClick={sendMsg}>메시지 보내기</button> */}
-            <div id="receive-msg"></div>
+            {/* <div id="receive-msg"></div>
             <button onClick={sayHi}>Say Hi</button>
             <button onClick={sendMessage}>메시지 보내기</button>
-            <div id="div"></div>
+            <div id="div"></div> */} 
         </>
     )
 }
