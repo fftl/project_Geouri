@@ -1,4 +1,6 @@
-function GeneralView() {
+function GeneralView(props) {
+    const { webSocket } = props;
+
     return (
         <>
             <h1>GeneralView</h1>
