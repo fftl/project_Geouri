@@ -3,6 +3,7 @@ import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from "../Components/Kids/Effect";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import PageParticles from "../Components/Kids/PageParticles";
 
 function Kids() {
   const member_info = useSelector(state => state?.member?.info);
@@ -26,11 +27,13 @@ function Kids() {
       }
       {play_teeth_video ? (
         <div>
+          <PageParticles />
           <Effect />
           <WashHandsVideo />
         </div>
       ) : (
         <div>
+          <PageParticles />
           <Effect />
           <BrushTeethVideo />
         </div>

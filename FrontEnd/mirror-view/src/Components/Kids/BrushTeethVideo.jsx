@@ -25,7 +25,7 @@ const BrushTeethVideo = () => {
   }, [video]);
   return (
     <div className="container">
-      {/* //   <ReactPlayer */}
+      {/* //   <ReactPlayer */}0
       {/* //     url={process.env.PUBLIC_URL + "/videos/brushteeth.mp4"}
     //     width="1000px"
     //     height="700px"
@@ -42,7 +42,7 @@ const BrushTeethVideo = () => {
         muted
         autoPlay={true}
         preload=""
-        style={{ width: "100%" }}
+        style={{ width: "80%" }}
         ref={videoRef}
       >
         <source src={video} type="video/mp4" />
