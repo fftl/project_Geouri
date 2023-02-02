@@ -8,15 +8,17 @@ import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
 
 function App() {
+  const webSocket = new WebSocket("ws://localhost:9998");
+  
   return (
     <React.Fragment>
-      <Socket>
+      <Socket webSocket={webSocket}>
       </Socket>
         <HomeHeader />
         <Routes>
           <Route path="/" element={<Home />}/>
-          <Route path="/kids" element={<Kids />}/>
-          <Route path="/general" element={<GeneralView />}/>
+          <Route path="/kids" element={<Kids webSocket={webSocket} />}/>
+          <Route path="/general" element={<GeneralView webSocket={webSocket} />}/>
         </Routes>
     </React.Fragment>
   );

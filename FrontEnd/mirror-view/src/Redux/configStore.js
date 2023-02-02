@@ -1,11 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { createStoreHook } from 'react-redux';
 import mirror from './modules/mirror';
 
-const store = configureStore({
-    reducer: {
-        mirror: mirror,
-        
-    },
-})
 
 export default store;

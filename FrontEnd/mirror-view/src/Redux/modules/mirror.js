@@ -1,11 +1,13 @@
-import { createAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { handleAction } from 'redux-actions';
 
+// action
+const GET_MEMBER = "GET_MEMBER";
+const GET_MESSAGE = "GET_MESSAGE";
 
-const GET_MEMBER = "mirror/GET_MEMBER";
-
+// action creators
 const get_member = createAction(GET_MEMBER);
+const get_message = createAction(GET_MESSAGE);
 
 const initialState = {
     member : null, 

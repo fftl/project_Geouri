@@ -11,9 +11,8 @@ function Home() {
 
   return (
     <React.Fragment>
-      <Kids />
       {/* {isChild ? <Kids /> : null} */}
-      {isAdult ? <GeneralView /> : null}
+      {/* {isAdult ? <GeneralView /> : null} */}
     </React.Fragment>
   );
 }

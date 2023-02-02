@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useRef } from "react";
 import ReactPlayer from "react-player";
 import "./BrushTeethVideo.css";
-const BrushTeethVideo = () => {
+const BrushTeethVideo = (props) => {
+  const { webSocket } = props;
+
   const [video, setVideo] = useState(
     process.env.PUBLIC_URL + "./videos/brushteeth.mp4"
   );
@@ -12,17 +14,24 @@ const BrushTeethVideo = () => {
   //     e.preventDefault();
   //     videoRef.current
   //   }
+
   const playVideo = (e) => {
     e.preventDefault();
     setVideo(process.env.PUBLIC_URL + "./videos/brushteeth.mp4");
   };
-  const stopvideo = (e) => {
+
+  const stopVideo = (e) => {
     e.preventDefault();
     setVideo("");
   };
+
   useEffect(() => {
     setVideo(process.env.PUBLIC_URL + "./videos/brushteeth.mp4");
   }, [video]);
+
+  const sendMsgToServer = () => {
+    webSocket.send('brushVideoEnded')
+  }
   return (
     <div className="container">
       {/* //   <ReactPlayer */}0
@@ -37,13 +46,14 @@ const BrushTeethVideo = () => {
     //   /> */}
       {/* <video ref={videoRef}> */}
       <button onClick={playVideo}>play</button>
-      <button onClick={stopvideo}>stop</button>
+      <button onClick={stopVideo}>stop</button>
       <video
-        muted
+        // muted
         autoPlay={true}
         preload=""
         style={{ width: "80%" }}
         ref={videoRef}
+        onEnded={sendMsgToServer}
       >
         <source src={video} type="video/mp4" />
       </video>
