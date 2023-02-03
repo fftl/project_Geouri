@@ -49,6 +49,19 @@ function Timer(props) {
       {sec === 0 && <img id="shooting" src={snap} alt="shooting" />}
     </div>
   );
+  if (sec > 0) {
+    return (
+      <>
+        <div className="timer">{sec}</div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="timer">찰칵</div>
+      </>
+    );
+  }
 }
 
 export default Timer;
