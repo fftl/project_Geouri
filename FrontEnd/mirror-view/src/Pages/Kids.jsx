@@ -21,18 +21,10 @@ function Kids(props) {
       },
     },
   };
-  const message = {
-    msg: "",
-  };
-  const [comp, setComp] = useState("message");
-  const [video, setVideo] = useState("");
-  const [videoEnded, setVideoEnded] = useState(false); // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
 
-  // 처음 렌더링될 때만 이름을 보여주며, 이는 5초동안만 보여줌
-  // useEffect(() => {
-  // const t = setTimeout(() => setShowName(false), 5000);
-  // return () => { clearTimeout(t) };
-  // }, [])
+  const [comp, setComp] = useState('message');
+  const [video, setVideo] = useState('');
+  const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
 
   // useEffect(() => {
   //   if( message?.msg && message?.action ){
@@ -50,11 +42,17 @@ function Kids(props) {
   //   }
   // }, [message])
 
+  // useEffect(() => {
+  //   if (videoEnded) {
+  //     setComp('ending');
+  //   }
+  // }, [videoEnded])
   useEffect(() => {
     // setComp("video");
     setComp("greeting");
     // setVideo("wash_hands");
   }, []);
+
   useEffect(() => {
     if (videoEnded) {
       setComp("ending");
