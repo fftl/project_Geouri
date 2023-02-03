@@ -1,4 +1,5 @@
-import { createStore, combineReducers } from 'redux';
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import mirror from './modules/mirror';
 
 // rootReducer 생성
@@ -8,6 +9,6 @@ const rootReducer = combineReducers( {
 } );
 
 // store 생성
-const store = createStore(rootReducer);
+const store = configureStore(rootReducer);
 
 export default store;
