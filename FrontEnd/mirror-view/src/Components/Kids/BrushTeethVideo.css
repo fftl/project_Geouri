@@ -1,0 +1,14 @@
+div {
+    color: white;
+    margin: 0 auto;
+    background-color: black;
+  }
+  .container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  #player {
+    margin: 0 auto;
+  }
+  

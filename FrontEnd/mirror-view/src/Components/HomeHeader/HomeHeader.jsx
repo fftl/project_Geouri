@@ -1,5 +1,5 @@
 import React from "react";
-import WeatherView from "./WeatherView";
+import WeatherView from "../WeatherView";
 
 function HomeHeader() {
     return (
