@@ -1,8 +1,6 @@
 package com.ssafy.SmartMirror.service;
 
-import com.ssafy.SmartMirror.domain.KidsScript;
 import com.ssafy.SmartMirror.domain.Member;
-import com.ssafy.SmartMirror.domain.Playlist;
 import com.ssafy.SmartMirror.domain.Visit;
 import com.ssafy.SmartMirror.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
