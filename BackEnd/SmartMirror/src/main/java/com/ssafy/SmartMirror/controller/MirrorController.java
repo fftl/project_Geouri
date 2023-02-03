@@ -15,8 +15,6 @@ import java.util.List;
 @RequestMapping("/mirror")
 @RestController
 public class MirrorController {
-
-    // static int
     static final int START = 0; // 시작
     static final int MORNING = 1; // 오전
     static final int AFTERNOON = 2; // 오후
@@ -52,6 +50,11 @@ public class MirrorController {
     }
 
 
+    /**
+     * 어린이 스크립트를 추가합니다.
+     * @param script
+     * @return
+     */
     @PostMapping("/kidsScript/insert")
     public ResponseEntity insertKidsScript(@RequestParam("script") String script) {
         ResponseDefault responseDefault = null;
@@ -67,9 +70,23 @@ public class MirrorController {
         return new ResponseEntity<>(responseDefault, HttpStatus.OK);
     }
 
+    /**
+     * 거울 앞의 사람과 상호작용하는 멘트를 리턴합니다.
+     * @param requestGetScript
+     * @return
+     */
     @PostMapping("/getScript")
     public ResponseEntity getScript(@RequestBody RequestGetScript requestGetScript) {
         ResponseDefault responseDefault = null;
+
+        // 0. 유효한 접근인지 확인
+        // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
+        String serialNumber = requestGetScript.getSerialNumber();
+        Long memberKey = requestGetScript.getMemberKey();
+        if(!isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        }
+
 
         /** 1. 일단 우선적으로 오자마자 멤버의 정보를 가지고와 어린이인지 어른인지 확인합니다. */
         Member getMember = memberService.findByMemberKey(requestGetScript.getMemberKey());
@@ -263,33 +280,24 @@ public class MirrorController {
         return new ResponseEntity("어른과 아이 모두 아님", HttpStatus.OK);
     }
 
+    /**
+     * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
+     * @param info
+     * @return
+     */
     @PostMapping("/member")
     public ResponseEntity readMember(@RequestBody RequestInfo info) {
         ResponseDefault responseDefault = null; // response 객체 생성
 
+        // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = info.getSerialNumber();
         Long memberKey = info.getMemberKey();
-        System.out.println("Serial Number : " + serialNumber);
-        System.out.println("member key : " + memberKey);
-
-        // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
-        // 거울 넘버에 연결된 계정 정보와 멤버키를 가진 계정 정보가 같은지 확인
-        Member member = memberService.findByMemberKey(memberKey);
-        if(member == null) { // 멤버키에 해당하는 멤버가 없다면
-            return new ResponseEntity("잘못된 접근 : 멤버키 없음", HttpStatus.OK);
-        }
-
-        Mirror mirror = mirrorService.findBySerialNumber(serialNumber);
-        if(mirror == null) { // 시리얼넘버에 해당하는 거울이 없다면
-            return new ResponseEntity("잘못된 접근 : 시리얼넘버 없음", HttpStatus.OK);
-        }
-
-        if(mirror.getUser().getUserKey() != member.getUser().getUserKey()) { // 멤버와 거울이 같은 계정을 공유하는지 확인
-            return new ResponseEntity("잘못된 접근 : 시리얼넘버 - 멤버키 불일치", HttpStatus.OK);
+        if(!isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
         // 2. 멤버 정보 가져오기
-        System.out.println("성공!");
+        Member member = memberService.findByMemberKey(memberKey);
 
         // 위젯
         Widget widget = widgetService.findByMemberKey(memberKey);
@@ -345,12 +353,52 @@ public class MirrorController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
-    //현재 시간을 가지고 현재가 어떤 시간인지 값을 찾아냅니다.
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 호출함수
+
+    /**
+     * 현재 시간에 해당하는 시간대 타입을 리턴합니다.
+     * @param hour 현재 시간의 시각
+     * @return 시간대타입
+     */
     public int whatTime(int hour){
-        System.out.println("nowWhatTime, 현재 시간은 >> "+hour);
-        if( 6<=hour && hour<=11 ) return 1;
-        else if( 12<=hour && hour<=17 ) return 2;
-        else if( 18<=hour && hour<=23) return 3;
-        else return 4;
+//        System.out.println("nowWhatTime, 현재 시간은 >> "+hour);
+        if(6 <= hour && hour <= 11) return MORNING;
+        else if(12 <= hour && hour <= 17) return AFTERNOON;
+        else if(18 <= hour && hour <= 23) return EVENING;
+        else return ALLTIME;
     }
+
+    /**
+     * 현재 요청을 하는 유저가 정상접근인지 확인합니다. (거울 시리얼 넘버와 멤버 키 비교)
+     * @param serialNumber
+     * @param memberKey
+     * @return
+     */
+    public boolean isValidAccess(String serialNumber, Long memberKey) {
+        // 거울 넘버에 연결된 계정 정보와 멤버키를 가진 계정 정보가 같은지 확인
+
+        // 1. 멤버키에 해당하는 멤버 불러오기
+        Member member = memberService.findByMemberKey(memberKey);
+        if(member == null) { // 멤버키에 해당하는 멤버가 없다면
+            return false;
+        }
+
+        // 2. 시리얼넘버에 해당하는 거울 불러오기
+        Mirror mirror = mirrorService.findBySerialNumber(serialNumber);
+        if(mirror == null) { // 시리얼넘버에 해당하는 거울이 없다면
+            return false;
+        }
+
+        // 3. 멤버와 거울이 같은 계정을 공유하는지 확인
+        if(mirror.getUser().getUserKey() != member.getUser().getUserKey()) {
+            return false;
+        }
+
+        // 멤버와 거울이 같은 계정을 공유 -> 정상 접근
+        return true;
+    }
+
 }
