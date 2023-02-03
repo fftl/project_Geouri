@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
+import Timer from "../Elements/Timer";
 
 function Kids(props) {
   const { webSocket, msg } = props;
@@ -22,9 +23,9 @@ function Kids(props) {
     },
   };
 
-  const [comp, setComp] = useState('message');
-  const [video, setVideo] = useState('');
-  const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
+  const [comp, setComp] = useState("message");
+  const [video, setVideo] = useState("");
+  const [videoEnded, setVideoEnded] = useState(false); // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
 
   // useEffect(() => {
   //   if( message?.msg && message?.action ){
@@ -104,10 +105,16 @@ function Kids(props) {
         </div>
       );
     }
+  } else if (comp === "camera ") {
+    return (
+      <div>
+        <Timer setComp={setComp} />
+      </div>
+    );
   } else if (comp === "ending") {
     return (
       <div className="balloon">
-        <div className="balloon-text">{message?.msg}</div>
+        {/* <div className="balloon-text">{message?.msg}</div> */}
         <Character />
       </div>
     );
