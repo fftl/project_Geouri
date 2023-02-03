@@ -73,6 +73,7 @@ function Kids(props) {
         {msg ? (
           <div className="balloon">
             <p className="balloon-text">{msg}</p>
+            <Character />
           </div>
         ) : null}
       </>
@@ -96,7 +97,12 @@ function Kids(props) {
       );
     }
   } else if (comp === "ending") {
-    return <div className="balloon">{msg}</div>;
+    return (
+      <div className="balloon">
+        <div className="balloon-text">{message?.msg}</div>
+        <Character />
+      </div>
+    );
   }
 }
 
