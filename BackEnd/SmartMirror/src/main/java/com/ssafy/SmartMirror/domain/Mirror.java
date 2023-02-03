@@ -21,7 +21,7 @@ public class Mirror {
     private String serialNumber;
     private String nickname;
 
-    @JoinColumn(name = "userKey")
     @ManyToOne
+    @JoinColumn(referencedColumnName = "user_key", name = "userKey")
     private User user;
 }

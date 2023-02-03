@@ -18,14 +18,13 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="member_key")
     private Long memberKey;
     private String nickname;
     private String birth;
     private String faceImage;
     private boolean kidsMode;
     @ManyToOne
-    @JoinColumn(name = "userKey")
+    @JoinColumn(name = "user_key")
     private User user;
-    @OneToMany(mappedBy = "member")
-    private List<Snapshot> snapshotList = new ArrayList<>();
 }

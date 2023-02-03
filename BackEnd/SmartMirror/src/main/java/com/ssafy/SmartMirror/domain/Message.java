@@ -25,6 +25,6 @@ public class Message {
     private boolean read_or_not;
 
     @ManyToOne
-    @JoinColumn(name="memberKey")
+    @JoinColumn(referencedColumnName = "member_key", name = "memberKey")
     private Member member;
 }

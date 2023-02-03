@@ -17,6 +17,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // AUTO_INCREMENT 설정 (id값이 null일 경우 자동 생성)
+    @Column(name="user_key")
     private Long userKey;
     private String email;
     private String password;
