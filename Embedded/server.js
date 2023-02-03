@@ -35,7 +35,7 @@ wss.on( 'connection', function(ws,request){
         uri: 'http://i8a201.p.ssafy.io/mirror/member',
         method: 'POST',
         body:{
-            "serialNumber": "MIRRORMIRROR",
+            "serialNumber": "A201_12345",
             "memberKey": face_name
         },
         json:true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
@@ -45,7 +45,7 @@ wss.on( 'connection', function(ws,request){
         console.log(body)
         const data = {
           "cmd" : "newperson",
-          "content" : body.data,
+          "content" : body,
         }
 
         wss.broadcast(data);

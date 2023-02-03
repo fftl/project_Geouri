@@ -49,12 +49,6 @@ function Kids(props) {
   //   }
   // }, [message])
 
-  useEffect(()=>{
-    setComp('video')
-    setVideo('wash_hands')
-  },[])
-
-
   useEffect(() => {
     if (videoEnded) {
       setComp('ending');
