@@ -1,0 +1,15 @@
+.balloon {
+  justify-content: center;
+  border-radius: 30px;
+  border: 2px solid white;
+  margin: 32px auto 32px auto;
+  padding: 4px;
+  width: 80%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.total {
+  width: 100%;
+}
