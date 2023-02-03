@@ -36,6 +36,7 @@ const Socket = (props) => {
       navigate('/general')
     } else if ( message.data ){
       // state.message 저장
+      console.log(message.data);
       setMsg(message.data)
       // dispatch()
     }

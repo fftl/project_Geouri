@@ -20,18 +20,10 @@ function Kids(props) {
       }
     },
   };
-  const message = {
-    msg : '',
-  };
+
   const [comp, setComp] = useState('message');
   const [video, setVideo] = useState('');
   const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
-
-  // 처음 렌더링될 때만 이름을 보여주며, 이는 5초동안만 보여줌
-  // useEffect(() => {
-    // const t = setTimeout(() => setShowName(false), 5000);
-    // return () => { clearTimeout(t) };
-  // }, [])
 
   // useEffect(() => {
   //   if( message?.msg && message?.action ){
@@ -49,11 +41,14 @@ function Kids(props) {
   //   }
   // }, [message])
 
+  // useEffect(() => {
+  //   if (videoEnded) {
+  //     setComp('ending');
+  //   }
+  // }, [videoEnded])
   useEffect(() => {
-    if (videoEnded) {
-      setComp('ending');
-    }
-  }, [videoEnded])
+    console.log( msg );
+  }, [msg]);
 
   // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말 
   if (comp === 'greeting'){
