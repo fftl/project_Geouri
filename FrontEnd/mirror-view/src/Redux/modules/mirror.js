@@ -26,15 +26,21 @@ const mirrorSlice = createSlice({
                 }
             }
         },
+        message : '',
         action: 1,
         
     },
     reducers: {
         getMember(state, action) {
-            state.member = [...state, action.payload.content];
+            state.member = action.payload.content;
         },
+
         getMessage(state, action) {
             state.message = action.payload.content;
+        },
+
+        leaveMirror(state) {
+            state.member = {};
         }
     }
 })
