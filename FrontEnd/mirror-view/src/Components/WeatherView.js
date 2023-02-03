@@ -29,11 +29,20 @@ const dateBuilder = (d) => {
   let month = months[d.getMonth()];
   let year = d.getFullYear();
   let date = d.getDate();
+  if(date < 10){
+    date = '0'+String(date)
+  }
   return `${year}/${month}/${date} (${day})`;
 };
 
 const clockBuilder = (d) => {
   let hour = d.getHours();
+  let morning = '오전';
+
+  if (hour > 12) { 
+    hour -= 12
+    morning = '오후';
+  }
   if (hour < 10){
     hour = '0'+String(hour)
   }
@@ -41,7 +50,7 @@ const clockBuilder = (d) => {
   if (minute < 10) {
     minute = '0' + String(minute);
   }
-  return `${hour}:${minute}`;
+  return `${morning} ${hour}:${minute}`;
 }
 
 function WeatherView() {
@@ -61,7 +70,7 @@ function WeatherView() {
     method:'get',
     url: url,
   }).then((res) => {
-    setTemp((res.data.main.temp - 237.15).toFixed(2))
+    setTemp(((res.data.main.temp)-273.15).toFixed(1))
     const w = String(res.data.weather[0].id)[0];
     // 추후 weather id에 따라 구체화 해야함
     if(w === '2'){
@@ -97,15 +106,17 @@ function WeatherView() {
   return (
     <div className='weatherView'>
       <div className='clock'>
-        <h2>{dateBuilder(new Date())}</h2>
-        <h2>{clockBuilder(new Date())}</h2>
+        <p className='date'>{dateBuilder(new Date())}</p>
+        <p className='time'>{clockBuilder(new Date())}</p>
       </div>
       <div className='weather'>
-        <div>
+        <div className='weather-icon-box'>
           <img className='weather-icon' src={icon} alt="weather-icon"/>
         </div>
-        <h2>{weather}</h2>
-        <h2>{temp}℃</h2>
+        <div className='weather-text-box'>
+          <p>{weather}</p>
+          <p>{temp}º</p>
+        </div>
       </div>
     </div>
   );

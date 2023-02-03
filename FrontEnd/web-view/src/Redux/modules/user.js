@@ -1,7 +1,15 @@
 import { createAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { handleActions } from "redux-actions";
+// import { createAction, handleActions } from "redux-actions";
+
 //Action TYPE
 const LOGIN = "user/LOGIN";
+const REGISTER_USER = "user/REGISTER_USER";
+
+// Action creator
+const login = createAction(LOGIN);
+const registerUser = createAction(REGISTER_USER);
 
 //InitialState
 const initialState = {
@@ -67,6 +75,34 @@ const userSlice = createSlice({
         })
     }
 })
+
+//영현이~ 
+const userReducer = handleActions({
+  [LOGIN]: (state, action) => ({ user: state.user }),
+  [REGISTER_USER]: (state, action) => ({ user: state.user }),
+});
+
+export function reducer(state = initialState, action = {}) {
+  switch (action.type) {
+    case "user/LOGIN": {
+      console.log(action);
+      return { ...state, user: action.type };
+    }
+    case "user/REGISTER_USER": {
+      return { ...state, register: action.payload };
+    }
+    default:
+      return state;
+  }
+}
+
+const actionCreators = {
+  login,
+  registerUser,
+};
+
+export { actionCreators };
+
 
 export const userActions = userSlice.actions;
 export default userSlice.reducer;
