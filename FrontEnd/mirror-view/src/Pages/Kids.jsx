@@ -101,7 +101,7 @@ function Kids(props) {
   else if ( comp === 'ending' ){
     return (
       <div className="balloon">
-        {message?.msg}
+        {msg}
       </div>
     )
   }
