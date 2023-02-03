@@ -10,19 +10,12 @@ import Character from "../Components/Kids/Character";
 
 function Kids(props) {
   const { webSocket, msg } = props;
-  // const member_info = useSelector(state => state?.member?.info);
+  const member_info = useSelector(state => state?.mirror?.member?.data);
+  const mirror_action = useSelector(state => state?.mirror?.action);
+  console.log(member_info, mirror_action)
   // const message = useSelector(state => state?.message);
 
-  const member_info = {
-    member: {
-      info: {
-        name: "소영",
-        is_child: true,
-      },
-    },
-  };
-
-  const [comp, setComp] = useState('message');
+  const [comp, setComp] = useState(mirror_action);
   const [video, setVideo] = useState('');
   const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
 
@@ -48,9 +41,7 @@ function Kids(props) {
   //   }
   // }, [videoEnded])
   useEffect(() => {
-    // setComp("video");
-    setComp("greeting");
-    // setVideo("wash_hands");
+    
   }, []);
 
   useEffect(() => {
@@ -60,22 +51,23 @@ function Kids(props) {
   }, [videoEnded]);
 
   // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
-  if (comp === "greeting") {
+  if ([1, 2, 3, 4, 5, 6, 7, 8].includes(comp)) {
     return (
       <>
         {member_info ? (
           <div className="total">
             <div className="balloon">
               <p className="balloon-text">
-                안녕, {member_info?.name}아! {member_info.greeting}!
+                {/* {member_info?.nickname}, {mirror_action?.message} */}
+                {member_info?.nickname}, 안녕 좋은 아침이야
               </p>
-              <Character />
             </div>
+            <Character />
           </div>
         ) : null}
       </>
     );
-  } else if (comp === "message") {
+  } else if (comp === 'message') {
     return (
       <>
         {msg ? (

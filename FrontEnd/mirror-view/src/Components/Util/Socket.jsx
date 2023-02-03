@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { mirrorActions } from "../../Redux/modules/mirror";
 
 const Socket = (props) => {
   const { webSocket, setMsg } = props;
@@ -26,9 +27,11 @@ const Socket = (props) => {
   // 소켓을 통해 메시지가 전달된 경우, 실행되는 함수
   webSocket.onmessage = function (message) {
     console.log(message.data);
-    if ( message.data === 'kid' ){
+    if ( message.data.cmd === 'newperson' ){
       // store에 member정보를 dispatch 하여 넣기
-      // dispatch()
+      if (message.data.body.data.kidsMode === true) {
+        dispatch(mirrorActions.getMember(message.data.body.data))
+      }
       navigate('/kids')
     } else if ( message.data === 'adult'){
       // store에 member정보를 dispatch 하여 넣기
