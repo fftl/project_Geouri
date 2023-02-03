@@ -15,6 +15,19 @@ function Timer() {
     return () => clearInterval(countdown);
   }, [sec]);
 
-  return <div className="timer">{{ sec }}</div>;
+  if (sec > 0) {
+    return (
+      <>
+        <div className="timer">{ sec }</div>
+      </>
+    )
+  }
+  else {
+    return (
+      <>
+        <div className="timer">찰칵</div>
+      </>
+    )
+  }
 }
 export default Timer;

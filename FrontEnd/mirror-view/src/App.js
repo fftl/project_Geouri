@@ -10,6 +10,7 @@ import GeneralView from "./Pages/GeneralView";
 function App() {
   const webSocket = new WebSocket("ws://localhost:9998");
   const [msg, setMsg] = useState(null);
+  
   return (
     <React.Fragment>
       <Socket webSocket={webSocket} setMsg={setMsg}>

@@ -1,0 +1,109 @@
+shim@shim000:~/speaker$ python3 streaming_mic.py 
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+ALSA lib pcm_route.c:877:(find_matching_chmap) Found no matching channel map
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+ALSA lib confmisc.c:160:(snd_config_get_card) Invalid field card
+ALSA lib pcm_usb_stream.c:482:(_snd_pcm_usb_stream_open) Invalid card 'card'
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats
+Traceback (most recent call last):
+  File "/home/shim/speaker/streaming_mic.py", line 140, in <module>
+    main()
+  File "/home/shim/speaker/streaming_mic.py", line 135, in main
+    responses = client.streaming_recognize(streaming_config, requests)  # 요청 전달 & 응답 가져옴
+  File "/home/shim/.local/lib/python3.10/site-packages/google/cloud/speech_v1/helpers.py", line 81, in streaming_recognize
+    return super(SpeechHelpers, self).streaming_recognize(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/cloud/speech_v1/services/speech/client.py", line 859, in streaming_recognize
+    response = rpc(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/gapic_v1/method.py", line 113, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/retry.py", line 349, in retry_wrapped_func
+    return retry_target(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/retry.py", line 191, in retry_target
+    return target()
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/timeout.py", line 120, in func_with_timeout
+    return func(*args, **kwargs)
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/grpc_helpers.py", line 162, in error_remapped_callable
+    return _StreamingResponseIterator(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/grpc_helpers.py", line 88, in __init__
+    self._stored_first_result = next(self._wrapped)
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_channel.py", line 426, in __next__
+    return self._next()
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_channel.py", line 817, in _next
+    _common.wait(self._state.condition.wait, _response_ready)
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_common.py", line 150, in wait
+    _wait_once(wait_fn, MAXIMUM_WAIT_TIMEOUT, spin_cb)
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_common.py", line 112, in _wait_once
+    wait_fn(timeout=timeout)
+  File "/usr/lib/python3.10/threading.py", line 324, in wait
+    gotit = waiter.acquire(True, timeout)
+SystemError
+shim@shim000:~/speaker$ python sp.py
+명령어 'python' 을(를) 찾을 수 없습니다. 다음 명령어로 시도하시겠습니까:
+  deb python3python3의 명령어 ''
+  deb pythonpython-is-python3의 명령어 ''
+shim@shim000:~/speaker$ python3 sp.py
+Traceback (most recent call last):
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/grpc_helpers.py", line 72, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/home/shim/.local/lib/python3.10/site-packages/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAUTHENTICATED
+	details = "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:172.217.25.170:443 {created_time:"2023-01-27T11:02:01.490534633+00:00", grpc_status:16, grpc_message:"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/shim/speaker/sp.py", line 17, in <module>
+    response = client.recognize(config=config, audio=audio)
+  File "/home/shim/.local/lib/python3.10/site-packages/google/cloud/speech_v1/services/speech/client.py", line 575, in recognize
+    response = rpc(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/gapic_v1/method.py", line 113, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/retry.py", line 349, in retry_wrapped_func
+    return retry_target(
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/retry.py", line 191, in retry_target
+    return target()
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/timeout.py", line 120, in func_with_timeout
+    return func(*args, **kwargs)
+  File "/home/shim/.local/lib/python3.10/site-packages/google/api_core/grpc_helpers.py", line 74, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.Unauthenticated: 401 Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project. [reason: "ACCESS_TOKEN_EXPIRED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "speech.googleapis.com"
+}
+metadata {
+  key: "method"
+  value: "google.cloud.speech.v1.Speech.Recognize"
+}
+]
+
