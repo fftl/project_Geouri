@@ -10,7 +10,7 @@ insert into user (email, password, tel, birth, pwd_token) values ("shimmumu@nave
 insert into user (email, password, tel, birth, pwd_token) values ("fftl0785@gmail.com", "0710", "010-4562-0785", "1995-07-10", null);
 
 -- 거울
-insert into mirror (serial_number, nickname, user_key) values ("12345", "쏘영이네 똑쟁이 거울", 1);
+insert into mirror (serial_number, nickname, user_key) values ("s9A1-4kc5-io7S-1Kw8", "쏘영이네 똑쟁이 거울", 1);
 insert into mirror (serial_number, nickname, user_key) values ("S23D-ED03S92", "광장동 우리집", 2);
 insert into mirror (serial_number, nickname, user_key) values ("YOUNG12-HYUN21", "영현이네 거울아거울아", 3);
 insert into mirror (serial_number, nickname, user_key) values ("MIRRORMIRROR", "미러미러", 4);

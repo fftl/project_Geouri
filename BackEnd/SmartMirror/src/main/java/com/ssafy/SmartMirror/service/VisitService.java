@@ -1,24 +1,40 @@
 package com.ssafy.SmartMirror.service;
 
+import com.ssafy.SmartMirror.domain.KidsScript;
+import com.ssafy.SmartMirror.domain.Member;
 import com.ssafy.SmartMirror.domain.Playlist;
-import com.ssafy.SmartMirror.repository.PlaylistRepository;
+import com.ssafy.SmartMirror.domain.Visit;
+import com.ssafy.SmartMirror.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PlaylistService {
+public class VisitService {
 
-    private PlaylistRepository playlistRepository;
+    private VisitRepository visitRepository;
 
     @Autowired
-    public PlaylistService(PlaylistRepository playlistRepository){
-        this.playlistRepository = playlistRepository;
+    public VisitService(VisitRepository visitRepository){
+        this.visitRepository = visitRepository;
     }
 
-    public String findByMemberKey(Long memberKey) {
-        // memberKey 에 해당하는 플레이 정보 DB 에서 read
-        Playlist playlist = playlistRepository.findById(memberKey).orElse(null);
-        if(playlist == null) return null; // 링크 없으면 null
-        return playlist.getLink(); // 플레이리스트 링크 전달
+    /**
+     * visitTime 과 해당 member 기록
+     * @param member
+     * @param visitTime
+     * @return
+     */
+    public int saveVisit(Member member, String visitTime) {
+        // 저장할 Visit 객체 새로 생성
+        Visit visit = Visit.builder()
+                .visitTime(visitTime)
+                .member(member)
+                .build();
+
+        // VisitRepository를 이용해서 DB에 insert한 뒤
+        // 저장된 VisitScript 객체 반환
+        Visit response = visitRepository.save(visit);
+        //reseponse 의 key값을 int로 변환하여 반환!
+        return response.getVisitKey().intValue();
     }
 }

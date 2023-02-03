@@ -1,5 +1,6 @@
 package com.ssafy.SmartMirror.controller;
 
+import com.ssafy.SmartMirror.config.Test;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.repository.MemberRepository;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/mirror")
@@ -35,9 +38,13 @@ public class MirrorController {
     private CalendarService calendarService;
     private RegionService regionService;
     private BrushingService brushingService;
+    private VisitService visitService;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService) {
+    private Test test;
+
+    @Autowired
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, VisitService visitService) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -47,6 +54,7 @@ public class MirrorController {
         this.calendarService = calendarService;
         this.regionService = regionService;
         this.brushingService = brushingService;
+        this.visitService = visitService;
     }
 
 
@@ -83,7 +91,7 @@ public class MirrorController {
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestGetScript.getSerialNumber();
         Long memberKey = requestGetScript.getMemberKey();
-        if(!isValidAccess(serialNumber, memberKey)) {
+        if(!test.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
@@ -98,7 +106,7 @@ public class MirrorController {
             /** 1. 첫 질문일 때 if ( req_key == START(0) ) : 시간에 맞는 인사말을 리턴합니다. */
             if (requestGetScript.getReqKey() == START) {
                 // 시간에 맞는 인사말 가져오기
-                int helloType = whatTime(LocalDateTime.now().getHour());
+                int helloType = test.whatTime(LocalDateTime.now().getHour());
 //                helloType = MORNING; //아침 상황 테스트
                 helloType = AFTERNOON; //점심 상황 테스트
 //                helloType = EVENING; //저녁 상황 테스트
@@ -148,8 +156,8 @@ public class MirrorController {
 
                     /** 오늘 날짜에 양치한 기록이 하나라도 있다면!  */
                     if(daysSum == brushingDaysSum) {
-                        int historyType = whatTime(Integer.parseInt(times[0]));
-                        int nowType = whatTime(now.getHour());
+                        int historyType = test.whatTime(Integer.parseInt(times[0]));
+                        int nowType = test.whatTime(now.getHour());
 
                         /** 마지막 양치 기록과 현재 시간의 시간 타입이 같다면 양치를 이미 한 것!
                          *  손씻기를 제안합니다! 손씻기 제안 resType == 7
@@ -292,7 +300,7 @@ public class MirrorController {
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = info.getSerialNumber();
         Long memberKey = info.getMemberKey();
-        if(!isValidAccess(serialNumber, memberKey)) {
+        if(!test.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
@@ -316,6 +324,16 @@ public class MirrorController {
         String calendar = calendarService.findByMemberKey(memberKey);
         // 캘린더 링크 접속 후 파싱 필요 !!!
         System.out.println(calendar);
+
+
+
+        // 방문기록 저장
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String visitTime = formatter.format(date);
+        visitService.saveVisit(member, visitTime);
+
+
 
         // responseDto 꾸리기
         ResponseWidget responseWidget = ResponseWidget.builder()
@@ -351,54 +369,6 @@ public class MirrorController {
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    // 호출함수
-
-    /**
-     * 현재 시간에 해당하는 시간대 타입을 리턴합니다.
-     * @param hour 현재 시간의 시각
-     * @return 시간대타입
-     */
-    public int whatTime(int hour){
-//        System.out.println("nowWhatTime, 현재 시간은 >> "+hour);
-        if(6 <= hour && hour <= 11) return MORNING;
-        else if(12 <= hour && hour <= 17) return AFTERNOON;
-        else if(18 <= hour && hour <= 23) return EVENING;
-        else return ALLTIME;
-    }
-
-    /**
-     * 현재 요청을 하는 유저가 정상접근인지 확인합니다. (거울 시리얼 넘버와 멤버 키 비교)
-     * @param serialNumber
-     * @param memberKey
-     * @return
-     */
-    public boolean isValidAccess(String serialNumber, Long memberKey) {
-        // 거울 넘버에 연결된 계정 정보와 멤버키를 가진 계정 정보가 같은지 확인
-
-        // 1. 멤버키에 해당하는 멤버 불러오기
-        Member member = memberService.findByMemberKey(memberKey);
-        if(member == null) { // 멤버키에 해당하는 멤버가 없다면
-            return false;
-        }
-
-        // 2. 시리얼넘버에 해당하는 거울 불러오기
-        Mirror mirror = mirrorService.findBySerialNumber(serialNumber);
-        if(mirror == null) { // 시리얼넘버에 해당하는 거울이 없다면
-            return false;
-        }
-
-        // 3. 멤버와 거울이 같은 계정을 공유하는지 확인
-        if(mirror.getUser().getUserKey() != member.getUser().getUserKey()) {
-            return false;
-        }
-
-        // 멤버와 거울이 같은 계정을 공유 -> 정상 접근
-        return true;
     }
 
 }
