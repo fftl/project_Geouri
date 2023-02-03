@@ -52,7 +52,7 @@ function Kids(props) {
     setComp("greeting");
     // setVideo("wash_hands");
   }, []);
-  
+
   useEffect(() => {
     if (videoEnded) {
       setComp("ending");
@@ -104,7 +104,7 @@ function Kids(props) {
       );
     }
   } else if (comp === "ending") {
-    return <div className="balloon">{message?.msg}</div>;
+    return <div className="balloon">{msg}</div>;
   }
 }
 
