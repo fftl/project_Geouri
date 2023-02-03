@@ -18,10 +18,10 @@ public class KidsResponseService {
     }
 
     //조건을 가지고 이번에 응답이 가능한 응답 리스트를 가져옵니다.
-    public List<KidsResponse> getKidsResponse(Long reqKey, int reaction, int resType){
+    public List<KidsResponse> getKidsResponse(Long reqKey, int reaction){
         System.out.println("log - getKidsResponse > 메소드 실행 !!");
-        System.out.println("log - reqKey >> " + reqKey +" reaction >> " + reaction +" type >> " + resType);
-        List<KidsResponse> kidsResponseList = kidsResponseRepository.findAllByReqKeyAndReactionAndResType(reqKey, reaction, resType);
+        System.out.println("log - reqKey >> " + reqKey +" reaction >> " + reaction +" type >> ");
+        List<KidsResponse> kidsResponseList = kidsResponseRepository.findAllByReqKeyAndReaction(reqKey, reaction);
         System.out.println("log - getKidsResponse > 메소드 종료 !!");
         return kidsResponseList;
     }

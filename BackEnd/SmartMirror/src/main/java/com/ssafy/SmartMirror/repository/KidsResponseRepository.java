@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface KidsResponseRepository extends JpaRepository<KidsResponse, Long> {
-    List<KidsResponse> findAllByReqKeyAndReactionAndResType(Long reqKey, int reaction, int resType);
+    List<KidsResponse> findAllByReqKeyAndReaction(Long reqKey, int reaction);
 }

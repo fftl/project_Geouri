@@ -274,7 +274,7 @@ insert into kids_script (script, type) values ("그래도 해야돼ㅠㅜ 하면
 insert into kids_script (script, type) values ("엄마가 혼낸대…",5);
 insert into kids_script (script, type) values ("헐 맛없었구나ㅠㅠ 그래두 우리 양치해볼까?",5);
 insert into kids_script (script, type) values ("그렇구나ㅠㅠ 대신 손씻으면서 기분전환해볼까?",7);
-insert into kids_script (script, type) values ("어쩔수없어! 자 셋하면 양치 시작한다! 하나둘셋!",5);
+insert into kids_script (script, type) values ("어쩔수없어! 자 셋하면 양치 시작한다! 하나둘셋!",6);
 insert into kids_script (script, type) values ("기본인사에 부정적 표현을 한 경우입니다",4);
 insert into kids_script (script, type) values ("손씻어야 착한 어린이야!",7);
 insert into kids_script (script, type) values ("손에는 세균이 정말 많다구!! 할거지?",7);
@@ -315,7 +315,7 @@ insert into kids_response (res_key, req_key, reaction, res_type) values (9,8,1,8
 insert into kids_response (res_key, req_key, reaction, res_type) values (7,10,1,6);
 insert into kids_response (res_key, req_key, reaction, res_type) values (11,10,0,5);
 insert into kids_response (res_key, req_key, reaction, res_type) values (7,11,1,6);
-insert into kids_response (res_key, req_key, reaction, res_type) values (14,11,0,5);
+insert into kids_response (res_key, req_key, reaction, res_type) values (14,11,0,6);
 insert into kids_response (res_key, req_key, reaction, res_type) values (7,12,1,6);
 insert into kids_response (res_key, req_key, reaction, res_type) values (9,13,1,8);
 insert into kids_response (res_key, req_key, reaction, res_type) values (5,15,1,5);
