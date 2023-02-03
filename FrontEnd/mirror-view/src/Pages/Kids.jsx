@@ -5,20 +5,20 @@ import "./Kids.css";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Timer from '../Elements/Timer';
+import Timer from "../Elements/Timer";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 
 function Kids(props) {
   const { webSocket, msg } = props;
-  const member_info = useSelector(state => state?.mirror?.member?.data);
-  const mirror_action = useSelector(state => state?.mirror?.action);
-  const message = useSelector(state => state?.mirror?.message);
+  const member_info = useSelector((state) => state?.mirror?.member?.data);
+  const mirror_action = useSelector((state) => state?.mirror?.action);
+  const message = useSelector((state) => state?.mirror?.message);
 
   const [comp, setComp] = useState(mirror_action); // component 설정
-  const [video, setVideo] = useState(''); // 비디오 url
-  const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
-  
+  const [video, setVideo] = useState(""); // 비디오 url
+  const [videoEnded, setVideoEnded] = useState(false); // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
+
   useEffect(() => {
     if (videoEnded) {
       setComp("ending");
@@ -42,7 +42,7 @@ function Kids(props) {
         ) : null}
       </>
     );
-  } else if (comp === 'message') {
+  } else if (comp === "message") {
     return (
       <>
         {msg ? (
@@ -71,6 +71,12 @@ function Kids(props) {
         </div>
       );
     }
+  } else if (comp === "camera ") {
+    return (
+      <div>
+        <Timer setComp={setComp} />
+      </div>
+    );
   } else if (comp === "ending") {
     return (
       <div className="balloon">
