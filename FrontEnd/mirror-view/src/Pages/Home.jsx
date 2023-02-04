@@ -11,7 +11,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <PhotoTimer />
+      {/* <PhotoTimer /> */}
       {/* {isChild ? <Kids /> : null} */}
       {/* {isAdult ? <GeneralView /> : null} */}
     </React.Fragment>
