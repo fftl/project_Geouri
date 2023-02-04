@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import snap from "../assets/img/snap.gif";
 
-function Timer(props) {
-  const { setComp } = props;
+function Timer( props ) {
+  const { setComp, comp } = props;
+  
   const [sec, setSec] = useState(parseInt(3));
-  const [shoot, setShoot] = useState(parseInt(4));
+  const [shoot, setShoot] = useState(false);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -14,11 +15,19 @@ function Timer(props) {
         setSec(parseInt(sec) - 1);
       }
       if (parseInt(sec) === 0) {
+        setShoot(true)
         clearInterval(countdown);
       }
     }, 1000);
     return () => clearInterval(countdown);
   }, [sec]);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setComp('ending')
+    }, 4100);
+    return () => clearInterval(countdown);
+  }, [shoot])
 
   // useEffect(() => {
   //   const shootover = setInterval(() => {
@@ -41,27 +50,13 @@ function Timer(props) {
     }, 1000);
   };
 
-  // console.log(ele.style);
-
   return (
     <div className="timer">
       {sec !== 0 && sec}
-      {sec === 0 && <img id="shooting" src={snap} alt="shooting" />}
+      {/* {sec === 0 && <img id="shooting" src={snap} alt="shooting" />} */}
+      {shoot ? <img id="shooting" src={snap} alt="shooting" /> : null}
     </div>
   );
-  if (sec > 0) {
-    return (
-      <>
-        <div className="timer">{sec}</div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div className="timer">찰칵</div>
-      </>
-    );
-  }
 }
 
 export default Timer;
