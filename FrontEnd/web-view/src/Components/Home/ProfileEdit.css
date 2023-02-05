@@ -1,0 +1,23 @@
+#profileEdit {
+  justify-content: center;
+  align-items: center;
+  margin: 10%;
+}
+#photobook {
+  width: 100%;
+  padding: 10px;
+}
+#register {
+  width: 50%;
+  padding: 10px;
+  margin: 30px;
+}
+#delete {
+  width: 50%;
+  padding: 10px;
+  margin: 30px;
+}
+.inputtag {
+  width: 100%;
+  padding: 5px 0;
+}
