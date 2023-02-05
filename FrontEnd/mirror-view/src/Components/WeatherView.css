@@ -3,8 +3,8 @@
     justify-content: space-between;
 }
 .clock {
-    /* padding: 25px; */
-    padding-top: 25px;
+    padding: 25px;
+    /* padding-top: 25px; */
     width: 30%;
 }
 .date {
