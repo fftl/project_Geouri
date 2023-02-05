@@ -59,8 +59,14 @@ function WeatherView() {
     base: "http://api.openweathermap.org/data/2.5/",
   };
   // 위치정보는 mock data
-  const [lat, lon] = [37, 127];
+  const member = useState((state) => state?.mirror?.member);
+  const lon = member?.lng;
+  const lat = member?.lat;
 
+  console.log(lon)
+  console.log(lat)
+
+  // const [lat, lon] = [37, 127];
   const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
   const [temp, setTemp] = useState("");
   const [weather, setWeather] = useState("");
@@ -109,15 +115,21 @@ function WeatherView() {
         <p className='date'>{dateBuilder(new Date())}</p>
         <p className='time'>{clockBuilder(new Date())}</p>
       </div>
-      <div className='weather'>
-        <div className='weather-icon-box'>
-          <img className='weather-icon' src={icon} alt="weather-icon"/>
+      {lat && lon ? 
+        <div className='weather'>
+          <div className='weather-icon-box'>
+            <img className='weather-icon' src={icon} alt="weather-icon"/>
+          </div>
+            <div className='weather-text-box'>
+              <p>{weather}</p>
+              <p>{temp}º</p>
+            </div>
         </div>
-        <div className='weather-text-box'>
-          <p>{weather}</p>
-          <p>{temp}º</p>
-        </div>
-      </div>
+          : 
+          <div style={{fontSize: '2rem', margin: '2rem'}}>
+            날씨 및 위치 정보를 불러올 수 없습니다.   
+          </div>
+      }
     </div>
   );
 }

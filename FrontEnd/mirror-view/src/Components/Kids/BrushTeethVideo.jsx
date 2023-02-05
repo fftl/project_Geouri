@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { useRef } from "react";
 import ReactPlayer from "react-player";
 import "./BrushTeethVideo.css";
+
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp } = props;
 
@@ -12,7 +10,7 @@ const BrushTeethVideo = (props) => {
   return (
     <div className="container">
      <ReactPlayer
-          url={process.env.PUBLIC_URL + "/videos/brushteeth.mp4"}
+        url={process.env.PUBLIC_URL + "/videos/brushteeth.mp4"}
         width="1000px"
         height="700px"
         playing={true}
