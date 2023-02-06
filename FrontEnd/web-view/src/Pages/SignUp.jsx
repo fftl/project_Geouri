@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "../Components/SignUp/RegisterUser";
 import { actionCreators as userActions } from "../Redux/modules/user";
 
 function SignUp(props) {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,57 +15,54 @@ function SignUp(props) {
   const [birthday, setBirthday] = useState("");
   const [checked, setChecked] = useState(false);
 
-  const onEmailHandler = (e) => {
+  const onEmailHandler = useCallback((e) => {
     setEmail(e.target.value);
-  };
+  });
 
-  const onPasswordHandler = (e) => {
-    setPassword(e.target.value);
-  };
-  const onConfirmPasswordHandler = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-  const onNameHandler = (e) => {
-    setName(e.target.value);
-  };
+  const onPasswordHandler = useCallback((e) => {
+    setEmail(e.target.value);
+  });
+  const onConfirmPasswordHandler = useCallback((e) => {
+    setEmail(e.target.value);
+  });
+  const onNameHandler = useCallback((e) => {
+    setEmail(e.target.value);
+  });
   //생년월일 8자리로 입력 받을건지?? String?
-  const onBirthdayHandler = (e) => {
-    setBirthday(e.target.value);
-  };
-  const onCheckedHandler = () => {
-    setChecked(!checked);
-  };
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
+  const onBirthdayHandler = useCallback((e) => {
+    setEmail(e.target.value);
+  });
+  const onCheckedHandler = useCallback((e) => {
+    setEmail(e.target.value);
+  });
+  const onSubmitHandler = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    if (password !== confirmPassword) {
-      return alert("비밀번호와 비밀번호 확인이 같지 않습니다!");
-    }
-
-    let body = {
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      name: name,
-      birthday: birthday,
-      checked: checked,
-    };
-
-    dispatch(userActions.registerUser(body)).then((res)=>{
-      if(res.payload.success){
-        props.history.push("/login");
-      }else{
-        alert("Error")
+      if (password !== confirmPassword) {
+        return alert("비밀번호와 비밀번호 확인이 같지 않습니다!");
       }
-    })
-    // dispatch(RegisterUser(body)).then((res) => {
-    //   if (res.payload.success) {
-    //     props.history.push("/login");
-    //   } else {
-    //     alert("Error");
-    //   }
-    // });
-  };
+
+      let body = {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        name: name,
+        birthday: birthday,
+        checked: checked,
+      };
+
+      // dispatch(userActions.registerUser(body)).then((res) => {
+      //   if (res.payload.success) {
+      //     props.history.push("/login");
+      //     navigate("/login");
+      //   } else {
+      //     alert("Error");
+      //   }
+      // });
+    },
+    [email, password, name]
+  );
 
   return (
     <div>

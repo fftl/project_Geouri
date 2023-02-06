@@ -19,23 +19,28 @@ function Kids(props) {
   const message = useSelector((state) => state?.mirror?.message);
 
   // const [comp, setComp] = useState(mirror_action); // component 설정
-  const [comp, setComp] = useState('video'); // component 설정
+  const [comp, setComp] = useState("video"); // component 설정
   const [video, setVideo] = useState("wash_hands"); // 비디오 url
   const [videoEnded, setVideoEnded] = useState(false); // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
-
+  const [cameraEnd, setCameraEnd] = useState(false);
+  // useEffect(() => {
+  //   if (videoEnded) {
+  //     setComp("camera");
+  //   }
+  // }, [videoEnded]);
 
   useEffect(() => {
-    console.log(comp)
-    if (comp === 'ending'){
+    console.log(comp);
+    if (comp === "ending") {
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 4000);
     }
   }, [comp]);
 
   // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
   // if ([1, 2, 3, 4, 5, 6, 7, 8].includes(comp)) {
-  if (comp === 'greeting') {
+  if (comp === "greeting") {
     return (
       <>
         {member_info ? (
@@ -80,13 +85,12 @@ function Kids(props) {
         </div>
       );
     }
-  }
-  else if (comp === 'camera'){
+  } else if (comp === "camera") {
     return (
       <>
-        <Timer setComp={setComp}/>
+        <Timer setComp={setComp} />
       </>
-    )
+    );
   } else if (comp === "ending") {
     return (
       <div className="balloon">
