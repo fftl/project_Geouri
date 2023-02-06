@@ -6,6 +6,7 @@ const rq = require('request');
 var prevKey = 0;
 var prevType = 0;
 var memberKey;
+var serialNumber;
 var PythonShell = require('python-shell');
 
 //접속되어 있는 모든 클라이언트들에게 동일한 메세지를 보내는 함수
@@ -44,6 +45,7 @@ wss.on('connection', function (ws, request) {
         json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
       };
 
+      serialNumber = options.body.serialNumber;
 
       rq.post(options, function (err, httpResponse, body) {
         console.log(body)
@@ -71,6 +73,7 @@ wss.on('connection', function (ws, request) {
       const voice_input = obj.content
       console.log("음성인식 받음 : ", voice_input)
 
+
       // fe
       // 비디오 관련하여 정지 재생 응답 
       if (voice_input.includes("video")){
@@ -85,6 +88,8 @@ wss.on('connection', function (ws, request) {
       // db
       // 어린이의 양치 손씻기에 대한 대답 전송
       else if (voice_input.includes("answer")) {
+        console.log("얼굴인식됨", obj.content)
+        const face_name = obj.content
 
         // 긍정 : 1, 부정 : 0
         // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
@@ -93,7 +98,7 @@ wss.on('connection', function (ws, request) {
 
         if (voice_input == "answer_positive")
           reaction = 1;
-        else if(void_input == "answer_negative")
+        else if (voice_input == "answer_negative")
           reaction = 0;
 
         let options = {
@@ -128,7 +133,15 @@ wss.on('connection', function (ws, request) {
       // nodejs에서 pythonshell을 통해 파이썬 파일 실행
       else if (voice_input.includes("capture")) {
         // 이미지 캡쳐해서 전송하는 파일을 memberKey데이터와 실행
-        PythonShell.PythonShell.run('./' + capture_img_db.py, memberKey, function (err, results) {
+        var options = {
+          mode: 'text',
+          pythonPath: '',
+          pythonOptions: ['-u'],
+          scriptPath: '',
+          args: [serialNumber, memberKey]
+        };
+
+        PythonShell.PythonShell.run(capture_img_db.py, options, function (err, results) {
           if (err) throw err;
           console.log('results: %j', results);
           //console.log('results: %j', results);
