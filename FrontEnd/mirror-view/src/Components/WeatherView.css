@@ -3,18 +3,18 @@
     justify-content: space-between;
 }
 .clock {
-    /* padding: 25px; */
-    padding-top: 25px;
+    padding: 25px;
+    /* padding-top: 25px; */
     width: 30%;
 }
 .date {
     font-weight: 300;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     margin-bottom: 8px;
 }
 .clock {
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 2rem;
     align-items: center;
 }
 .weather {
@@ -42,7 +42,7 @@
     text-align: end ;
 }
 .weather-text-box > p {
-    font-size: 1rem;
+    font-size: 1.5em;
     font-weight: 500;
     display: flex;
     align-items: center;

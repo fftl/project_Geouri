@@ -10,7 +10,7 @@ import GeneralView from "./Pages/GeneralView";
 function App() {
   const webSocket = new WebSocket("ws://localhost:9998");
   const [msg, setMsg] = useState(null);
-  
+
   return (
     <React.Fragment>
       <Socket webSocket={webSocket} setMsg={setMsg}>
@@ -18,7 +18,7 @@ function App() {
         <HomeHeader />
         <Routes>
           <Route path="/" element={<Home />}/>
-          <Route path="/kids" element={<Kids webSocket={webSocket} msg={msg} />}/>
+          <Route path="/kids" element={<Kids webSocket={webSocket} />}/>
           <Route path="/general" element={<GeneralView webSocket={webSocket} />}/>
         </Routes>
     </React.Fragment>
