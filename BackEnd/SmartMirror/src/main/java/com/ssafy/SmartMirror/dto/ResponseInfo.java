@@ -22,9 +22,10 @@ public class ResponseInfo {
 //    private String faceImage; // 줄필요 없는듯?
     private boolean kidsMode;
 
-    private ResponseWidget widget; // 위젯 (boolean 뉴스, 플레이리스트, 사진찍기, 일정)
     private String playlist;
     private String calender;
+    private ResponseWidget widget; // 위젯 (boolean 뉴스, 플레이리스트, 사진찍기, 일정)
+
     private ResponseRegion region; // 지역 (Double 경도, 위도)
 
     private List<ResponseNews> news;

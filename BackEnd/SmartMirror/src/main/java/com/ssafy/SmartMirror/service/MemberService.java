@@ -22,4 +22,14 @@ public class MemberService {
         Member member = memberRepository.findById(memberKey).orElse(null);
         return member;
     }
+
+    public int updateKidsMode(String value, String memberKey) {
+        int result = memberRepository.updateKidsMode(value.equals("true")?true:false, memberKey);
+        return result;
+    }
+
+//    public int updateRegion(String value, String memberKey) {
+//        int result = memberRepository.updateRegion(value.equals("true")?true:false, memberKey);
+//        return result;
+//    }
 }

@@ -22,4 +22,8 @@ public class CalendarService {
     }
 
 
+    public int updateLink(String link, String memberKey) {
+        int result = calendarRepository.updateLink(link, memberKey);
+        return result;
+    }
 }

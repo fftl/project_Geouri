@@ -16,12 +16,12 @@ insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) v
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
 
 -- 위젯 ( 멤버키, 뉴스 여부, 플레이리스트 여부, 사진찍기 여부, 일정 여부 // 1이 true 고 0이 false 입니다 )
-insert into widget (member_key, news, playlist, shot, calender) values ("nh3b-494F", 1, 1, 0, 1);
-insert into widget (member_key, news, playlist, shot, calender) values ("B7T3-jX6r", 1, 1, 1, 1);
-insert into widget (member_key, news, playlist, shot, calender) values ("GhhR-Habi", 0, 1, 0, 0);
-insert into widget (member_key, news, playlist, shot, calender) values ("60lm-pxTc", 1, 1, 0, 1);
-insert into widget (member_key, news, playlist, shot, calender) values ("fSBS-lCHb", 1, 1, 1, 0);
-insert into widget (member_key, news, playlist, shot, calender) values ("DnGc-bHAM", 1, 1, 1, 0);
+insert into widget (member_key, news, playlist, calender) values ("nh3b-494F", 1, 1, 1);
+insert into widget (member_key, news, playlist, calender) values ("B7T3-jX6r", 1, 1, 1);
+insert into widget (member_key, news, playlist, calender) values ("GhhR-Habi", 0, 1, 0);
+insert into widget (member_key, news, playlist, calender) values ("60lm-pxTc", 1, 1, 1);
+insert into widget (member_key, news, playlist, calender) values ("fSBS-lCHb", 1, 1, 0);
+insert into widget (member_key, news, playlist, calender) values ("DnGc-bHAM", 1, 1, 0);
 
 -- 플레이리스트 ( member_key: 본인에 맞는 거! )
 insert into playlist (member_key, link) values ("nh3b-494F", "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy");
