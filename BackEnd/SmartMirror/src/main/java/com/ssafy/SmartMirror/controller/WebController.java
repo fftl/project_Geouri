@@ -17,24 +17,4 @@ import java.util.Random;
 
 public class WebController {
 
-    @Autowired
-    private FireBaseService fireBaseService;
-
-    @PostMapping("/files")
-    public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("name") String name) throws IOException, FirebaseAuthException {
-        
-        if(file.isEmpty()){
-            return "is empty";
-        }
-
-        return fireBaseService.uploadFiles(file, name);
-
-    public ResponseEntity signUp() {
-        return null;
-    }
-
-    // 이메일 인증번호 전송
-    public ResponseEntity sendEmailToken(RequestEntity requestEntity) {
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.SmartMirror.controller;
 
+import com.ssafy.SmartMirror.config.NewsCrawling;
 import com.ssafy.SmartMirror.config.FireBaseService;
 import com.ssafy.SmartMirror.config.Test;
 import com.ssafy.SmartMirror.domain.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,13 +44,13 @@ public class MirrorController {
     private BrushingService brushingService;
     private FireBaseService fireBaseService;
     private VisitService visitService;
+    private NewsService newsService;
 
-    @Autowired
     private Test test;
 
-    @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService) {
 
+    @Autowired
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, NewsService newsService, Test test) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -60,6 +62,8 @@ public class MirrorController {
         this.brushingService = brushingService;
         this.fireBaseService = fireBaseService;
         this.visitService = visitService;
+        this.newsService = newsService;
+        this.test = test;
     }
 
     /**
@@ -298,7 +302,8 @@ public class MirrorController {
      * @return
      */
     @PostMapping("/member")
-    public ResponseEntity readMember(@RequestBody RequestInfo info) {
+    public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException {
+        System.out.println("readMember");
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
@@ -318,7 +323,6 @@ public class MirrorController {
 
         // 플레이리스트
         String playlist = playlistService.findByMemberKey(memberKey);
-        System.out.println(playlist);
 
         // 지역
         DongCode dongCode = regionService.findByMemberKey(memberKey);
@@ -329,6 +333,15 @@ public class MirrorController {
         // 캘린더 링크 접속 후 파싱 필요 !!!
         System.out.println(calendar);
 
+        // 뉴스
+        List<News> newsList = newsService.findByPress("YTN");
+        List<ResponseNews> newsListDto = new ArrayList<>();
+        for (News news : newsList) {
+            newsListDto.add(ResponseNews.builder()
+                    .press(news.getPress())
+                    .title(news.getTitle())
+                    .build());
+        }
 
 
         // 방문기록 저장
@@ -364,6 +377,7 @@ public class MirrorController {
                 .playlist(playlist)
                 .calender(calendar)
                 .region(responseRegion)
+                .news(newsListDto)
                 .build();
 
         responseDefault = ResponseDefault.builder()
