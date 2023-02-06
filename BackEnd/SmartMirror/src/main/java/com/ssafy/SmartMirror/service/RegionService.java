@@ -19,7 +19,7 @@ public class RegionService {
         this.dongCodeRepository = dongCodeRepository;
     }
 
-    public DongCode findByMemberKey(Long memberKey) {
+    public DongCode findByMemberKey(String memberKey) {
         Region region = regionRepository.findById(memberKey).orElse(null);
         if(region==null) return null; // 등록된 지역이 없을 경우 null 리턴
         DongCode dongCode = dongCodeRepository.findById(region.getDongCode()).orElse(null);

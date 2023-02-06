@@ -42,7 +42,7 @@ public class BrushingService {
         return response.getBrushingKey().intValue();
     }
 
-    public List<Brushing> findAllByMember(Long memberKey){
+    public List<Brushing> findAllByMember(String memberKey){
         System.out.println("test1");
         Member member = memberRepository.findById(memberKey).get();
         List<Brushing> brushingList = brushingRepository.findAllByMember(member);

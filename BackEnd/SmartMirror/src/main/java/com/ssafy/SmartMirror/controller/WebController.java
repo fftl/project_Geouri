@@ -2,6 +2,8 @@ package com.ssafy.SmartMirror.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.ssafy.SmartMirror.config.FireBaseService;
+import com.ssafy.SmartMirror.dto.RequestInfo;
+import com.ssafy.SmartMirror.dto.ResponseDefault;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -16,5 +18,12 @@ import java.util.Random;
 @RequestMapping("/web")
 
 public class WebController {
+
+
+//    @PostMapping("/member")
+//    public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException
+
+//    @GetMapping("/member")
+//    public ResponseEntity getMemberList(@RequestParam)
 
 }

@@ -60,7 +60,7 @@ public class Test {
      * @param memberKey
      * @return
      */
-    public boolean isValidAccess(String serialNumber, Long memberKey) {
+    public boolean isValidAccess(String serialNumber, String memberKey) {
         // 거울 넘버에 연결된 계정 정보와 멤버키를 가진 계정 정보가 같은지 확인
 
         // 1. 멤버키에 해당하는 멤버 불러오기

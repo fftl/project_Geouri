@@ -17,8 +17,8 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageKey;
-    private Long memberKeyFrom;
-    private Long memberKeyTo;
+    private String memberKeyFrom;
+    private String memberKeyTo;
 
     private String time;
     private String content;
