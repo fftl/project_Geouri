@@ -45,9 +45,11 @@ function Timer(props) {
 
   return (
     <div className="timer">
-      {sec !== 0 && sec}
-      {/* {sec === 0 && <img id="shooting" src={snap} alt="shooting" />} */}
-      {shoot ? <img id="shooting" src={snap} alt="shooting" /> : null}
+      <p className="seconds">
+        {sec !== 0 && sec}
+        {/* {sec === 0 && <img id="shooting" src={snap} alt="shooting" />} */}
+        {shoot ? <img id="shooting" src={snap} alt="shooting" /> : null}
+      </p>
     </div>
   );
 }

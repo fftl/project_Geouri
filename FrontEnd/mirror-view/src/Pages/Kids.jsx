@@ -29,6 +29,9 @@ function Kids(props) {
   //   }
   // }, [videoEnded]);
 
+  // useEffect(() => {
+  //   setComp("camera");
+  // }, []);
   useEffect(() => {
     console.log(comp);
     if (comp === "ending") {
