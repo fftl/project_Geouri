@@ -12,6 +12,10 @@ export const REGISTER_USER = "user/REGISTER_USER";
 const login = createAction(LOGIN);
 const registerUser = createAction(REGISTER_USER);
 
+// 중복된 주소를 줄이는 방법
+axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
+
 //InitialState
 const initialState = {
   user: null,

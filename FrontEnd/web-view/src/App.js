@@ -7,17 +7,13 @@ import Home from "./Pages/Home";
 import ProfileEdit from "./Components/Home/ProfileEdit";
 import Cal from "./Elements/Cal";
 import { Provider } from "react-redux";
-import { store } from "./Redux/modules/store";
-
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        {/* <Provider store={store}>
-          <Route path="/signup" element={<SignUp />} />
-        </Provider> */}
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/find-user" element={<FindUser />} />
         <Route path="/member/add" element={<AddMember />} />
         <Route path="/member/:id" element={<MemberPage />} />
