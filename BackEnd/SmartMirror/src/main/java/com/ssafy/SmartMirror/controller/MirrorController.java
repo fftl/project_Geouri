@@ -1,5 +1,6 @@
 package com.ssafy.SmartMirror.controller;
 
+import com.ssafy.SmartMirror.config.FireBaseService;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.repository.MemberRepository;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,9 +38,10 @@ public class MirrorController {
     private CalendarService calendarService;
     private RegionService regionService;
     private BrushingService brushingService;
+    private FireBaseService fireBaseService;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -47,8 +51,8 @@ public class MirrorController {
         this.calendarService = calendarService;
         this.regionService = regionService;
         this.brushingService = brushingService;
+        this.fireBaseService = fireBaseService;
     }
-
 
     /**
      * 어린이 스크립트를 추가합니다.
@@ -353,11 +357,29 @@ public class MirrorController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
+    @PostMapping("/snapShot")
+    public ResponseEntity insertSnapShot(RequestInsertSnapShot insertSnapShot) throws IOException {
+        ResponseDefault responseDefault = null; // response 객체 생성
+        System.out.println(insertSnapShot.toString());
+        if(!isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        }
+
+        String url = fireBaseService.uploadFiles(insertSnapShot.getImgFile(), insertSnapShot.getImgName());
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .data(url)
+                .msg(null)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
     // 호출함수
-
     /**
      * 현재 시간에 해당하는 시간대 타입을 리턴합니다.
      * @param hour 현재 시간의 시각

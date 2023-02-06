@@ -18,7 +18,7 @@ public class FireBaseService {
     @Value("${app.firebase-bucket}")
     private String firebaseBucket;
 
-    public String uploadFiles(MultipartFile file, String nameFile) throws IOException, FirebaseAuthException {
+    public String uploadFiles(MultipartFile file, String nameFile) throws IOException {
         Bucket bucket = StorageClient.getInstance().bucket(firebaseBucket);
         InputStream content = new ByteArrayInputStream(file.getBytes());
         Blob blob = bucket.create(nameFile.toString(), content, file.getContentType());
