@@ -8,12 +8,12 @@ insert into user (user_key, email, password, tel, birth, pwd_token) values ("Fyw
 insert into mirror (serial_number, nickname, user_key) values ("8DLL-44yh-x7vB-VuWK", "1조의 해피해피 거울", "Fyw3-DOwW");
 
 -- 멤버 ( kids_mode: true(1) false(0)  / user_key: 본인에 맞는 거! )
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("nh3b-494F", "쏘영이", "1998-09-11", "soyoung.jpg", 1, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("B7T3-jX6r", "노노", "1993-02-03", "hyeonjung.jpg", 1, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("GhhR-Habi", "영혀니", "1996-12-21", "younghyun.jpg", 1, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("60lm-pxTc", "BM", "1996-11-04", "bm.jpg", 0, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("fSBS-lCHb", "짱윤", "1997-09-01", "JY.jpg", 1, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("nh3b-494F", "쏘영이", "1998-09-11", "soyoung.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("B7T3-jX6r", "노노", "1993-02-03", "hyeonjung.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("GhhR-Habi", "영혀니", "1996-12-21", "younghyun.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("60lm-pxTc", "BM", "1996-11-04", "bm.jpg", 0, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("fSBS-lCHb", "짱윤", "1997-09-01", "JY.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
 
 -- 위젯 ( 멤버키, 뉴스 여부, 플레이리스트 여부, 사진찍기 여부, 일정 여부 // 1이 true 고 0이 false 입니다 )
 insert into widget (member_key, news, playlist, shot, calender) values ("nh3b-494F", 1, 1, 0, 1);

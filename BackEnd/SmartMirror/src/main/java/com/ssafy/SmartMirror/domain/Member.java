@@ -21,7 +21,7 @@ public class Member {
     private String memberKey;
     private String nickname;
     private String birth;
-    private String faceImage;
+    private String imgUrl;
     private boolean kidsMode;
     @ManyToOne
     @JoinColumn(name = "user_key")

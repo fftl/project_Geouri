@@ -335,9 +335,9 @@ public class MirrorController {
 
         // 뉴스
         List<News> newsList = newsService.findByPress("YTN");
-        List<ResponseNews> newsListDto = new ArrayList<>();
+        List<ResponseNews> responseNewsList = new ArrayList<>();
         for (News news : newsList) {
-            newsListDto.add(ResponseNews.builder()
+            responseNewsList.add(ResponseNews.builder()
                     .press(news.getPress())
                     .title(news.getTitle())
                     .build());
@@ -377,7 +377,7 @@ public class MirrorController {
                 .playlist(playlist)
                 .calender(calendar)
                 .region(responseRegion)
-                .news(newsListDto)
+                .news(responseNewsList)
                 .build();
 
         responseDefault = ResponseDefault.builder()
