@@ -17,7 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member findByMemberKey(Long memberKey) {
+    public Member findByMemberKey(String memberKey) {
         // member_key 에 해당하는 멤버 정보 DB 에서 read
         Member member = memberRepository.findById(memberKey).orElse(null);
         return member;

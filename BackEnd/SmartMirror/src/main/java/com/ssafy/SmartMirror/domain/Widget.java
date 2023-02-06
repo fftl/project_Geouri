@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class Widget {
     @Id
-    private Long memberKey; // 멤버 기본키
+    private String memberKey; // 멤버 기본키
     private boolean news;
     private boolean playlist;
     private boolean shot;

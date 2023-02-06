@@ -50,7 +50,7 @@ public class MirrorController {
 
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, NewsService newsService, Test test) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -98,7 +98,7 @@ public class MirrorController {
         // 0. 유효한 접근인지 확인
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestGetScript.getSerialNumber();
-        Long memberKey = requestGetScript.getMemberKey();
+        String memberKey = requestGetScript.getMemberKey();
         if(!test.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
@@ -308,7 +308,7 @@ public class MirrorController {
 
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = info.getSerialNumber();
-        Long memberKey = info.getMemberKey();
+        String memberKey = info.getMemberKey();
         if(!test.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
@@ -393,7 +393,7 @@ public class MirrorController {
     public ResponseEntity insertSnapShot(RequestInsertSnapShot insertSnapShot) throws IOException {
         ResponseDefault responseDefault = null; // response 객체 생성
         System.out.println(insertSnapShot.toString());
-        if(!isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
+        if(!test.isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
         }
 
@@ -408,51 +408,5 @@ public class MirrorController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////
-    // 호출함수
-    /**
-     * 현재 시간에 해당하는 시간대 타입을 리턴합니다.
-     * @param hour 현재 시간의 시각
-     * @return 시간대타입
-     */
-    public int whatTime(int hour){
-//        System.out.println("nowWhatTime, 현재 시간은 >> "+hour);
-        if(6 <= hour && hour <= 11) return MORNING;
-        else if(12 <= hour && hour <= 17) return AFTERNOON;
-        else if(18 <= hour && hour <= 23) return EVENING;
-        else return ALLTIME;
-    }
-
-    /**
-     * 현재 요청을 하는 유저가 정상접근인지 확인합니다. (거울 시리얼 넘버와 멤버 키 비교)
-     * @param serialNumber
-     * @param memberKey
-     * @return
-     */
-    public boolean isValidAccess(String serialNumber, Long memberKey) {
-        // 거울 넘버에 연결된 계정 정보와 멤버키를 가진 계정 정보가 같은지 확인
-
-        // 1. 멤버키에 해당하는 멤버 불러오기
-        Member member = memberService.findByMemberKey(memberKey);
-        if(member == null) { // 멤버키에 해당하는 멤버가 없다면
-            return false;
-        }
-
-        // 2. 시리얼넘버에 해당하는 거울 불러오기
-        Mirror mirror = mirrorService.findBySerialNumber(serialNumber);
-        if(mirror == null) { // 시리얼넘버에 해당하는 거울이 없다면
-            return false;
-        }
-
-        // 3. 멤버와 거울이 같은 계정을 공유하는지 확인
-        if(mirror.getUser().getUserKey() != member.getUser().getUserKey()) {
-            return false;
-        }
-
-        // 멤버와 거울이 같은 계정을 공유 -> 정상 접근
-        return true;
-    }
 
 }

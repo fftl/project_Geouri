@@ -15,7 +15,7 @@ public class PlaylistService {
         this.playlistRepository = playlistRepository;
     }
 
-    public String findByMemberKey(Long memberKey) {
+    public String findByMemberKey(String memberKey) {
         // memberKey 에 해당하는 플레이 정보 DB 에서 read
         Playlist playlist = playlistRepository.findById(memberKey).orElse(null);
         if(playlist == null) return null; // 링크 없으면 null

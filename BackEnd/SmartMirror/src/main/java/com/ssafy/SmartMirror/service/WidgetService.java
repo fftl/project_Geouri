@@ -13,7 +13,7 @@ public class WidgetService {
         this.widgetRepository = widgetRepository;
     }
 
-    public Widget findByMemberKey(Long memberKey) {
+    public Widget findByMemberKey(String memberKey) {
         // serial_number 에 해당하는 거울 정보 DB 에서 read
         Widget widget = widgetRepository.findById(memberKey).orElse(null);
         return widget;

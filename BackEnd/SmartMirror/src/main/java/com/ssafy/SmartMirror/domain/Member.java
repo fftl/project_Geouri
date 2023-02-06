@@ -17,9 +17,8 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="member_key")
-    private Long memberKey;
+    private String memberKey;
     private String nickname;
     private String birth;
     private String faceImage;

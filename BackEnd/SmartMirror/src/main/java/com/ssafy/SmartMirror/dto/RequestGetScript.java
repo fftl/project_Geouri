@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 public class RequestGetScript {
     private String serialNumber;
-    private Long memberKey;
+    private String memberKey;
     private Long reqKey;
     private int reaction;
     private int type;

@@ -15,6 +15,6 @@ import javax.persistence.Id;
 @Entity
 public class Region {
     @Id
-    private Long memberKey; // 멤버 기본키
+    private String memberKey; // 멤버 기본키
     private String dongCode;
 }

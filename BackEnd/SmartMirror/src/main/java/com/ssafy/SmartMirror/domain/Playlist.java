@@ -15,6 +15,6 @@ import javax.persistence.Id;
 @Entity
 public class Playlist {
     @Id
-    private Long memberKey; // 멤버 기본키
+    private String memberKey; // 멤버 기본키
     private String link;
 }

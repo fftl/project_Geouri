@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ResponseInfo {
 
-    private Long memberKey;
+    private String memberKey;
     private String nickname;
     private String birth;
 //    private String faceImage; // 줄필요 없는듯?

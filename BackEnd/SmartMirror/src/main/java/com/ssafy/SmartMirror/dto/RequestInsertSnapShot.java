@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class RequestInsertSnapShot {
     private String serialNumber;
-    private Long memberKey;
+    private String memberKey;
     private MultipartFile imgFile;
     private String imgName;
 }

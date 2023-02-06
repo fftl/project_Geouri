@@ -2,61 +2,51 @@
 -- #####################################################################################################################################################################
 -- #####################################################################################################################################################################
 -- 계정
-insert into user (email, password, tel, birth, pwd_token) values ("sy980911@gmail.com", "1234", "010-9358-0053", "1998-09-11", null);
-insert into user (email, password, tel, birth, pwd_token) values ("nohhyunjeong93@gmail.com", "9393", "010-7363-9393", "1993-02-03", null);
-insert into user (email, password, tel, birth, pwd_token) values ("hello6815@naver.com", "2222", "010-4394-0988", "1996-12-21", null);
-insert into user (email, password, tel, birth, pwd_token) values ("sbmsky@gmail.com", "7765", "010-4446-7765", "1996-11-04", null);
-insert into user (email, password, tel, birth, pwd_token) values ("shimmumu@naver.com", "1234", "010-2037-9709", "1997-09-01", null);
-insert into user (email, password, tel, birth, pwd_token) values ("fftl0785@gmail.com", "0710", "010-4562-0785", "1995-07-10", null);
+insert into user (user_key, email, password, tel, birth, pwd_token) values ("Fyw3-DOwW", "sy980911@gmail.com", "1234", "010-9358-0053", "1998-09-11", null);
 
 -- 거울
-insert into mirror (serial_number, nickname, user_key) values ("s9A1-4kc5-io7S-1Kw8", "쏘영이네 똑쟁이 거울", 1);
-insert into mirror (serial_number, nickname, user_key) values ("S23D-ED03S92", "광장동 우리집", 2);
-insert into mirror (serial_number, nickname, user_key) values ("YOUNG12-HYUN21", "영현이네 거울아거울아", 3);
-insert into mirror (serial_number, nickname, user_key) values ("MIRRORMIRROR", "미러미러", 4);
-insert into mirror (serial_number, nickname, user_key) values ("JY97-SHIMMUMU", "정윤이의 거울 친구", 5);
-insert into mirror (serial_number, nickname, user_key) values ("DM0710-SYEWHDK123", "동민이네 집!", 6);
+insert into mirror (serial_number, nickname, user_key) values ("8DLL-44yh-x7vB-VuWK", "1조의 해피해피 거울", "Fyw3-DOwW");
 
 -- 멤버 ( kids_mode: true(1) false(0)  / user_key: 본인에 맞는 거! )
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("쏘영이", "1998-09-11", "soyoung.jpg", 1, 1);
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("노노", "1993-02-03", "hyeonjung.jpg", 1, 1);
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("영현이", "1996-12-21", "younghyun.jpg", 1, 1);
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("BM", "1996-11-04", "bm.jpg", 0, 1);
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("짱윤", "1997-09-01", "JY.jpg", 1, 1);
-insert into member (nickname, birth, face_image, kids_mode, user_key) values ("동밍", "1995-07-10", "DM.jpg", 0, 1);
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("nh3b-494F", "쏘영이", "1998-09-11", "soyoung.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("B7T3-jX6r", "노노", "1993-02-03", "hyeonjung.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("GhhR-Habi", "영혀니", "1996-12-21", "younghyun.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("60lm-pxTc", "BM", "1996-11-04", "bm.jpg", 0, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("fSBS-lCHb", "짱윤", "1997-09-01", "JY.jpg", 1, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, face_image, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
 
 -- 위젯 ( 멤버키, 뉴스 여부, 플레이리스트 여부, 사진찍기 여부, 일정 여부 // 1이 true 고 0이 false 입니다 )
-insert into widget (member_key, news, playlist, shot, calender) values (1, 1, 1, 0, 1);
-insert into widget (member_key, news, playlist, shot, calender) values (2, 1, 1, 1, 1);
-insert into widget (member_key, news, playlist, shot, calender) values (3, 0, 1, 0, 0);
-insert into widget (member_key, news, playlist, shot, calender) values (4, 1, 1, 0, 1);
-insert into widget (member_key, news, playlist, shot, calender) values (5, 1, 1, 1, 0);
-insert into widget (member_key, news, playlist, shot, calender) values (6, 1, 1, 1, 0);
+insert into widget (member_key, news, playlist, shot, calender) values ("nh3b-494F", 1, 1, 0, 1);
+insert into widget (member_key, news, playlist, shot, calender) values ("B7T3-jX6r", 1, 1, 1, 1);
+insert into widget (member_key, news, playlist, shot, calender) values ("GhhR-Habi", 0, 1, 0, 0);
+insert into widget (member_key, news, playlist, shot, calender) values ("60lm-pxTc", 1, 1, 0, 1);
+insert into widget (member_key, news, playlist, shot, calender) values ("fSBS-lCHb", 1, 1, 1, 0);
+insert into widget (member_key, news, playlist, shot, calender) values ("DnGc-bHAM", 1, 1, 1, 0);
 
 -- 플레이리스트 ( member_key: 본인에 맞는 거! )
-insert into playlist (member_key, link) values (1, "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy");
-insert into playlist (member_key, link) values (2, "https://youtube.com/playlist?list=PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D");
-insert into playlist (member_key, link) values (3, "https://www.youtube.com/watch?v=kVdVe_pWHH4&list=PLensnm4tVH-4FCrJyBbuJccSSMq8reZa5");
-insert into playlist (member_key, link) values (4, "https://www.youtube.com/playlist?list=PL4_4iSHjwuA9AhMh7z4v8oMFSSarqEq8-");
-insert into playlist (member_key, link) values (5, "https://youtube.com/playlist?list=PLOSjsIj8E3hZEwP7IPQ4388fCjzrcfEuI");
-insert into playlist (member_key, link) values (6, "https://www.youtube.com/watch?v=6RQ-bBdASvk");
+insert into playlist (member_key, link) values ("nh3b-494F", "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy");
+insert into playlist (member_key, link) values ("B7T3-jX6r", "https://youtube.com/playlist?list=PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D");
+insert into playlist (member_key, link) values ("GhhR-Habi", "https://www.youtube.com/watch?v=kVdVe_pWHH4&list=PLensnm4tVH-4FCrJyBbuJccSSMq8reZa5");
+insert into playlist (member_key, link) values ("60lm-pxTc", "https://www.youtube.com/playlist?list=PL4_4iSHjwuA9AhMh7z4v8oMFSSarqEq8-");
+insert into playlist (member_key, link) values ("fSBS-lCHb", "https://youtube.com/playlist?list=PLOSjsIj8E3hZEwP7IPQ4388fCjzrcfEuI");
+insert into playlist (member_key, link) values ("DnGc-bHAM", "https://www.youtube.com/watch?v=6RQ-bBdASvk");
 
 
 -- 캘린더 ( member_key: 안넣고싶으면 null 하면 됩니다! )
-insert into calendar (member_key, link) values (1, "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics");
-insert into calendar (member_key, link) values (2, "https://calendar.google.com/calendar/ical/nohhyunjeong93%40gmail.com/private-5348e203bdf09830ece6875026b74015/basic.ics");
-insert into calendar (member_key, link) values (3, null);
-insert into calendar (member_key, link) values (4, "https://calendar-ics.kakao.com/SfPf6k8UHnSP68gZDbSbdl4j6V9K7sFNNJ2ngHzlUkF8Ymdiof9hdji2e9lahh8n/talk.ics");
-insert into calendar (member_key, link) values (5, null);
-insert into calendar (member_key, link) values (6, null);
+insert into calendar (member_key, link) values ("nh3b-494F", "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics");
+insert into calendar (member_key, link) values ("B7T3-jX6r", "https://calendar.google.com/calendar/ical/nohhyunjeong93%40gmail.com/private-5348e203bdf09830ece6875026b74015/basic.ics");
+insert into calendar (member_key, link) values ("GhhR-Habi", null);
+insert into calendar (member_key, link) values ("60lm-pxTc", "https://calendar-ics.kakao.com/SfPf6k8UHnSP68gZDbSbdl4j6V9K7sFNNJ2ngHzlUkF8Ymdiof9hdji2e9lahh8n/talk.ics");
+insert into calendar (member_key, link) values ("fSBS-lCHb", null);
+insert into calendar (member_key, link) values ("DnGc-bHAM", null);
 
 -- 지역 ( 특정 지역 법정동코드 검색하면 나와요!! )
-insert into region (member_key, dong_code) values (1, "2823710700");
-insert into region (member_key, dong_code) values (2, "1168011100");
-insert into region (member_key, dong_code) values (3, "2818510600");
-insert into region (member_key, dong_code) values (4, "4121010600");
-insert into region (member_key, dong_code) values (5, "1117011500");
-insert into region (member_key, dong_code) values (6, "4119010900");
+insert into region (member_key, dong_code) values ("nh3b-494F", "2823710700");
+insert into region (member_key, dong_code) values ("B7T3-jX6r", "1168011100");
+insert into region (member_key, dong_code) values ("GhhR-Habi", "2818510600");
+insert into region (member_key, dong_code) values ("60lm-pxTc", "4121010600");
+insert into region (member_key, dong_code) values ("fSBS-lCHb", "1117011500");
+insert into region (member_key, dong_code) values ("DnGc-bHAM", "4119010900");
 
 -- 법정동코드
 insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
@@ -71,100 +61,100 @@ insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) va
 -- #####################################################################################################################################################################
 -- 소영
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (1, '2023-01-31 08:00:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-01 08:14:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-01 11:30:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-01 15:23:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-01 18:25:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-02 08:03:00');
-insert into visit (member_key, visit_time) values (1, '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-01-31 08:00:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 08:14:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 11:30:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 15:23:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 18:25:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 08:03:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 12:03:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
-insert into brushing (member_key, brushing_time) values (1, '2023-01-31 08:02:31');
-insert into brushing (member_key, brushing_time) values (1, '2023-02-01 08:15:00');
-insert into brushing (member_key, brushing_time) values (1, '2023-02-01 11:33:18');
-insert into brushing (member_key, brushing_time) values (1, '2023-02-01 18:28:31');
-insert into brushing (member_key, brushing_time) values (1, '2023-02-02 08:05:11');
-insert into brushing (member_key, brushing_time) values (1, '2023-02-02 12:06:38');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-01-31 08:02:31');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 08:15:00');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 11:33:18');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 18:28:31');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 08:05:11');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 12:06:38');
 
 -- 현정
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (2, '2023-01-31 08:00:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-01 08:14:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-01 11:30:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-01 15:23:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-01 18:25:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-02 08:03:00');
-insert into visit (member_key, visit_time) values (2, '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-01-31 08:00:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-01 08:14:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-01 11:30:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-01 15:23:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-01 18:25:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-02 08:03:00');
+insert into visit (member_key, visit_time) values ("B7T3-jX6r", '2023-02-02 12:03:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
-insert into brushing (member_key, brushing_time) values (2, '2023-01-31 08:02:31');
-insert into brushing (member_key, brushing_time) values (2, '2023-02-01 08:15:00');
-insert into brushing (member_key, brushing_time) values (2, '2023-02-01 11:33:18');
-insert into brushing (member_key, brushing_time) values (2, '2023-02-01 18:28:31');
-insert into brushing (member_key, brushing_time) values (2, '2023-02-02 08:05:11');
-insert into brushing (member_key, brushing_time) values (2, '2023-02-02 12:06:38');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-01-31 08:02:31');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-02-01 08:15:00');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-02-01 11:33:18');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-02-01 18:28:31');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-02-02 08:05:11');
+insert into brushing (member_key, brushing_time) values ("B7T3-jX6r", '2023-02-02 12:06:38');
 
 -- 영현
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (3, '2023-01-31 12:00:00');
-insert into visit (member_key, visit_time) values (3, '2023-02-01 06:14:00');
-insert into visit (member_key, visit_time) values (3, '2023-02-01 19:30:00');
-insert into visit (member_key, visit_time) values (3, '2023-02-01 06:23:00');
-insert into visit (member_key, visit_time) values (3, '2023-02-01 18:25:00');
-insert into visit (member_key, visit_time) values (3, '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-01-31 12:00:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-02-01 06:14:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-02-01 19:30:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-02-01 06:23:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-02-01 18:25:00');
+insert into visit (member_key, visit_time) values ("GhhR-Habi", '2023-02-02 12:03:00');
 
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
-insert into brushing (member_key, brushing_time) values (3, '2023-01-31 12:02:31');
-insert into brushing (member_key, brushing_time) values (3, '2023-02-01 06:15:00');
-insert into brushing (member_key, brushing_time) values (3, '2023-02-01 19:33:18');
-insert into brushing (member_key, brushing_time) values (3, '2023-02-01 06:28:31');
-insert into brushing (member_key, brushing_time) values (3, '2023-02-02 12:05:11');
+insert into brushing (member_key, brushing_time) values ("GhhR-Habi", '2023-01-31 12:02:31');
+insert into brushing (member_key, brushing_time) values ("GhhR-Habi", '2023-02-01 06:15:00');
+insert into brushing (member_key, brushing_time) values ("GhhR-Habi", '2023-02-01 19:33:18');
+insert into brushing (member_key, brushing_time) values ("GhhR-Habi", '2023-02-01 06:28:31');
+insert into brushing (member_key, brushing_time) values ("GhhR-Habi", '2023-02-02 12:05:11');
 
 -- 보민
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (4, '2023-01-31 08:00:00');
+insert into visit (member_key, visit_time) values ("60lm-pxTc", '2023-01-31 08:00:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
 
 -- 정윤
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (5, '2023-01-31 08:00:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-01 08:14:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-01 11:30:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-01 15:23:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-01 18:25:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-02 08:03:00');
-insert into visit (member_key, visit_time) values (5, '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-01-31 08:00:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-01 08:14:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-01 11:30:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-01 15:23:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-01 18:25:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-02 08:03:00');
+insert into visit (member_key, visit_time) values ("fSBS-lCHb", '2023-02-02 12:03:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
-insert into brushing (member_key, brushing_time) values (5, '2023-01-31 08:02:31');
-insert into brushing (member_key, brushing_time) values (5, '2023-02-01 08:15:00');
-insert into brushing (member_key, brushing_time) values (5, '2023-02-01 11:33:18');
-insert into brushing (member_key, brushing_time) values (5, '2023-02-01 18:28:31');
-insert into brushing (member_key, brushing_time) values (5, '2023-02-02 08:05:11');
-insert into brushing (member_key, brushing_time) values (5, '2023-02-02 12:06:38');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-01-31 08:02:31');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-02-01 08:15:00');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-02-01 11:33:18');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-02-01 18:28:31');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-02-02 08:05:11');
+insert into brushing (member_key, brushing_time) values ("fSBS-lCHb", '2023-02-02 12:06:38');
 
 -- #####################################################################################################################################################################
 -- #####################################################################################################################################################################
 -- 동민
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
-insert into visit (member_key, visit_time) values (6, '2023-01-31 08:00:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-01 08:14:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-02 11:30:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-02 15:23:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-03 08:03:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-03 12:03:00');
-insert into visit (member_key, visit_time) values (6, '2023-02-03 18:25:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-01-31 08:00:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-01 08:14:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-02 11:30:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-02 15:23:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-03 08:03:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-03 12:03:00');
+insert into visit (member_key, visit_time) values ("DnGc-bHAM", '2023-02-03 18:25:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
-insert into brushing (member_key, brushing_time) values (6, '2023-01-31 08:02:31');
-insert into brushing (member_key, brushing_time) values (6, '2023-02-01 08:15:00');
-insert into brushing (member_key, brushing_time) values (6, '2023-02-02 11:33:18');
-insert into brushing (member_key, brushing_time) values (6, '2023-02-02 18:28:31');
-insert into brushing (member_key, brushing_time) values (6, '2023-02-03 08:05:11');
-insert into brushing (member_key, brushing_time) values (6, '2023-02-03 12:06:38');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-01-31 08:02:31');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-02-01 08:15:00');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-02-02 11:33:18');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-02-02 18:28:31');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-02-03 08:05:11');
+insert into brushing (member_key, brushing_time) values ("DnGc-bHAM", '2023-02-03 12:06:38');
 
 
 -- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

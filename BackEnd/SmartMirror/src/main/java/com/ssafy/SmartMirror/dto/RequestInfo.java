@@ -12,5 +12,5 @@ import lombok.Getter;
 @Getter
 public class RequestInfo {
     private String serialNumber;
-    private Long memberKey;
+    private String memberKey;
 }
