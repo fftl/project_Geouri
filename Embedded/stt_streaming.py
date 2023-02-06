@@ -152,7 +152,7 @@ def listen_print_loop(responses):
                     r'\b(노노)', transcript, re.I) or re.search(r'\b(손)', transcript, re.I):
                 audio_data = {
                     "cmd": "voice_input",
-                    "content": 'no',
+                    "content": 'answerno',
                 }
             # 대답 yes
             elif re.search(r'\b(좋아)', transcript, re.I) or re.search(r'\b(응)', transcript, re.I) or re.search(r'\b(할래)',
@@ -163,7 +163,7 @@ def listen_print_loop(responses):
                                                                                                         re.I):
                 audio_data = {
                     "cmd": "voice_input",
-                    "content": 'yes',
+                    "content": 'answeryes',
                 }
 
             # 문장중에 '명령끝'이라는 단어가 있다면 종료한다.
