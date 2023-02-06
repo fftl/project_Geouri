@@ -10,7 +10,6 @@ const ProfileEdit = (props) => {
   const [youtube, setYoutube] = useState(false);
   const [news, setNews] = useState(false);
   const [cal, setCal] = useState(false);
-  const [photo, setPhoto] = useState(false);
 
   const handleKidsmodeChange = (event) => {
     setKidsmode(event.target.checked);
@@ -28,10 +27,7 @@ const ProfileEdit = (props) => {
     setCal(event.target.checked);
     event.preventDefault();
   };
-  const handlePhotoChange = (event) => {
-    setPhoto(event.target.checked);
-    event.preventDefault();
-  };
+
   const handleClick = () => {};
   const submitHandler = () => {};
   const deleteHandler = () => {};
@@ -117,18 +113,7 @@ const ProfileEdit = (props) => {
           <Grid item xs={6}>
             <input type="text" className="inputtag" />
           </Grid>
-          <Grid item xs={6}>
-            <label htmlFor="photo" id="photo">
-              사진 촬영
-            </label>
-          </Grid>
-          <Grid item xs={6}>
-            <Switch
-              photo={photo}
-              onChange={handlePhotoChange}
-              inputProps={{ "aria-label": "controlled" }}
-            />
-          </Grid>
+
           <Grid item xs={12}>
             <button id="photobook" onClick={handleClick}>
               사진첩
