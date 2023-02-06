@@ -2,8 +2,10 @@ package com.ssafy.SmartMirror.config;
 
 import com.ssafy.SmartMirror.domain.Member;
 import com.ssafy.SmartMirror.domain.Mirror;
+import com.ssafy.SmartMirror.domain.User;
 import com.ssafy.SmartMirror.service.MemberService;
 import com.ssafy.SmartMirror.service.MirrorService;
+import com.ssafy.SmartMirror.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +18,16 @@ public class Test {
     static final int EVENING = 3; // 저녁
     static final int ALLTIME = 4; // 평시
 
-    @Autowired
     private MemberService memberService;
-    @Autowired
     private MirrorService mirrorService;
+    private UserService userService;
 
+    @Autowired
+    public Test(MemberService memberService, MirrorService mirrorService, UserService userService) {
+        this.memberService = memberService;
+        this.mirrorService = mirrorService;
+        this.userService = userService;
+    }
 
     /**
      * 소문자, 대문자, 숫자(0~9)으로 구성된 랜덤난수를 생성합니다.
@@ -81,6 +88,15 @@ public class Test {
         }
 
         // 멤버와 거울이 같은 계정을 공유 -> 정상 접근
+        return true;
+    }
+
+    public boolean isValidAccess(String userKey) {
+        User user = userService.findByUserKey(userKey);
+
+        if(user == null) { // 해당 유저 없음
+            return false;
+        }
         return true;
     }
 }
