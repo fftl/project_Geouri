@@ -126,17 +126,15 @@ wss.on('connection', function (ws, request) {
       }
       // db 
       // 사진 촬영을 하는 경우
+      // nodejs에서 pythonshell을 통해 파이썬 파일 실행
       else if (voice_input.includes("capture")) {
         // 이미지 캡쳐해서 전송하는 파일을 memberKey데이터와 실행
-        PythonShell.PythonShell.run('./tests/' + capture_img.py, memberKey, function (err, results) {
+        PythonShell.PythonShell.run('./' + capture_img_db.py, memberKey, function (err, results) {
           if (err) throw err;
           console.log('results: %j', results);
           //console.log('results: %j', results);
-          response.send({ result: results });
         });
-
       }
-
     }
 
     else if (command === "reply") {
