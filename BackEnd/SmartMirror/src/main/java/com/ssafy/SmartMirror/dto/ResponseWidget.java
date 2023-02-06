@@ -12,6 +12,5 @@ import lombok.Setter;
 public class ResponseWidget {
     private boolean news;
     private boolean playlist;
-    private boolean shot;
     private boolean calender;
 }

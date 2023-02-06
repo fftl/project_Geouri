@@ -3,14 +3,8 @@ package com.ssafy.SmartMirror.controller;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.ssafy.SmartMirror.config.FireBaseService;
 import com.ssafy.SmartMirror.config.Test;
-import com.ssafy.SmartMirror.domain.Brushing;
-import com.ssafy.SmartMirror.domain.Member;
-import com.ssafy.SmartMirror.domain.News;
-import com.ssafy.SmartMirror.domain.User;
-import com.ssafy.SmartMirror.dto.RequestInfo;
-import com.ssafy.SmartMirror.dto.ResponseDefault;
-import com.ssafy.SmartMirror.dto.ResponseMember;
-import com.ssafy.SmartMirror.dto.ResponseNews;
+import com.ssafy.SmartMirror.domain.*;
+import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,16 +81,18 @@ public class WebController {
 
         System.out.println("사이즈 "+memberList.size());
         
-        List<ResponseMember> responseMemberList = new ArrayList<>(); // 멤버리스트를 응답 dto로 변경
+        List<ResponseMember> responseMemberListdto = new ArrayList<>(); // 멤버리스트를 응답 dto로 변경
         for (Member member : memberList) {
-            responseMemberList.add(ResponseMember.builder()
+            responseMemberListdto.add(ResponseMember.builder()
                     .memberKey(member.getMemberKey())
                     .imgUrl(member.getImgUrl())
                     .nickname(member.getNickname())
                     .build());
         }
 
-
+        ResponseMemberList responseMemberList = ResponseMemberList.builder()
+                .memberList(responseMemberListdto)
+                .build();
         responseDefault = ResponseDefault.builder()
                 .success(true)
                 .msg("")
@@ -107,8 +103,126 @@ public class WebController {
     }
 
 
+
     /**
-     *
+     * 해당 멤버의 위젯 정보(여부, 링크, 지역) 반환
+     * @param memberKey
+     * @return
+     */
+    @GetMapping("/member")
+    public ResponseEntity getWidget(@RequestParam String memberKey) {
+        ResponseDefault responseDefault = null;
+
+        // 해당 멤버 있는지 확인
+        if(!test.isValidMemberKey(memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
+        }
+
+
+        // 멤버 정보 가져오기
+        Member member = memberService.findByMemberKey(memberKey);
+
+        // 위젯
+        Widget widget = widgetService.findByMemberKey(memberKey);
+
+        // 플레이리스트
+        String playlist = playlistService.findByMemberKey(memberKey);
+
+        // 지역
+        DongCode dongCode = regionService.findByMemberKey(memberKey);
+
+        // 캘린더
+        String calendar = calendarService.findByMemberKey(memberKey);
+
+        // responseDto 꾸리기
+        ResponseWidget responseWidget = ResponseWidget.builder()
+                .news(widget.isNews())
+                .calender(widget.isCalender())
+                .playlist(widget.isPlaylist())
+                .build();
+
+        ResponseRegion responseRegion = ResponseRegion.builder()
+                .sidoName(dongCode.getSidoName())
+                .gugunName(dongCode.getGugunName())
+                .dongName(dongCode.getDongName())
+                .lat(dongCode.getLat())
+                .lng(dongCode.getLng())
+                .build();
+
+
+        ResponseMember responseMember = ResponseMember.builder()
+                .memberKey(member.getMemberKey())
+                .nickname(member.getNickname())
+                .imgUrl(member.getImgUrl())
+                .playlist(playlist)
+                .calender(calendar)
+                .kidsMode(member.isKidsMode())
+                .widget(responseWidget)
+                .region(responseRegion)
+                .build();
+
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg("")
+                .data(responseMember)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+    /**
+     * 위젯 정보(show 여부, 링크, 지역 정보)
+     * @param requestWidget
+     * @return
+     */
+    @PutMapping("/widget")
+    public ResponseEntity updateWidget(@RequestBody RequestWidget requestWidget) {
+        ResponseDefault responseDefault = null;
+
+        // 멤버키 유효성 확인
+        String memberKey = requestWidget.getMemberKey();
+        if(!test.isValidMemberKey(memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음)",HttpStatus.OK);
+        }
+
+        String cmd = requestWidget.getCmd();
+        String value = requestWidget.getValue();
+
+        int res = 0;
+
+        // 아이모드(kidsMode), 재생목록(playlist), 뉴스/기사(news), 캘린더(calendar), 재생목록링크(playlistLink), 캘린더링크(calendarLink), 지역(region)
+        switch(cmd) {
+            case "kidsMode":
+                res = memberService.updateKidsMode(value, memberKey);
+                break;
+            case "playlist":
+                res = widgetService.updatePlaylist(value, memberKey);
+                break;
+            case "news":
+                res = widgetService.updateNews(value, memberKey);
+                break;
+            case "calendar":
+                res = widgetService.updateCalender(value, memberKey);
+                break;
+            case "playlistLink":
+                res = playlistService.updateLink(value, memberKey);
+                break;
+            case "calendarLink":
+                res = calendarService.updateLink(value, memberKey);
+                break;
+//            case "region":
+//                res = memberService.updateRegion(value, memberKey);
+//                break;
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+    /**
+     * 해당 멤버가 해당 월에 실시한 양치 횟수를 31 길이의 리스트에 저장하여 출력합니다.
      * @param memberKey
      * @param year
      * @param month

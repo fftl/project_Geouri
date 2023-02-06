@@ -19,7 +19,6 @@ public class Widget {
     private String memberKey; // 멤버 기본키
     private boolean news;
     private boolean playlist;
-    private boolean shot;
     private boolean calender;
 
 }

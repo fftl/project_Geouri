@@ -303,7 +303,6 @@ public class MirrorController {
      */
     @PostMapping("/member")
     public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException {
-        System.out.println("readMember");
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
@@ -318,20 +317,16 @@ public class MirrorController {
 
         // 위젯
         Widget widget = widgetService.findByMemberKey(memberKey);
-        // 위젯 dto로 만들기
-
 
         // 플레이리스트
         String playlist = playlistService.findByMemberKey(memberKey);
 
         // 지역
         DongCode dongCode = regionService.findByMemberKey(memberKey);
-        // 지역 dto 로 만들기
 
         // 캘린더
         String calendar = calendarService.findByMemberKey(memberKey);
         // 캘린더 링크 접속 후 파싱 필요 !!!
-        System.out.println(calendar);
 
         // 뉴스
         List<News> newsList = newsService.findByPress("YTN");
@@ -355,7 +350,6 @@ public class MirrorController {
         // responseDto 꾸리기
         ResponseWidget responseWidget = ResponseWidget.builder()
                 .news(widget.isNews())
-                .shot(widget.isShot())
                 .calender(widget.isCalender())
                 .playlist(widget.isPlaylist())
                 .build();

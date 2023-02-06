@@ -21,4 +21,9 @@ public class PlaylistService {
         if(playlist == null) return null; // 링크 없으면 null
         return playlist.getLink(); // 플레이리스트 링크 전달
     }
+
+    public int updateLink(String link, String memberKey) {
+        int result = playlistRepository.updateLink(link, memberKey);
+        return result;
+    }
 }
