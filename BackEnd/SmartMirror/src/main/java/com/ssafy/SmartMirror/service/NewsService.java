@@ -1,9 +1,13 @@
 package com.ssafy.SmartMirror.service;
 
+import com.ssafy.SmartMirror.domain.Brushing;
+import com.ssafy.SmartMirror.domain.Member;
 import com.ssafy.SmartMirror.domain.News;
 import com.ssafy.SmartMirror.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class NewsService {
@@ -27,5 +31,15 @@ public class NewsService {
         News response = newsRepository.save(news);
         //reseponse 의 key값을 int로 변환하여 반환!
         return response.getNewsKey().intValue();
+    }
+
+    public List<News> findByPress(String press) {
+        System.out.println("find by "+press);
+        List<News> newsList = newsRepository.findAllByPress(press);
+        return newsList;
+    }
+
+    public void truncate() {
+        newsRepository.truncateNews();
     }
 }

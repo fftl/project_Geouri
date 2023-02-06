@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * 거울 혹은 서버에 전송할 멤버 정보를 저장한다.
  */
@@ -24,5 +26,7 @@ public class ResponseInfo {
     private String playlist;
     private String calender;
     private ResponseRegion region; // 지역 (Double 경도, 위도)
+
+    private List<ResponseNews> news;
 
 }

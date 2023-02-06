@@ -13,15 +13,4 @@ import java.util.Random;
 
 public class WebController {
 
-
-    public ResponseEntity signUp() {
-        return null;
-    }
-
-
-
-    // 이메일 인증번호 전송
-    public ResponseEntity sendEmailToken(RequestEntity requestEntity) {
-        return null;
-    }
 }
