@@ -3,6 +3,7 @@ package com.ssafy.SmartMirror.controller;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.ssafy.SmartMirror.config.FireBaseService;
 import com.ssafy.SmartMirror.config.Test;
+import com.ssafy.SmartMirror.domain.Brushing;
 import com.ssafy.SmartMirror.domain.Member;
 import com.ssafy.SmartMirror.domain.News;
 import com.ssafy.SmartMirror.domain.User;
@@ -10,7 +11,7 @@ import com.ssafy.SmartMirror.dto.RequestInfo;
 import com.ssafy.SmartMirror.dto.ResponseDefault;
 import com.ssafy.SmartMirror.dto.ResponseMember;
 import com.ssafy.SmartMirror.dto.ResponseNews;
-import com.ssafy.SmartMirror.service.UserService;
+import com.ssafy.SmartMirror.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -30,11 +31,35 @@ import java.util.Random;
 public class WebController {
 
     private UserService userService;
+    private KidsScriptService kidsScriptService;
+    private KidsResponseService kidsResponseService;
+    private MemberService memberService;
+    private MirrorService mirrorService;
+    private WidgetService widgetService;
+    private PlaylistService playlistService;
+    private CalendarService calendarService;
+    private RegionService regionService;
+    private BrushingService brushingService;
+    private FireBaseService fireBaseService;
+    private VisitService visitService;
+    private NewsService newsService;
     private Test test;
 
     @Autowired
-    public WebController(UserService userService, Test test) {
+    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
         this.userService = userService;
+        this.kidsScriptService = kidsScriptService;
+        this.kidsResponseService = kidsResponseService;
+        this.memberService = memberService;
+        this.mirrorService = mirrorService;
+        this.widgetService = widgetService;
+        this.playlistService = playlistService;
+        this.calendarService = calendarService;
+        this.regionService = regionService;
+        this.brushingService = brushingService;
+        this.fireBaseService = fireBaseService;
+        this.visitService = visitService;
+        this.newsService = newsService;
         this.test = test;
     }
 
@@ -52,7 +77,7 @@ public class WebController {
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 해당 유저 있는지 확인
-        if(!test.isValidAccess(userKey)) {
+        if(!test.isValidUserKey(userKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
 
@@ -78,6 +103,44 @@ public class WebController {
                 .data(responseMemberList)
                 .build();
 
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+    /**
+     *
+     * @param memberKey
+     * @param year
+     * @param month
+     * @return
+     */
+    @GetMapping("/brushlog")
+    public ResponseEntity getBrushLog(@RequestParam String memberKey, String year, String month) {
+        ResponseDefault responseDefault = null;
+
+        // 해당 멤버 있는지 확인
+        if(!test.isValidMemberKey(memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
+        }
+
+        // 해당 멤버의 브러쉬 기록 중 year, month 에 해당하는 양치기록을 가져온다
+        int[] brushlog = new int[31];
+        String searchMonth = year+"-"+month;
+
+        List<Brushing> brushinglog = brushingService.findAllByMemberAndBrushingTimeStartingWith(memberKey, searchMonth);
+        for (Brushing log : brushinglog) {
+            String[] date = log.getBrushingTime().split(" ");
+            String[] days = date[0].split("-");
+            int day = Integer.parseInt(days[2]);
+
+            brushlog[day]++;
+        }
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg("")
+                .data(brushlog)
+                .build();
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 }
