@@ -6,6 +6,7 @@ const rq = require('request');
 var prevKey = 0;
 var prevType = 0;
 var memberKey;
+var PythonShell = require('python-shell');
 
 //접속되어 있는 모든 클라이언트들에게 동일한 메세지를 보내는 함수
 wss.broadcast = (message) => {
@@ -77,13 +78,15 @@ wss.on('connection', function (ws, request) {
       }
 
       // fe
+      // 비디오 관련하여 정지 재생 응답 
       if (voice_input.includes("video"))
         wss.broadcast(JSON.stringify(data));
+
       // db
-      else {
+      // 어린이의 양치 손씻기에 대한 대답 전송
+      else if (voice_input.includes("answer")) {
         console.log("얼굴인식됨", obj.content)
         const face_name = obj.content
-
 
         // 긍정 : 1, 부정 : 0
         // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
@@ -120,6 +123,18 @@ wss.on('connection', function (ws, request) {
 
           wss.broadcast(JSON.stringify(data));
         });
+      }
+      // db 
+      // 사진 촬영을 하는 경우
+      else if (voice_input.includes("capture")) {
+        // 이미지 캡쳐해서 전송하는 파일을 memberKey데이터와 실행
+        PythonShell.PythonShell.run('./tests/' + capture_img.py, memberKey, function (err, results) {
+          if (err) throw err;
+          console.log('results: %j', results);
+          //console.log('results: %j', results);
+          response.send({ result: results });
+        });
+
       }
 
     }
