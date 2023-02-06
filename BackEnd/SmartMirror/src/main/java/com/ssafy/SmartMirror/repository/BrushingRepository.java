@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface BrushingRepository extends JpaRepository<Brushing, Long> {
     public List<Brushing> findAllByMember(Member member);
+    public List<Brushing> findAllByMemberAndBrushingTimeStartingWith(Member member, String month);
+
+
 }

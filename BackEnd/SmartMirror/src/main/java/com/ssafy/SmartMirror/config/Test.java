@@ -91,10 +91,19 @@ public class Test {
         return true;
     }
 
-    public boolean isValidAccess(String userKey) {
+    public boolean isValidUserKey(String userKey) {
         User user = userService.findByUserKey(userKey);
 
         if(user == null) { // 해당 유저 없음
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isValidMemberKey(String memberKey) {
+        Member member = memberService.findByMemberKey(memberKey);
+
+        if(member == null) { // 해당 유저 없음
             return false;
         }
         return true;

@@ -6,6 +6,7 @@ import com.ssafy.SmartMirror.domain.Visit;
 import com.ssafy.SmartMirror.repository.BrushingRepository;
 import com.ssafy.SmartMirror.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,10 +44,16 @@ public class BrushingService {
     }
 
     public List<Brushing> findAllByMember(String memberKey){
-        System.out.println("test1");
         Member member = memberRepository.findById(memberKey).get();
         List<Brushing> brushingList = brushingRepository.findAllByMember(member);
-        System.out.println("test2");
+        return brushingList;
+    }
+
+    public List<Brushing> findAllByMemberAndBrushingTimeStartingWith(String memberKey, String month){
+        System.out.println("findALl~~~~~ "+month);
+        Member member = memberRepository.findById(memberKey).get();
+        List<Brushing> brushingList = brushingRepository.findAllByMemberAndBrushingTimeStartingWith(member, month);
+        System.out.println("사이즈"+brushingList.size());
         return brushingList;
     }
 }
