@@ -12,6 +12,13 @@ import json
 RATE = 16000
 CHUNK = int(RATE / 10)  
 
+# Audio strings
+arr_str = [["시작", "재생", "진행"],["종료","그만","정지","중지"],["다음","넥스트"], ["이전"],["응","좋아","그래"],["아니","싫어"]]
+arr_voicecmd = ["video_start","video_stop","video_next","video_prev","answer_positive","answer_negative"]
+
+
+
+
 class MicrophoneStream(object):
     def __init__(self, rate, chunk):
         self._rate = rate
@@ -71,7 +78,15 @@ class MicrophoneStream(object):
 
             yield b''.join(data) # byte-stream
 
-# response  화면에 출력
+
+def find_command_by_transcript(transcript):
+    for i in range(len(arr_str)):
+        for str in arr_str[i]:
+            if str in transcript:
+                return arr_voicecmd[i]
+    return "none"
+
+
 def listen_print_loop(responses):
     num_chars_printed = 0
     for response in responses:
@@ -100,77 +115,30 @@ def listen_print_loop(responses):
 
         else:   # 확정된 transcript라면
             print(transcript + overwrite_chars)
-
-            audio_data = {
-                "cmd": "voice_input",
-                "content": transcript.strip(),
-            }
-
             ws = create_connection("ws://localhost:9998")
+
             ##=======================================음악관련 => FE===========================================##
             # 음악 재생
-            if re.search(r'\b(시작)', transcript, re.I) or re.search(r'\b(재생)', transcript, re.I) or re.search(r'\b(진행)',
-                                                                                                             transcript,
-                                                                                                             re.I):
+            # if re.search(r'\b(시작)', transcript, re.I) or re.search(r'\b(재생)', transcript, re.I) or re.search(r'\b(진행)',
+            #                                                                                                  transcript,
+            #                                                                                                  re.I):
+            #     audio_data = {
+            #         "cmd": "voice_input",
+            #         "content": 'startvideo',
+            #     }
+            #     ws.send(json.dumps(audio_data))
+
+
+            voicecmd = find_command_by_transcript(transcript)
+
+            if voicecmd != "none":
                 audio_data = {
                     "cmd": "voice_input",
-                    "content": 'startvideo',
+                    "content": voicecmd,
                 }
                 ws.send(json.dumps(audio_data))
-            # 음악 종료
-            elif re.search(r'\b(종료)', transcript, re.I) or re.search(r'\b(그만)', transcript, re.I) or re.search(
-                    r'\b(중지)', transcript, re.I) or (r'\b(정지)', transcript, re.I) or re.search(r'\b(멈춰)', transcript,
-                                                                                               re.I) or re.search(
-                    r'\b(멈춰)', transcript, re.I):
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": 'stopvideo',
-                }
-                ws.send(json.dumps(audio_data))
-            # 다음 음악
-            elif re.search(r'\b(다음)', transcript, re.I) or re.search(r'\b(뒤로)', transcript, re.I) or re.search(
-                    r'\b(넥스트)'):
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": 'nextvideo',
-                }
-                ws.send(json.dumps(audio_data))
-            # 이전 음악
-            elif re.search(r'\b(이전)', transcript, re.I) or re.search(r'\b(앞으로)', transcript, re.I) or re.search(
-                    r'\b(앞에)'):
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": 'frontvideo',
-                }
-                ws.send(json.dumps(audio_data))
+
             ws.close()
-            ##=======================================양치관련 => DB===========================================##
-            # 대답 no
-            if re.search(r'\b(아니)', transcript, re.I) or re.search(r'\b(안할래)', transcript, re.I) or re.search(r'\b(싫어)',
-                                                                                                              transcript,
-                                                                                                              re.I) or re.search(
-                    r'\b(노노)', transcript, re.I) or re.search(r'\b(손)', transcript, re.I):
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": 'answerno',
-                }
-            # 대답 yes
-            elif re.search(r'\b(좋아)', transcript, re.I) or re.search(r'\b(응)', transcript, re.I) or re.search(r'\b(할래)',
-                                                                                                              transcript,
-                                                                                                              re.I) or re.search(
-                    r'\b(할게)', transcript, re.I) or re.search(r'\b(양치)', transcript, re.I) or re.search(r'\b(네)',
-                                                                                                        transcript,
-                                                                                                        re.I):
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": 'answeryes',
-                }
-
-            # 문장중에 '명령끝'이라는 단어가 있다면 종료한다.
-            """if re.search(r'\b(명령 끝)', transcript, re.I):
-                print('Exiting..')
-                break"""
-
             num_chars_printed = 0
 
 

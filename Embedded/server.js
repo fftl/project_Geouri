@@ -71,32 +71,30 @@ wss.on('connection', function (ws, request) {
       const voice_input = obj.content
       console.log("음성인식 받음 : ", voice_input)
 
-
-      const data = {
-        "cmd": "voice_input",
-        "content": voice_input,
-      }
-
       // fe
       // 비디오 관련하여 정지 재생 응답 
-      if (voice_input.includes("video"))
+      if (voice_input.includes("video")){
+        const data = {
+          "cmd": "voice_input",
+          "content": voice_input,
+        }
         wss.broadcast(JSON.stringify(data));
+      }
+        
 
       // db
       // 어린이의 양치 손씻기에 대한 대답 전송
       else if (voice_input.includes("answer")) {
-        console.log("얼굴인식됨", obj.content)
-        const face_name = obj.content
 
         // 긍정 : 1, 부정 : 0
         // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
         // prevKey : 전에 받았던 멘트 키
         const reaction = -1;
 
-        if (voice_input == "yes")
+        if (voice_input == "answer_positive")
           reaction = 1;
-        elif(void_input == "no")
-        reaction = 0;
+        else if(void_input == "answer_negative")
+          reaction = 0;
 
         let options = {
           uri: 'http://i8a201.p.ssafy.io/--',
@@ -124,6 +122,7 @@ wss.on('connection', function (ws, request) {
           wss.broadcast(JSON.stringify(data));
         });
       }
+      
       // db 
       // 사진 촬영을 하는 경우
       // nodejs에서 pythonshell을 통해 파이썬 파일 실행
