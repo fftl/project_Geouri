@@ -29,23 +29,19 @@ function Timer(props) {
     return () => clearInterval(countdown);
   }, [shoot]);
 
-  // useEffect(() => {
-  //   const shootover = setInterval(() => {
-  //     if (parseInt(shoot) > 0) {
-  //       setShoot(parseInt(shoot) - 1);
-  //     }
-  //     if (parseInt(shoot) === 0) {
-  //       clearInterval(shootover);
-  //       {
-  //         style: display = { none };
-  //       }
-  //     }
+  // const ele = document.getElementById("shooting");
+  // const shootover = () => {
+  //   const ele = document.getElementById("shooting");
+  //   setTimeout(() => {
+  //     setComp("ending");
   //   }, 1000);
   // }, []);
 
   return (
     <div className="timer">
-      {sec !== 0 && sec}
+      <p className="timer-num">
+        {sec !== 0 && sec}
+      </p>
       {/* {sec === 0 && <img id="shooting" src={snap} alt="shooting" />} */}
       {shoot ? <img id="shooting" src={snap} alt="shooting" /> : null}
     </div>

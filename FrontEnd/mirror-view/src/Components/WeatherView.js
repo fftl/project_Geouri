@@ -61,10 +61,7 @@ function WeatherView() {
   // 위치정보는 mock data
   const member = useState((state) => state?.mirror?.member);
   const lon = member?.lng;
-  const lat = member?.lat;
-
-  console.log(lon)
-  console.log(lat)
+  const lat = member?.lon;
 
   // const [lat, lon] = [37, 127];
   const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
@@ -120,13 +117,13 @@ function WeatherView() {
           <div className='weather-icon-box'>
             <img className='weather-icon' src={icon} alt="weather-icon"/>
           </div>
-            <div className='weather-text-box'>
-              <p>{weather}</p>
-              <p>{temp}º</p>
-            </div>
+          <div className='weather-text-box'>
+            {/* <p style={{alignItems:'end'}}>{weather}</p> */}
+            <p style={{alignItems:'start'}}>{weather} {temp}º</p>
+          </div>
         </div>
           : 
-          <div style={{fontSize: '2rem', margin: '2rem'}}>
+          <div style={{fontSize: '2rem', margin: '4rem'}}>
             날씨 및 위치 정보를 불러올 수 없습니다.   
           </div>
       }
