@@ -60,10 +60,11 @@ function WeatherView() {
   };
   // 위치정보는 mock data
   const member = useState((state) => state?.mirror?.member);
-  const lon = member?.lng;
-  const lat = member?.lon;
 
-  // const [lat, lon] = [37, 127];
+  // const lon = member?.lng;
+  // const lat = member?.lon;
+
+  const [lat, lon] = [37, 127];
   const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
   const [temp, setTemp] = useState("");
   const [weather, setWeather] = useState("");
@@ -118,7 +119,7 @@ function WeatherView() {
             <img className='weather-icon' src={icon} alt="weather-icon"/>
           </div>
           <div className='weather-text-box'>
-            {/* <p style={{alignItems:'end'}}>{weather}</p> */}
+            <p style={{alignItems:'end'}}>{member?.sidoName} {member?.gugunName}</p>
             <p style={{alignItems:'start'}}>{weather} {temp}º</p>
           </div>
         </div>

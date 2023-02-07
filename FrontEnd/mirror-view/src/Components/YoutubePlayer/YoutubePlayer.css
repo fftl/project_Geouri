@@ -1,8 +1,4 @@
-div {
-    color: white;
-    margin: 0 auto;
-    background-color: black;
-  }
+
   .container {
     margin: 0 auto;
     display: flex;
@@ -22,4 +18,6 @@ div {
       width: 100%;
       height: 100%;
   }
-  
+  .youtube-box{
+    padding-left: 4rem;
+  }

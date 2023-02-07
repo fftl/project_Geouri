@@ -1,0 +1,34 @@
+.news-player-box{
+    display: flex;
+    justify-content: end;
+    margin: 0 4rem ;
+    height: 440px;
+    overflow-y: hidden;
+}
+
+.news-player {
+    display: grid;
+}
+
+.news-box{
+    display: flex;
+    width: 100%;
+    border: 1px solid rgb(255, 255, 255, 0.5);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.news-title{
+    font-size: 2rem;
+    height: fit-content;
+}
+
+.news-press{
+    font-size: 1.3rem;
+    margin-left: 16px;
+    padding: 8px;
+    border: 1px solid white;
+    display: flex;
+    align-items: center;
+}

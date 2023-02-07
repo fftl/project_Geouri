@@ -16,6 +16,7 @@
     font-weight: 800;
     font-size: 8rem;
     align-items: center;
+    margin-left: 4rem;
 }
 .weather {
     display: grid;

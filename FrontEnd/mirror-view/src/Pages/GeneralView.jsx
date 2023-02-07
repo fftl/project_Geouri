@@ -8,10 +8,10 @@ function GeneralView(props) {
     const member_info = useState(state => state?.mirror?.member?.data);
 
     return (
-        <>
+        <div className="general-view-box">
             <YouTubePlayer />
             <NewsPlayer />
-        </>
+        </div>
     )
 }
 
