@@ -11,7 +11,7 @@ import Photobook from "./Pages/Photobook";
 function App() {
   return (
     <div className="App">
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
@@ -19,9 +19,9 @@ function App() {
         <Route path="/member/add" element={<AddMember />} />
         <Route path="/member/:id" element={<MemberPage />} />
         <Route path="*" element={<NotFound404 />} />
-      </Routes> */}
+      </Routes>
       {/* <ProfileEdit /> */}
-      <Cal />
+      {/* <Cal /> */}
       {/* <Photobook /> */}
     </div>
   );

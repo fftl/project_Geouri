@@ -21,20 +21,24 @@ function Kids(props) {
   const message = useSelector((state) => state?.mirror?.message);
 
   // const [comp, setComp] = useState(mirror_action); // component 설정
-  const [comp, setComp] = useState('camera'); // component 설정
+  const [comp, setComp] = useState("camera"); // component 설정
   const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
-  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
-  useEffect(() => {
-    if (comp === 'ending'){
-      setTimeout(() => {
-        dispatch(mirrorActions.finish())
-      }, 4000);
-    }
-  }, [comp]);
+  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
+  // useEffect(() => {
+  //   if (comp === "ending") {
+  //     setTimeout(() => {
+  //       dispatch(mirrorActions.finish());
+  //     }, 4000);
+  //   }
+  // }, [comp]);
 
+  useEffect(() => {
+    setComp("video");
+    setVideo("wash_hands");
+  }, []);
   // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
-  if (comp === 'greeting') {
+  if (comp === "greeting") {
     return (
       <>
         {member_info ? (
