@@ -79,13 +79,12 @@ function Kids(props) {
         </div>
       );
     }
-  }
-  else if (comp === 'camera'){
+  } else if (comp === "camera") {
     return (
       <>
-        <Timer setComp={setComp}/>
+        <Timer setComp={setComp} />
       </>
-    )
+    );
   } else if (comp === "ending") {
     return (
       <div className="balloon">
