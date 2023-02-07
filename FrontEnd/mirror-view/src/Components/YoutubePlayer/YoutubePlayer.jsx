@@ -36,13 +36,13 @@ function YoutubePlayer(){
     
     return (
         <>
-            {play ? 
+            {/* {play ? 
                 <div className="youtube-box">
                     <Youtube key={play} videoId={play} opts={opts} ></Youtube> 
                 </div>
             :
-            null}   
-        {/* <iframe  
+            null}    */}
+        <iframe  
             title="ytplayer"
             id="ytplayer" 
             className="ytplayer"
@@ -50,7 +50,7 @@ function YoutubePlayer(){
             enablejsapi="1"
             width="640" height="360"
             src={url} ref={iframeRef}
-            ></iframe> */}
+            ></iframe>
 
             
         </>
