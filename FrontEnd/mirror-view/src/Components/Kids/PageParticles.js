@@ -54,14 +54,7 @@ const particleClasses = (): string => {
 };
 
 const GlobalParticles = createGlobalStyle`
-html, body {
-  
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #1e1e1e;
-}
+
 
 .animation-wrapper {
   background-color: transparent;

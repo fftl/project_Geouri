@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import HomeHeader from "./Components/HomeHeader/HomeHeader";
 import Socket from "./Components/Util/Socket";
@@ -9,7 +9,7 @@ import GeneralView from "./Pages/GeneralView";
 
 function App() {
   const webSocket = new WebSocket("ws://localhost:9998");
-  
+
   return (
     <React.Fragment>
       <Socket webSocket={webSocket}>
