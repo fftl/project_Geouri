@@ -1,6 +1,5 @@
 package com.ssafy.SmartMirror.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.ssafy.SmartMirror.config.FireBaseService;
 import com.ssafy.SmartMirror.config.Test;
 import com.ssafy.SmartMirror.domain.*;
@@ -8,20 +7,16 @@ import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/web")
-
 public class WebController {
 
     private UserService userService;
@@ -33,6 +28,7 @@ public class WebController {
     private PlaylistService playlistService;
     private CalendarService calendarService;
     private RegionService regionService;
+    private DongCodeService dongCodeService;
     private BrushingService brushingService;
     private FireBaseService fireBaseService;
     private VisitService visitService;
@@ -40,7 +36,7 @@ public class WebController {
     private Test test;
 
     @Autowired
-    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
+    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
         this.userService = userService;
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
@@ -50,6 +46,7 @@ public class WebController {
         this.playlistService = playlistService;
         this.calendarService = calendarService;
         this.regionService = regionService;
+        this.dongCodeService = dongCodeService;
         this.brushingService = brushingService;
         this.fireBaseService = fireBaseService;
         this.visitService = visitService;
@@ -57,16 +54,38 @@ public class WebController {
         this.test = test;
     }
 
-    //    @PostMapping("/member")
-//    public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException
+    /* ***************************** User ***************************** */
 
+//    @PostMapping("/signup")
+//    public ResponseEntity registUser() { // 유저 등록
+//        // implememt here
+//        return null;
+//    }
+//
+//    @GetMapping("/user")
+//    public ResponseEntity addUser() { // 유저 읽기
+//        // implememt here
+//        return null;
+//    }
+//
+//    @PutMapping("/user")
+//    public ResponseEntity addUser() { // 유저 수정
+//        // implememt here
+//        return null;
+//    }
+//
+//    @DeleteMapping("/user")
+//    public ResponseEntity addUser() { // 유저 삭제
+//        // implememt here
+//        return null;
+//    }
 
     /**
      * 해당 유저가 가지고 있는 멤버 리스트 반환
      * @param userKey
      * @return
      */
-    @GetMapping("/memberlist")
+    @GetMapping("/user/memberlist")
     public ResponseEntity getMemberList(@RequestParam String userKey) {
         ResponseDefault responseDefault = null; // response 객체 생성
 
@@ -75,33 +94,67 @@ public class WebController {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
 
-        
-        User user = userService.findByUserKey(userKey); // 유저키에 해당하는 유저 가져오기
-        List<Member> memberList = user.getMemberList(); // 해당 유저에 연결된 멤버리스트 가져오기
 
-        System.out.println("사이즈 "+memberList.size());
-        
-        List<ResponseMember> responseMemberListdto = new ArrayList<>(); // 멤버리스트를 응답 dto로 변경
-        for (Member member : memberList) {
-            responseMemberListdto.add(ResponseMember.builder()
+        User user = userService.findByUserKey(userKey); // 유저키에 해당하는 유저 가져오기
+        List<Member> memberEntityList = user.getMemberList(); // 해당 유저에 연결된 멤버리스트 가져오기
+
+        List<ResponseMember> responseMemberList = new ArrayList<>(); // 멤버리스트를 응답 dto로 변경
+        for (Member member : memberEntityList) {
+            responseMemberList.add(ResponseMember.builder()
                     .memberKey(member.getMemberKey())
                     .imgUrl(member.getImgUrl())
                     .nickname(member.getNickname())
                     .build());
         }
 
-        ResponseMemberList responseMemberList = ResponseMemberList.builder()
-                .memberList(responseMemberListdto)
+        ResponseMemberList memberList = ResponseMemberList.builder()
+                .memberList(responseMemberList)
                 .build();
+
         responseDefault = ResponseDefault.builder()
                 .success(true)
                 .msg("")
-                .data(responseMemberList)
+                .data(memberList)
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
+
+    @PostMapping("/user/mirror")
+    public ResponseEntity registMirror() { // 거울 등록
+        return null;
+    }
+
+    @GetMapping("/user/mirror")
+    public ResponseEntity getMirrorList() { // 거울 리스트 반환
+        return null;
+    }
+
+    @PutMapping("/user/mirror")
+    public ResponseEntity updateMirror() { // 거울 정보 수정
+        return null;
+    }
+
+    @DeleteMapping("/user/mirror")
+    public ResponseEntity deleteMirror() { // 거울 삭제
+        return null;
+    }
+
+
+    /* ***************************** Member ***************************** */
+
+    /**
+     * 멤버 추가
+     * @param info
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/member")
+    public ResponseEntity addMember(@RequestBody RequestInfo info) {
+        //        // implememt here
+        return null;
+    }
 
 
     /**
@@ -120,19 +173,18 @@ public class WebController {
 
 
         // 멤버 정보 가져오기
-        Member member = memberService.findByMemberKey(memberKey);
+        Member member = memberService.findByMemberKey(memberKey); // 멤버
+        Widget widget = widgetService.findByMemberKey(memberKey); // 위젯
+        String playlist = playlistService.findByMemberKey(memberKey); // 플레이리스트
 
-        // 위젯
-        Widget widget = widgetService.findByMemberKey(memberKey);
-
-        // 플레이리스트
-        String playlist = playlistService.findByMemberKey(memberKey);
-
-        // 지역
-        DongCode dongCode = regionService.findByMemberKey(memberKey);
+        // 지역 정보
+        String dongCode = dongCodeService.findByMemberKey(memberKey);
+        Region region = regionService.findByDongCode(dongCode);
 
         // 캘린더
         String calendar = calendarService.findByMemberKey(memberKey);
+        // 캘린더 링크 접속 후 파싱 필요 !!!
+
 
         // responseDto 꾸리기
         ResponseWidget responseWidget = ResponseWidget.builder()
@@ -142,11 +194,11 @@ public class WebController {
                 .build();
 
         ResponseRegion responseRegion = ResponseRegion.builder()
-                .sidoName(dongCode.getSidoName())
-                .gugunName(dongCode.getGugunName())
-                .dongName(dongCode.getDongName())
-                .lat(dongCode.getLat())
-                .lng(dongCode.getLng())
+                .sidoName(region.getSidoName())
+                .gugunName(region.getGugunName())
+                .dongName(region.getDongName())
+                .lat(region.getLat())
+                .lng(region.getLng())
                 .build();
 
 
@@ -173,7 +225,7 @@ public class WebController {
 
 
     /**
-     * 위젯 정보(show 여부, 링크, 지역 정보)
+     * 멤버의 위젯 정보(show 여부, 링크, 지역 정보) 수정
      * @param requestWidget
      * @return
      */
@@ -212,9 +264,14 @@ public class WebController {
             case "calendarLink":
                 res = calendarService.updateLink(value, memberKey);
                 break;
-//            case "region":
-//                res = memberService.updateRegion(value, memberKey);
-//                break;
+            case "region":
+                String[] address = value.split(" ");
+                String sidoName = address[0]; // 시,도 이름
+                String gugunName = address[1]; // 구,군 이름
+                String dongName = address[2]; // 동 이름
+                String dongCode = regionService.findBySidoNameAndGugunNameAndDongName(sidoName, gugunName, dongName);
+                res = dongCodeService.updateDongCode(dongCode, memberKey);
+                break;
         }
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
