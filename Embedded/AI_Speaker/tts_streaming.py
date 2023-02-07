@@ -1,6 +1,8 @@
 """
 pip install playsound
 pip install google-tts
+OR
+pip install google-cloud-texttospeech
 """
 
 # text-to-speech api로 텍스트 전달
