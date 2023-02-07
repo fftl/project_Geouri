@@ -54,7 +54,7 @@ wss.on('connection', function (ws, request) {
       const voice_input = obj.content
       console.log("음성인식 받음 : ", voice_input)
 
-      if(!personExist) return;
+      // if(!personExist) return;
       
       // fe
       // 비디오 관련하여 정지 재생 응답 
@@ -87,9 +87,11 @@ wss.on('connection', function (ws, request) {
       // db 
       // 사진 촬영을 하는 경우
       // nodejs에서 pythonshell을 통해 파이썬 파일 실행
-      else if (voice_input.includes("capture")) {
-        // 이미지 캡쳐해서 전송하는 파일을 memberKey데이터와 실행
+      else if (voice_input.includes("picture")) {
         takePicture();
+      }
+      else{
+        console.log("voice input leftovers")
       }
     }
 
@@ -236,6 +238,12 @@ function answerAndReply(reaction){
 
 
 function takePicture(){
+  console.log("사진 촬영 시작");
+  var data = {
+    "cmd" : "picturetaken",
+    "content" : "",
+  }
+
   var options = {
     mode: 'text',
     pythonPath: 'C:\\Users\\SSAFY\\anaconda3\\python.exe',
@@ -247,5 +255,9 @@ function takePicture(){
   PythonShell.PythonShell.run('capture_img_db.py', options, function (err, results) {
     if (err) throw err;
     console.log('results: %j', results);
+    data.content = results;
   });
+
+  wss.broadcast(JSON.stringify(data));
+  console.log("사진 촬영 끝");
 }
