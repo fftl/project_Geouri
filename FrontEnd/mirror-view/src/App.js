@@ -11,22 +11,18 @@ import KidsMain from "./Components/Kids/KidsMain";
 
 function App() {
   const webSocket = new WebSocket("ws://localhost:9998");
-  const [msg, setMsg] = useState(null);
 
   return (
-    // <React.Fragment>
-    //   <Socket webSocket={webSocket} setMsg={setMsg}></Socket>
-    //   <HomeHeader />
-    //   <Routes>
-    //     <Route path="/" element={<Home />} />
-    //     <Route path="/kids" element={<Kids webSocket={webSocket} />} />
-    //     <Route
-    //       path="/general"
-    //       element={<GeneralView webSocket={webSocket} />}
-    //     />
-    //   </Routes>
-    //   </React.Fragment>
-    <KidsMain />
+    <React.Fragment>
+      <Socket webSocket={webSocket}>
+      </Socket>
+        <HomeHeader />
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="/kids" element={<Kids webSocket={webSocket} />}/>
+          <Route path="/general" element={<GeneralView webSocket={webSocket} />}/>
+        </Routes>
+    </React.Fragment>
   );
 }
 
