@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { actionCreators as userActions } from "../../Redux/modules/user";
+import { FormControl, Grid } from "@mui/material";
+import "./Join.css";
 
 function Join(props) {
   const navigate = useNavigate();
@@ -65,30 +67,78 @@ function Join(props) {
 
   return (
     <div>
-      <form>
-        <label htmlFor="email">Email</label>
-        <input type="email" value={email} onChange={onEmailHandler} />
-        <label htmlFor="password">Password</label>
-        <input type="password" value={password} onChange={onPasswordHandler} />
-        <label htmlFor="confirmPassword">Password 확인</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={onConfirmPasswordHandler}
-        />
-        <label htmlFor="name">이름</label>
-        <input type="text" value={name} onChange={onNameHandler} />
-        <label htmlFor="birthday">생년월일</label>
-        <input type="text" value={birthday} onChange={onBirthdayHandler} />
-        <br />
-        <div>
-          이용약관, 개인정보 수집 및 이용,위치정보 이용약관(선택), 프로모션 안내
-          메일 수신(선택)에 모두 동의합니다.
-        </div>
-        <input type="checkbox" onChange={onCheckedHandler}></input>
-        <label htmlFor="check">동의합니다</label>
-        <button onClick={onSubmitHandler}>회원 가입</button>
-      </form>
+      <FormControl id="signup" variant="standard">
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <label htmlFor="email">Email</label>
+          </Grid>
+          <Grid item xs={6}>
+            <input
+              type="email"
+              value={email}
+              onChange={onEmailHandler}
+              className="inputtag"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <label htmlFor="password">Password</label>
+          </Grid>
+          <Grid item xs={6}>
+            <input
+              type="password"
+              value={password}
+              onChange={onPasswordHandler}
+              className="inputtag"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <label htmlFor="confirmPassword">Password 확인</label>
+          </Grid>
+          <Grid item xs={6}>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={onConfirmPasswordHandler}
+              className="inputtag"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <label htmlFor="name">이름</label>
+          </Grid>
+          <Grid item xs={6}>
+            <input
+              type="text"
+              value={name}
+              onChange={onNameHandler}
+              className="inputtag"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <label htmlFor="birthday">생년월일</label>
+          </Grid>
+          <Grid item xs={6}>
+            <input
+              type="text"
+              value={birthday}
+              onChange={onBirthdayHandler}
+              className="inputtag"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <div id="term">
+              이용약관, 개인정보 수집 및 이용,위치정보 이용약관(선택), 프로모션
+              안내 메일 수신(선택)에 모두 동의합니다.
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <input type="checkbox" onChange={onCheckedHandler}></input>
+            <label htmlFor="check">동의합니다</label>
+          </Grid>
+          <Grid item xs={12}>
+            <button onClick={onSubmitHandler}>회원 가입</button>
+          </Grid>
+        </Grid>
+      </FormControl>
     </div>
   );
 }

@@ -7,10 +7,11 @@ import Home from "./Pages/Home";
 import ProfileEdit from "./Components/Home/ProfileEdit";
 import Cal from "./Elements/Cal";
 import { Provider } from "react-redux";
+import Photobook from "./Pages/Photobook";
 function App() {
   return (
     <div className="App">
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
@@ -18,9 +19,10 @@ function App() {
         <Route path="/member/add" element={<AddMember />} />
         <Route path="/member/:id" element={<MemberPage />} />
         <Route path="*" element={<NotFound404 />} />
-      </Routes>
+      </Routes> */}
       {/* <ProfileEdit /> */}
-      {/* <Cal /> */}
+      <Cal />
+      {/* <Photobook /> */}
     </div>
   );
 }

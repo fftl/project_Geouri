@@ -1,0 +1,12 @@
+#signup {
+  justify-content: center;
+  align-items: center;
+  margin: 10%;
+}
+
+#term {
+  width: 100%;
+  margin: 10px;
+  border: 1px solid grey;
+  padding: 20px;
+}

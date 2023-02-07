@@ -3,9 +3,11 @@ import "./App.css";
 import HomeHeader from "./Components/HomeHeader/HomeHeader";
 import Socket from "./Components/Util/Socket";
 import Home from "./Pages/Home";
-import { Routes, Route } from 'react-router-dom'; 
+import { Routes, Route } from "react-router-dom";
 import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
+import Character from "./Components/Kids/Character";
+import KidsMain from "./Components/Kids/KidsMain";
 
 function App() {
   const webSocket = new WebSocket("ws://localhost:9998");
