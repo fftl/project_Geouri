@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function YoutubePlayer(){
     const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
-    // mute 해주거나
-    const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&mute=1&autoplay=1&loop=1`
-    // unmute 하거나
-    const url2 = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1`
+    // const playlistId = useState((state) => state?.mirror?.member?.playlist);
 
+    // mute 해주거나
+    const url2 = `https://www.youtube.com/embed/videoseries?list=${playlistId}&mute=1&autoplay=1&loop=1`
+    // unmute 하거나
+    const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1`
+
+
+        
     return (
         <>
             <iframe  
@@ -14,7 +18,11 @@ function YoutubePlayer(){
                 id="ytplayer" 
                 type="text/html" 
                 width="640" height="360"
-                src={url}></iframe>
+                src={url}
+                ></iframe>
+            <button className="play">play</button>
+            <button className="pause">stop</button>
+            <button className="stop"> stop </button>
         </>
     )
 }

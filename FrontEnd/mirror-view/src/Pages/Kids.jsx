@@ -2,115 +2,98 @@ import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
 import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from "../Components/Kids/Effect";
 import "./Kids.css";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import Timer from "../Elements/Timer";
 import PageParticles from "../Components/Kids/PageParticles";
+import Character from "../Components/Kids/Character";
+import { mirrorActions } from "../Redux/modules/mirror";
+import { useNavigate } from "react-router";
 
 function Kids(props) {
-  const { webSocket, msg } = props;
-  // const member_info = useSelector(state => state?.member?.info);
-  // const message = useSelector(state => state?.message);
+  const { webSocket } = props;
 
-  const member_info = {
-    member: {
-      info: {
-        name : '소영',
-        is_child : true,
-      }
-    },
-  };
-  const message = {
-    msg : '',
-  };
-  const [comp, setComp] = useState('message');
-  const [video, setVideo] = useState('');
-  const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // 처음 렌더링될 때만 이름을 보여주며, 이는 5초동안만 보여줌
-  // useEffect(() => {
-    // const t = setTimeout(() => setShowName(false), 5000);
-    // return () => { clearTimeout(t) };
-  // }, [])
+  const member_info = useSelector((state) => state?.mirror?.member?.data);
+  const mirror_action = useSelector((state) => state?.mirror?.action);
+  const message = useSelector((state) => state?.mirror?.message);
 
-  // useEffect(() => {
-  //   if( message?.msg && message?.action ){
-  //     if( message?.action === 'wash_hands' ){
-  //       setComp('video')
-  //       setVideo('wash_hands');
-  //     } else {
-  //       setComp('video')
-  //       setVideo('brush_teeth');
-  //     }
-  //   }
-  //   else if(message && !message?.action ) {
-  //     setVideo('');
-  //     setComp('message');
-  //   }
-  // }, [message])
+  // const [comp, setComp] = useState(mirror_action); // component 설정
+  const [comp, setComp] = useState('camera'); // component 설정
+  const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
+  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
   useEffect(() => {
-    if (videoEnded) {
-      setComp('ending');
+    if (comp === 'ending'){
+      setTimeout(() => {
+        dispatch(mirrorActions.finish())
+      }, 4000);
     }
-  }, [videoEnded])
+  }, [comp]);
 
-  // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말 
-  if (comp === 'greeting'){
+  // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
+  if (comp === 'greeting') {
     return (
       <>
-        {member_info? 
-          <div className="balloon">
-            <p className="balloon-text">
-              안녕, {member_info?.name}아! {member_info.greeting}!
-            </p>
+        {member_info ? (
+          <div className="total">
+            <div className="balloon">
+              <p className="balloon-text">
+                {member_info?.nickname}, {mirror_action?.message}
+                {/* {member_info?.nickname}, 안녕 좋은 아침이야 */}
+              </p>
+            </div>
+            <Character />
           </div>
-        : null
-        }
+        ) : null}
       </>
-    )
-  } 
-  else if (comp === 'message'){
+    );
+  } else if (comp === "message") {
     return (
       <>
-        {msg ?
+        {mirror_action?.msg ? (
           <div className="balloon">
-            <p className="balloon-text">
-              {msg}
-            </p>
+            <p className="balloon-text">{mirror_action?.msg}</p>
+            <Character />
           </div>
-        : null
-        }
+        ) : null}
       </>
-    )
-  }
-  else if ( comp === 'video' && videoEnded === false ){
-    if(video === 'wash_hands'){
+    );
+  } else if (comp === "video") {
+    if (video === "wash_hands") {
       return (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <WashHandsVideo webSocket={webSocket} videoEnded={videoEnded}/>
+          <WashHandsVideo webSocket={webSocket} setComp={setComp} />
         </div>
-      )
-    } else if (video === 'brush_teeth') {
+      );
+    } else if (video === "brush_teeth") {
       return (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <BrushTeethVideo webSocket={webSocket} videoEnded={videoEnded}/>
+          <BrushTeethVideo webSocket={webSocket} setComp={setComp} />
         </div>
-      )
+      );
     }
-  }
-  else if ( comp === 'ending' ){
+  } else if (comp === "camera") {
+    return (
+      <>
+        <Timer setComp={setComp} />
+      </>
+    );
+  } else if (comp === "ending") {
     return (
       <div className="balloon">
-        {message?.msg}
+        {/* <div className="balloon-text">{mirror_action?.msg}</div> */}
+        <div className="balloon-text">수고했어~ </div>
+        <Character />
       </div>
-    )
+    );
   }
-
 }
 
 export default Kids;
