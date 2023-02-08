@@ -28,6 +28,8 @@ public class ResponseMember {
     private ResponseWidget widget; // 위젯 (boolean 뉴스, 플레이리스트, 사진찍기, 일정)
     private ResponseRegion region; // 지역 (Double 경도, 위도)
 
+    private String fortune; // 오늘의 한마디
+
     private List<ResponseNews> news;
 
 }
