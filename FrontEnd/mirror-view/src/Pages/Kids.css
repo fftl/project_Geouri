@@ -1,24 +1,87 @@
-.balloon {
+.main-box {
   margin: 0 auto;
   justify-content: center;
-  border-radius: 30px;
-  /* border: 2px solid white; */
-  margin: 32px auto 32px auto;
-  padding: 4px;
+  margin: 4rem auto 4rem auto;
+  padding: 2rem;
   width: 80%;
   text-align: center;
 }
+.text-div{
+  height: 10rem;
+}
+.text{
+  font-size: 8rem;
+  font-weight: 400;
+}
+/* if ( comp === '' ) {
+  return (
+    <>
+      <div className="balloon">
+        <p className="balloon-text">
 
-.balloon-text {
-  font-size: 2rem;
-  font-weight: 800;
+        </p>
+      </div>
+    </>
+  )
 }
-.balloon-text {
-  width: 80%;
-  margin: 0 auto;
+if (comp === "message") {
+  return (
+    <>
+      {mirror_action?.msg ? (
+        <div className="balloon">
+          <p className="balloon-text">{mirror_action?.msg}</p>
+          <Character />
+        </div>
+      ) : null}
+    </>
+  );
 }
-.total {
-  width: 100%;
-  justify-content: center;
-  margin: 0 auto;
+else if (comp === 'greeting') {
+  return (
+    <>
+      {member_info ? (
+        <div className="total">
+          <div className="balloon">
+            <p className="balloon-text">
+              {{member_info?.nickname}, {mirror_action?.message}}
+              /* {member_info?.nickname}, 안녕 좋은 아침이야
+            </p>
+          </div>
+          <Character />
+        </div>
+      ) : null}
+    </>
+  );
+}else if (comp === "ending") {
+  return (
+    <div className="balloon">
+      <div className="balloon-text">{mirror_action?.msg}</div>
+      <Character />
+    </div>
+  );
 }
+if (comp === 'video') {
+  if (video === "wash_hands") {
+    return (
+      <div className="video-box">
+        <PageParticles />
+        <Effect />
+        <WashHandsVideo webSocket={webSocket} setComp={setComp} />
+      </div>
+    );
+  } else if (video === "brush_teeth") {
+    return (
+      <div className="video-box">
+        <PageParticles />
+        <Effect />
+        <BrushTeethVideo webSocket={webSocket} setComp={setComp} />
+      </div>
+    );
+  }
+} else if (comp === "camera") {
+  return (
+    <>
+      <Timer setComp={setComp} />
+    </>
+  );
+}  */ 

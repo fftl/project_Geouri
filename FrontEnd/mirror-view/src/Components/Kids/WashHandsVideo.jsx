@@ -2,10 +2,11 @@ import ReactPlayer from "react-player";
 import "./WashHandsVideo.css";
 
 const WashHandsVideo = (props) => {
-  const { webSocket, setComp } = props;
+  const { webSocket, setComp, setVideo } = props;
 
   const videoOff = () => {
     setComp('camera')
+    setVideo('')
   }
 
   return (
@@ -16,7 +17,6 @@ const WashHandsVideo = (props) => {
         height="700px"
         playing={true}
         autoPlay={true}
-        muted={true}
         id="player"
         onEnded={videoOff}
       />

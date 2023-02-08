@@ -5,7 +5,6 @@ import Schedule from "../Components/Schedule/Schedule";
 
 function GeneralView(props) {
     const { webSocket } = props;
-
     const member_info = useState(state => state?.mirror?.member?.data);
 
     return (

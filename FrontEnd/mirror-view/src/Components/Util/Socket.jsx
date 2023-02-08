@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { mirrorActions } from "../../Redux/modules/mirror";
@@ -34,12 +34,6 @@ const Socket = (props) => {
       // 거울 사용 종료시 
       dispatch(mirrorActions.leaveMirror());
       navigate('/');
-    } 
-    else if (msg.cmd === 'birthday') {
-      dispatch(mirrorActions.getAction(msg))
-    }
-    else if (message.data.cmd === 'easter_egg') {
-      dispatch(mirrorActions.getAction(msg))
     }
     else {
       dispatch(mirrorActions.getAction(msg))
