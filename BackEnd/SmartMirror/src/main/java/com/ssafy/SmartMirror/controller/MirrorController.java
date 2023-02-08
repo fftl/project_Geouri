@@ -5,6 +5,7 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequestMapping("/mirror")
 @RestController
 public class MirrorController {
+
     static final int START = 0; // 시작
     static final int MORNING = 1; // 오전
     static final int AFTERNOON = 2; // 오후
@@ -42,15 +44,16 @@ public class MirrorController {
     private PlaylistService playlistService;
     private CalendarService calendarService;
     private RegionService regionService;
+    private DongCodeService dongCodeService;
     private BrushingService brushingService;
     private FireBaseService fireBaseService;
     private VisitService visitService;
     private NewsService newsService;
     private SnapshotService snapshotService;
-
     private Utils utils;
 
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, Utils utils) {
+    @Autowired
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -59,6 +62,7 @@ public class MirrorController {
         this.playlistService = playlistService;
         this.calendarService = calendarService;
         this.regionService = regionService;
+        this.dongCodeService = dongCodeService;
         this.brushingService = brushingService;
         this.fireBaseService = fireBaseService;
         this.visitService = visitService;
@@ -66,6 +70,8 @@ public class MirrorController {
         this.snapshotService = snapshotService;
         this.utils = utils;
     }
+
+    /* ***************************** Script ***************************** */
 
     /**
      * 거울 앞의 사람과 상호작용하는 멘트를 리턴합니다.
@@ -273,33 +279,33 @@ public class MirrorController {
         return new ResponseEntity("어른과 아이 모두 아님", HttpStatus.OK);
     }
 
+
+    /* ***************************** Member ***************************** */
+
     /**
      * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
      * @param info
      * @return
      */
     @PostMapping("/member")
-    public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException {
+    public ResponseEntity getMember(@RequestBody RequestInfo info) throws IOException {
         ResponseDefault responseDefault = null; // response 객체 생성
 
-        // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
+        // 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = info.getSerialNumber();
         String memberKey = info.getMemberKey();
         if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
-        // 2. 멤버 정보 가져오기
-        Member member = memberService.findByMemberKey(memberKey);
+        // 멤버 정보 가져오기
+        Member member = memberService.findByMemberKey(memberKey); // 멤버
+        Widget widget = widgetService.findByMemberKey(memberKey); // 위젯
+        String playlist = playlistService.findByMemberKey(memberKey); // 플레이리스트
 
-        // 위젯
-        Widget widget = widgetService.findByMemberKey(memberKey);
-
-        // 플레이리스트
-        String playlist = playlistService.findByMemberKey(memberKey);
-
-        // 지역
-        DongCode dongCode = regionService.findByMemberKey(memberKey);
+        // 지역 정보
+        String dongCode = dongCodeService.findByMemberKey(memberKey);
+        Region region = regionService.findByDongCode(dongCode);
 
         // 캘린더
         String calendar = calendarService.findByMemberKey(memberKey);
@@ -323,7 +329,6 @@ public class MirrorController {
         visitService.saveVisit(member, visitTime);
 
 
-
         // responseDto 꾸리기
         ResponseWidget responseWidget = ResponseWidget.builder()
                 .news(widget.isNews())
@@ -332,14 +337,14 @@ public class MirrorController {
                 .build();
 
         ResponseRegion responseRegion = ResponseRegion.builder()
-                .sidoName(dongCode.getSidoName())
-                .gugunName(dongCode.getGugunName())
-                .dongName(dongCode.getDongName())
-                .lat(dongCode.getLat())
-                .lng(dongCode.getLng())
+                .sidoName(region.getSidoName())
+                .gugunName(region.getGugunName())
+                .dongName(region.getDongName())
+                .lat(region.getLat())
+                .lng(region.getLng())
                 .build();
 
-        ResponseInfo responseInfo = ResponseInfo.builder()
+        ResponseMember responseMember = ResponseMember.builder()
                 .memberKey(member.getMemberKey())
                 .nickname(member.getNickname())
                 .birth(member.getBirth())
@@ -354,7 +359,7 @@ public class MirrorController {
         responseDefault = ResponseDefault.builder()
                 .success(true)
                 .msg("성공")
-                .data(responseInfo)
+                .data(responseMember)
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);

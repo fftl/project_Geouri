@@ -41,20 +41,20 @@ insert into calendar (member_key, link) values ("fSBS-lCHb", null);
 insert into calendar (member_key, link) values ("DnGc-bHAM", null);
 
 -- 지역 ( 특정 지역 법정동코드 검색하면 나와요!! )
-insert into region (member_key, dong_code) values ("nh3b-494F", "2823710700");
-insert into region (member_key, dong_code) values ("B7T3-jX6r", "1168011100");
-insert into region (member_key, dong_code) values ("GhhR-Habi", "2818510600");
-insert into region (member_key, dong_code) values ("60lm-pxTc", "4121010600");
-insert into region (member_key, dong_code) values ("fSBS-lCHb", "1117011500");
-insert into region (member_key, dong_code) values ("DnGc-bHAM", "4119010900");
+insert into dong_code (member_key, dong_code) values ("nh3b-494F", "2823710700");
+insert into dong_code (member_key, dong_code) values ("B7T3-jX6r", "1168011100");
+insert into dong_code (member_key, dong_code) values ("GhhR-Habi", "2818510600");
+insert into dong_code (member_key, dong_code) values ("60lm-pxTc", "4121010600");
+insert into dong_code (member_key, dong_code) values ("fSBS-lCHb", "1117011500");
+insert into dong_code (member_key, dong_code) values ("DnGc-bHAM", "4119010900");
 
 -- 법정동코드
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1168011100", "서울특별시", "강남구", "세곡동", 127.104583, 37.464369 );
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2818510600", "인천광역시", "연수구", "송도동", 126.645656, 37.384532);
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4121010600", "경기도", "광명시", "일직동", 126.531533, 37.265020 );
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1117011500", "서울특별시", "용산구", "산천동", 126.952396,37.535428);
-insert into dong_code (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4119010900", "경기도", "부천시", "상동", 126.7544075,37.5005775);
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1168011100", "서울특별시", "강남구", "세곡동", 127.104583, 37.464369 );
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2818510600", "인천광역시", "연수구", "송도동", 126.645656, 37.384532);
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4121010600", "경기도", "광명시", "일직동", 126.531533, 37.265020 );
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1117011500", "서울특별시", "용산구", "산천동", 126.952396,37.535428);
+insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4119010900", "경기도", "부천시", "상동", 126.7544075,37.5005775);
 
 
 -- #####################################################################################################################################################################

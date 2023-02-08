@@ -15,10 +15,6 @@ import javax.persistence.Id;
 @Entity
 public class DongCode {
     @Id
-    private String dongCode; // 동코드 (기본키)
-    private String sidoName;
-    private String gugunName;
-    private String dongName;
-    private double lng; // 위도
-    private double lat; // 경도
+    private String memberKey; // 멤버 기본키
+    private String dongCode;
 }

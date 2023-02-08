@@ -28,8 +28,4 @@ public class MemberService {
         return result;
     }
 
-//    public int updateRegion(String value, String memberKey) {
-//        int result = memberRepository.updateRegion(value.equals("true")?true:false, memberKey);
-//        return result;
-//    }
 }
