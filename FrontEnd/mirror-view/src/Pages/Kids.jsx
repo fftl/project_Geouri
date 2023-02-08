@@ -8,7 +8,6 @@ import Timer from "../Elements/Timer";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
-import { useNavigate } from "react-router";
 
 function Kids(props) {
   const { webSocket } = props;
@@ -69,22 +68,19 @@ function Kids(props) {
               </div>,
             greeting : 
               <div className="text-div">
-                <p className="text"> {checkKorean(name)}, {mirror_action?.msg}</p>
-                <p className="text"> 안녕~ 오랜만이야!?</p>
+                <p className="text">{mirror_action?.msg}, {checkKorean(name)}</p>
               </div>,
             message : 
               <>
                 <div className="text-div">
-                  {/* <p className="text">{mirror_action?.msg}</p> */}
-                  <p className="text">오늘은 이를 닦아보자!</p>
+                  <p className="text">{mirror_action?.msg}</p>
                 </div>
                 <Character />
               </>,
             ending : 
               <>
                 <div className="text-div">
-                  {/* <div className="text">{mirror_action?.msg}</div> */}
-                  <div className="text">이따가 또 보자 소영아!</div>
+                  <div className="text">{mirror_action?.msg}</div>
                 </div>  
                 <Character />
               </>,
