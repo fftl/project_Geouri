@@ -1,23 +1,17 @@
 package com.ssafy.SmartMirror.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.ssafy.SmartMirror.config.FireBaseService;
-import com.ssafy.SmartMirror.config.Test;
+import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/web")
@@ -37,25 +31,8 @@ public class WebController {
     private FireBaseService fireBaseService;
     private VisitService visitService;
     private NewsService newsService;
-    private Test test;
+    private Utils utils;
 
-    @Autowired
-    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
-        this.userService = userService;
-        this.kidsScriptService = kidsScriptService;
-        this.kidsResponseService = kidsResponseService;
-        this.memberService = memberService;
-        this.mirrorService = mirrorService;
-        this.widgetService = widgetService;
-        this.playlistService = playlistService;
-        this.calendarService = calendarService;
-        this.regionService = regionService;
-        this.brushingService = brushingService;
-        this.fireBaseService = fireBaseService;
-        this.visitService = visitService;
-        this.newsService = newsService;
-        this.test = test;
-    }
 
     //    @PostMapping("/member")
 //    public ResponseEntity readMember(@RequestBody RequestInfo info) throws IOException
@@ -71,7 +48,7 @@ public class WebController {
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 해당 유저 있는지 확인
-        if(!test.isValidUserKey(userKey)) {
+        if(!utils.isValidUserKey(userKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
 
@@ -114,7 +91,7 @@ public class WebController {
         ResponseDefault responseDefault = null;
 
         // 해당 멤버 있는지 확인
-        if(!test.isValidMemberKey(memberKey)) {
+        if(!utils.isValidMemberKey(memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
 
@@ -183,7 +160,7 @@ public class WebController {
 
         // 멤버키 유효성 확인
         String memberKey = requestWidget.getMemberKey();
-        if(!test.isValidMemberKey(memberKey)) {
+        if(!utils.isValidMemberKey(memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음)",HttpStatus.OK);
         }
 
@@ -233,7 +210,7 @@ public class WebController {
         ResponseDefault responseDefault = null;
 
         // 해당 멤버 있는지 확인
-        if(!test.isValidMemberKey(memberKey)) {
+        if(!utils.isValidMemberKey(memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
 

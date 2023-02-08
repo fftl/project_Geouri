@@ -18,12 +18,10 @@ public class Snapshot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long snapshotKey;
 
-    private String img;
+    private String imgUrl;
     private String created;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_key", name = "memberKey")
     private Member member;
-
-
 }

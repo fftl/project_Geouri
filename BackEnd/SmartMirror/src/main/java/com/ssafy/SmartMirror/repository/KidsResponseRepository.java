@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface KidsResponseRepository extends JpaRepository<KidsResponse, Long> {
     List<KidsResponse> findAllByReqKeyAndReaction(Long reqKey, int reaction);
+    List<KidsResponse> findAllByReqKeyAndReactionAndResType(Long reqKey, int reaction, int type);
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 
 @Component
-public class Test {
+public class Utils {
     static final int MORNING = 1; // 오전
     static final int AFTERNOON = 2; // 오후
     static final int EVENING = 3; // 저녁
@@ -23,7 +23,7 @@ public class Test {
     private UserService userService;
 
     @Autowired
-    public Test(MemberService memberService, MirrorService mirrorService, UserService userService) {
+    public Utils(MemberService memberService, MirrorService mirrorService, UserService userService) {
         this.memberService = memberService;
         this.mirrorService = mirrorService;
         this.userService = userService;

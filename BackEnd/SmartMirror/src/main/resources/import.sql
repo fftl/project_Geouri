@@ -11,7 +11,7 @@ insert into mirror (serial_number, nickname, user_key) values ("8DLL-44yh-x7vB-V
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("nh3b-494F", "쏘영이", "1998-09-11", "soyoung.jpg", 1, "Fyw3-DOwW");
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("B7T3-jX6r", "노노", "1993-02-03", "hyeonjung.jpg", 1, "Fyw3-DOwW");
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("GhhR-Habi", "영혀니", "1996-12-21", "younghyun.jpg", 1, "Fyw3-DOwW");
-insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("60lm-pxTc", "BM", "1996-11-04", "bm.jpg", 0, "Fyw3-DOwW");
+insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("60lm-pxTc", "BM", "1996-11-04", "bm.jpg", 1, "Fyw3-DOwW");
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("fSBS-lCHb", "짱윤", "1997-09-01", "JY.jpg", 1, "Fyw3-DOwW");
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
 
@@ -67,7 +67,7 @@ insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 11:3
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 15:23:00');
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 18:25:00');
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 08:03:00');
-insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-07 16:03:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-01-31 08:02:31');
@@ -75,7 +75,7 @@ insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-0
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 11:33:18');
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 18:28:31');
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 08:05:11');
-insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 12:06:38');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-07 12:30:38');
 
 -- 현정
 -- 방문기록 ( 거울에 방문했던 기록입니당 )

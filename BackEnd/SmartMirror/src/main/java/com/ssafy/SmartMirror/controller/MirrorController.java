@@ -1,21 +1,22 @@
 package com.ssafy.SmartMirror.controller;
 
-import com.ssafy.SmartMirror.config.NewsCrawling;
 import com.ssafy.SmartMirror.config.FireBaseService;
-import com.ssafy.SmartMirror.config.Test;
+import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
-import com.ssafy.SmartMirror.repository.MemberRepository;
 import com.ssafy.SmartMirror.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,12 +46,11 @@ public class MirrorController {
     private FireBaseService fireBaseService;
     private VisitService visitService;
     private NewsService newsService;
+    private SnapshotService snapshotService;
 
-    private Test test;
+    private Utils utils;
 
-
-    @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Test test) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -63,27 +63,8 @@ public class MirrorController {
         this.fireBaseService = fireBaseService;
         this.visitService = visitService;
         this.newsService = newsService;
-        this.test = test;
-    }
-
-    /**
-     * 어린이 스크립트를 추가합니다.
-     * @param script
-     * @return
-     */
-    @PostMapping("/kidsScript/insert")
-    public ResponseEntity insertKidsScript(@RequestParam("script") String script) {
-        ResponseDefault responseDefault = null;
-
-        System.out.println(script);
-        int res = kidsScriptService.saveKidsScript(script);
-
-        responseDefault = ResponseDefault.builder()
-                .success(true)
-                .data(res)
-                .build();
-
-        return new ResponseEntity<>(responseDefault, HttpStatus.OK);
+        this.snapshotService = snapshotService;
+        this.utils = utils;
     }
 
     /**
@@ -99,10 +80,9 @@ public class MirrorController {
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestGetScript.getSerialNumber();
         String memberKey = requestGetScript.getMemberKey();
-        if(!test.isValidAccess(serialNumber, memberKey)) {
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
-
 
         /** 1. 일단 우선적으로 오자마자 멤버의 정보를 가지고와 어린이인지 어른인지 확인합니다. */
         Member getMember = memberService.findByMemberKey(requestGetScript.getMemberKey());
@@ -113,19 +93,13 @@ public class MirrorController {
 
             /** 1. 첫 질문일 때 if ( req_key == START(0) ) : 시간에 맞는 인사말을 리턴합니다. */
             if (requestGetScript.getReqKey() == START) {
-                // 시간에 맞는 인사말 가져오기
-                int helloType = test.whatTime(LocalDateTime.now().getHour());
-//                helloType = MORNING; //아침 상황 테스트
-                helloType = AFTERNOON; //점심 상황 테스트
-//                helloType = EVENING; //저녁 상황 테스트
-//                helloType = ALLTIME; //평상 상황 테스트
 
-                System.out.println("log - nowWhatTime, hello type은? >> " + helloType);
+                // 응답할 수 있는 응답 List를 가져옵니다. 그리고 Shuffle을 이용해서 순서를 섞어줍니다.
                 List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
+                Collections.shuffle(kidsResponseList);
 
-                //가져온 응답할 수 있는 리스트 중에서 일단은 첫번째 응답을 사용(나중엔 랜덤)
-                //응답을 가지고 script 멘트를 조회합니다.
-                KidsResponse kidsResponse = kidsResponseList.get(1); // 현 조건에 맞는 resKey 랜덤 추출
+                // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
+                KidsResponse kidsResponse = kidsResponseList.get(0); // 현 조건에 맞는 resKey 랜덤 추출
                 KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey()); // resKey 에 맞는 스트링 문장 추출
 
                 //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
@@ -147,32 +121,35 @@ public class MirrorController {
             } else {
                 /** 전 멘트 타입이 인사(1~4) 이고 그에 대한 대답이 긍정이었을 경우, 양치 여부를 판단하여 제안으로 감 */
                 if(requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1) {
+
                     //현재 시간의 정보와 마지막 양치 기록의 시간을 확인하여 양치 여부를 판단합니다.
                     LocalDateTime now = LocalDateTime.now();
-                    System.out.println("log - 현재시간 : > " + now.toString());
                     int year = now.getYear();
                     int month = now.getMonthValue();
                     int day = now.getDayOfMonth();
-                    int daysSum = year+month+day;
 
+                    //현재 어린이의 양치기록들을 모두 가져온 뒤 가장 최근값 즉 마지막 인덱스 기록을 가져옵니다.
                     List<Brushing> brushingList = brushingService.findAllByMember(requestGetScript.getMemberKey());
                     Brushing brushing = brushingList.get(brushingList.size()-1);
                     String[] date = brushing.getBrushingTime().split(" ");
                     String[] days = date[0].split("-");
                     String[] times = date[1].split(":");
+
+                    //오늘 시간과, 마지막 양치기록의 시각을 더해주어 비교하기 쉽도록 만들어줍니다.
+                    int daysSum = year+month+day;
                     int brushingDaysSum = Integer.parseInt(days[0]) + Integer.parseInt(days[1]) + Integer.parseInt(days[2]);
 
-                    /** 오늘 날짜에 양치한 기록이 하나라도 있다면!  */
+                    /** daysSum과 brushingDaysSum의 값이 같다면 오늘 양치를 이미 했었다는 뜻! */
                     if(daysSum == brushingDaysSum) {
-                        int historyType = test.whatTime(Integer.parseInt(times[0]));
-                        int nowType = test.whatTime(now.getHour());
+                        int historyType = utils.whatTime(Integer.parseInt(times[0]));
+                        int nowType = utils.whatTime(now.getHour());
 
-                        /** 마지막 양치 기록과 현재 시간의 시간 타입이 같다면 양치를 이미 한 것!
-                         *  손씻기를 제안합니다! 손씻기 제안 resType == 7
+                        /**
+                         *  날짜가 같다면 시간타입을 구해서 비교합니다. 이미 양치를 했다면 손씻기를 제안합니다.
                          * */
                         if(historyType==nowType){
-                            System.out.println("log - 양치를 이미 했으므로 손씻기를 제안합니다.");
-                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
+                            //응답중에
+                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 7);
 
                             //질문을 무사히 가져왔다면!
                             if(kidsResponseList.size()>0){
@@ -202,7 +179,7 @@ public class MirrorController {
                              * */
                         } else {
                             System.out.println("log - 이번 시간타임에는 양치를 하지 않았으므로 양치를 제안합니다.");
-                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
+                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 5);
 
                             //질문을 무사히 가져왔다면!
                             if(kidsResponseList.size()>0){
@@ -232,7 +209,7 @@ public class MirrorController {
                          * */
                     } else {
                         System.out.println("log - 오늘 한번도 양치를 하지 않았습니다. 양치를 제안합니다.");
-                        List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
+                        List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 5);
 
                         //질문을 무사히 가져왔다면!
                         if(kidsResponseList.size()>0){
@@ -308,7 +285,7 @@ public class MirrorController {
         // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = info.getSerialNumber();
         String memberKey = info.getMemberKey();
-        if(!test.isValidAccess(serialNumber, memberKey)) {
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
@@ -383,19 +360,41 @@ public class MirrorController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
+    /***
+     *
+     * @param insertSnapShot
+     * @return
+     */
     @PostMapping("/snapShot")
     public ResponseEntity insertSnapShot(RequestInsertSnapShot insertSnapShot) throws IOException {
-        ResponseDefault responseDefault = null; // response 객체 생성
+
+        // response 객체 생성
+        ResponseDefault responseDefault = null;
         System.out.println(insertSnapShot.toString());
-        if(!test.isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
+        if(!utils.isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
         }
 
+        // memberKey에 해당하는 Member를 가져옵니다.
+        Member getMember = memberService.findByMemberKey(insertSnapShot.getMemberKey());
+        if (getMember == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
+
+        // fireBaseService.uploadFiles()를 통해서 firebase storage에 파일을 업로드하고 해당 파일에 대한 접근 url을
+        // url에 담습니다.
         String url = fireBaseService.uploadFiles(insertSnapShot.getImgFile(), insertSnapShot.getImgName());
 
+        // 사진 저장 시간을 서버시간 기준으로 만들어냅니다.
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String snapShotTime = formatter.format(date);
+
+        // snapShot을 DB에 입력합니다.
+        Snapshot result = snapshotService.saveSnapShot(getMember, snapShotTime, url);
+
+        // 모두가 성공적으로 입력이 되었다면 DB에 입력합니다.
         responseDefault = ResponseDefault.builder()
                 .success(true)
-                .data(url)
+                .data(result.getImgUrl())
                 .msg(null)
                 .build();
 
