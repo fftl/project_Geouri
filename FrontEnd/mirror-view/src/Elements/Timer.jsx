@@ -1,5 +1,5 @@
 import { getByDisplayValue } from "@testing-library/dom";
-import React, { useState, useEffect, useHistory } from "react";
+import React, { useState, useEffect, useHistory, useRef } from "react";
 import styled from "styled-components";
 import snap from "../assets/img/snap.gif";
 import "./Timer.css";
@@ -7,19 +7,17 @@ import "./Timer.css";
 function Timer(props) {
   const { setComp, comp } = props;
 
-  const [sec, setSec] = useState(parseInt(3));
+  const [sec, setSec] = useState(3);
   const [shoot, setShoot] = useState(false);
 
   useEffect(() => {
-    const countdown = setInterval(() => {
-      if (parseInt(sec) > 0) {
-        setSec(parseInt(sec) - 1);
-      }
-      if (parseInt(sec) === 0) {
-        setShoot(true);
-        clearInterval(countdown);
+    const timer = setInterval(() => {
+      if ( sec > 0 ){
+
+        setSec((prev) => prev - 1);
       }
     }, 1000);
+    return () => clearInterval(timer);
   }, [sec]);
 
   useEffect(() => {

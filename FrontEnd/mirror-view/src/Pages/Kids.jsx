@@ -21,7 +21,7 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  const [comp, setComp] = useState(''); // component 설정
+  const [comp, setComp] = useState('camera'); // component 설정
   // const [comp, setComp] = useState('camera'); // component 설정
   const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
@@ -44,7 +44,9 @@ function Kids(props) {
     if( mirror_action === 'message' ){
       setComp('message');
     }
-    if (mirror_action === '') 
+    if (mirror_action === 'none') {
+      setComp('kidsDefault');
+    } 
     if (comp === 'ending'){
       setTimeout(() => {
         dispatch(mirrorActions.finish())
@@ -98,14 +100,14 @@ function Kids(props) {
           }[comp]
         }
       </div>
-      { video === 'brush_teeth' && 
+      { comp === 'video' && video === 'brush_teeth' && 
         <div className="video-box">
           <PageParticles />
           <Effect />
           <BrushTeethVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo}/>
         </div> 
       }
-      { video === 'wash_hands' && 
+      { comp === 'video' && video === 'wash_hands' && 
         <div className="video-box">
           <PageParticles />
           <Effect />
