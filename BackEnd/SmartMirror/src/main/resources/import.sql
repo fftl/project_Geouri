@@ -49,12 +49,12 @@ insert into dong_code (member_key, dong_code) values ("fSBS-lCHb", "1117011500")
 insert into dong_code (member_key, dong_code) values ("DnGc-bHAM", "4119010900");
 
 -- 법정동코드
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1168011100", "서울특별시", "강남구", "세곡동", 127.104583, 37.464369 );
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2818510600", "인천광역시", "연수구", "송도동", 126.645656, 37.384532);
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4121010600", "경기도", "광명시", "일직동", 126.531533, 37.265020 );
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1117011500", "서울특별시", "용산구", "산천동", 126.952396,37.535428);
-insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4119010900", "경기도", "부천시", "상동", 126.7544075,37.5005775);
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1168011100", "서울특별시", "강남구", "세곡동", 127.104583, 37.464369 );
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2818510600", "인천광역시", "연수구", "송도동", 126.645656, 37.384532);
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4121010600", "경기도", "광명시", "일직동", 126.531533, 37.265020 );
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1117011500", "서울특별시", "용산구", "산천동", 126.952396,37.535428);
+-- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4119010900", "경기도", "부천시", "상동", 126.7544075,37.5005775);
 
 
 -- #####################################################################################################################################################################
@@ -228,5 +228,47 @@ insert into kids_response (res_key, req_key, reaction, res_type) values (18,17,0
 
 --- 일반 멘트 모음
 -- 일반 멘트 응답관게
-insert into Quiz (question, hint, answer) values ("세상에서 제일 맛있는 음식은?", "내가 좋아하는 음식!", "떡볶이");
-insert into Quiz (question, hint, answer) values ("나는 짜장면과 짱뽕중에 뭘 더 좋아할까?", "까만거!", "짜장면");
+
+
+-- 포춘
+insert into fortune (sentence) values ("오늘은 왠지 달달한 게 땡기는걸?");
+insert into fortune (sentence) values ("오늘 나 좀 매력적인 듯?");
+insert into fortune (sentence) values ("오늘은 떡볶이!");
+insert into fortune (sentence) values ("난 정말 완벽해!");
+insert into fortune (sentence) values ("현실 감각이 중요한 때입니다.");
+insert into fortune (sentence) values ("많은 사람들이 따르는 날입니다.");
+insert into fortune (sentence) values ("늘! 웃음 가득한 당신");
+insert into fortune (sentence) values ("조금 서툴러도 돼. 처음엔 누구나 서툰 법이야 :)");
+insert into fortune (sentence) values ("좋아하는 걸 계속하려면 건강해야해. 운동하자!");
+insert into fortune (sentence) values ("모든 게 잘 될 것만 같은 하루~");
+insert into fortune (sentence) values ("너는 왜 매일 같은 티만 입어? 큐티…♥");
+insert into fortune (sentence) values ("내일은 내일의 태양이 뜬다");
+insert into fortune (sentence) values ("행운의 숫자: 1");
+insert into fortune (sentence) values ("행운의 숫자: 2");
+insert into fortune (sentence) values ("행운의 숫자: 3");
+insert into fortune (sentence) values ("행운의 숫자: 4");
+insert into fortune (sentence) values ("행운의 숫자: 5");
+insert into fortune (sentence) values ("행운의 숫자: 6");
+insert into fortune (sentence) values ("행운의 숫자: 7");
+insert into fortune (sentence) values ("행운의 숫자: 8");
+insert into fortune (sentence) values ("행운의 숫자: 9");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 노랑!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 빨강!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 초록!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 파랑!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 보라!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 하양!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 주황!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 검정!");
+insert into fortune (sentence) values ("오늘 내 행운의 색은 분홍!");
+
+-- 퀴즈
+insert into Quiz (question, hint, answer) values ("이 동물은 꼬리가 엄청 길대. 그리고 바나나를 진짜진짜 좋아한대. 나무도 엄청 잘 타.", "이 동물은 우끼끼 하고 운대", "원숭이");
+insert into Quiz (question, hint, answer) values ("이 동물은 물가에 살고, 몸이 길고 커. 그리고 입이 엄청 크고 이빨이 많고 날카롭대.", "늪지대가 나타나면 이 동물이 나올지도 몰라", "악어");
+insert into Quiz (question, hint, answer) values ("이 동물은 몸집이 크고, 다리가 4개래. 그리고 코가 엄~청 길고 귀가 커.", "먹이를 주면 코로 받아서 먹는 동물이래", "코끼리");
+insert into Quiz (question, hint, answer) values ("이 동물은 귀가 엄청 길고 조그만한 동물이야. 깡총깡총 뛰어다니고 당근과 채소를 좋아하는 동물이야", "이 동물은 엄청 빠른데도 거북이랑 달리기 시합해서 진 적이 있대!", "토끼");
+insert into Quiz (question, hint, answer) values ("이 동물은 크고 딱딱 등딱지를 가지고 있어, 그리고 땅에서 느리게 엉금엉금 걷는대.", "이 동물은 엉금엉금 느리게 걷는대도 엄청 빠른 토끼랑 경주해서 이긴 적이 있대!", "거북이");
+insert into Quiz (question, hint, answer) values ("이 동물은 뿔이 있고, 주로 농장에서 살아. 그리고 우리한테 맛있는 우유를 준대", "이 동물은 음메~ 하고 운대", "소");
+insert into Quiz (question, hint, answer) values ("이 동물은 핑크빛에 뚱뚱하고, 다리가 네개인 동물이야. 그리고 꼬리가 짧고 말려 있어.", "이 동물은 꿀꿀 거리는걸 좋아해", "돼지");
+insert into Quiz (question, hint, answer) values ("이 동물은 쥐를 잡는걸 좋아하고, 집에서 많이 키우는 동물이야. 수염과 털이 나 있어.", "가끔 다가와서 야옹거리는 동물이야", "고양이");
+insert into Quiz (question, hint, answer) values ("이 동물은 깃털이 많고, 땅에서 두발로 걷는  동물이야. 그리고 알을 낳고 꼬끼오 하고 울지.", "맛있는 달걀을 낳아주는 고마운 동물이야", "닭");

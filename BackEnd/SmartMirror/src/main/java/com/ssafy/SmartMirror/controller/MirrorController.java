@@ -48,9 +48,11 @@ public class MirrorController {
     private NewsService newsService;
     private SnapshotService snapshotService;
     private QuizService quizService;
+    private FortuneService fortuneService;
     private Utils utils;
 
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, Utils utils) {
+    @Autowired
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -66,6 +68,7 @@ public class MirrorController {
         this.newsService = newsService;
         this.snapshotService = snapshotService;
         this.quizService = quizService;
+        this.fortuneService = fortuneService;
         this.utils = utils;
     }
 
@@ -357,6 +360,8 @@ public class MirrorController {
                     .build());
         }
 
+        // 포춘
+        String fortune = fortuneService.getFortune(memberKey);
 
         // 방문기록 저장
         Date date = new Date();
@@ -372,13 +377,13 @@ public class MirrorController {
                 .playlist(widget.isPlaylist())
                 .build();
 
-        ResponseRegion responseRegion = ResponseRegion.builder()
-                .sidoName(region.getSidoName())
-                .gugunName(region.getGugunName())
-                .dongName(region.getDongName())
-                .lat(region.getLat())
-                .lng(region.getLng())
-                .build();
+//        ResponseRegion responseRegion = ResponseRegion.builder()
+//                .sidoName(region.getSidoName())
+//                .gugunName(region.getGugunName())
+//                .dongName(region.getDongName())
+//                .lat(region.getLat())
+//                .lng(region.getLng())
+//                .build();
 
         ResponseMember responseMember = ResponseMember.builder()
                 .memberKey(member.getMemberKey())
@@ -388,8 +393,9 @@ public class MirrorController {
                 .widget(responseWidget)
                 .playlist(playlist)
                 .calender(calendar)
-                .region(responseRegion)
+//                .region(responseRegion)
                 .news(responseNewsList)
+                .fortune(fortune)
                 .build();
 
         responseDefault = ResponseDefault.builder()
