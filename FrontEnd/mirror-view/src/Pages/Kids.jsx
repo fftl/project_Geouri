@@ -107,6 +107,7 @@ function Kids(props) {
     return (
       <>
         <KidsDefault />
+        <Character />
       </>
     );
   }

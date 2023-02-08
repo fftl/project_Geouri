@@ -15,8 +15,8 @@ const KidsLevel = (props) => {
   // setLevel(pointNow);
   // setPoint(levelNow);
   //   }, []);
-  const pointNow = 30;
-  const memlevel = "lv1";
+  const pointNow = 40;
+  const memlevel = "lv0";
 
   return (
     <div>
@@ -30,14 +30,6 @@ const KidsLevel = (props) => {
       </div>
     </div>
   );
-  // if(level == 0){
-  //     return(
-  //         <div></div>
-  //         )
-  //     }
-  //     if(level == 1){
-
-  //     }
 };
 
 export default KidsLevel;
