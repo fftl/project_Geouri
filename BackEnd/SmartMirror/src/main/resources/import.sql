@@ -228,3 +228,5 @@ insert into kids_response (res_key, req_key, reaction, res_type) values (18,17,0
 
 --- 일반 멘트 모음
 -- 일반 멘트 응답관게
+insert into Quiz (question, hint, answer) values ("세상에서 제일 맛있는 음식은?", "내가 좋아하는 음식!", "떡볶이");
+insert into Quiz (question, hint, answer) values ("나는 짜장면과 짱뽕중에 뭘 더 좋아할까?", "까만거!", "짜장면");

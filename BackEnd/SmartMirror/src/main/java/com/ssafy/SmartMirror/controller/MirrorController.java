@@ -8,10 +8,7 @@ import com.ssafy.SmartMirror.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -50,10 +47,10 @@ public class MirrorController {
     private VisitService visitService;
     private NewsService newsService;
     private SnapshotService snapshotService;
+    private QuizService quizService;
     private Utils utils;
 
-    @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, Utils utils) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -68,6 +65,7 @@ public class MirrorController {
         this.visitService = visitService;
         this.newsService = newsService;
         this.snapshotService = snapshotService;
+        this.quizService = quizService;
         this.utils = utils;
     }
 
@@ -277,6 +275,44 @@ public class MirrorController {
         } // 어른
 
         return new ResponseEntity("어른과 아이 모두 아님", HttpStatus.OK);
+    }
+
+    /***
+     * 무작위 퀴즈 하나를 반환하는 요청입니다.
+     * @param requestInfo
+     * @return
+     */
+    @PostMapping("/getQuiz")
+    public ResponseEntity getQuiz(@RequestBody RequestInfo requestInfo){
+        ResponseDefault responseDefault = null;
+
+        if(!utils.isValidAccess(requestInfo.getSerialNumber(), requestInfo.getMemberKey())) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        }
+
+        Quiz quiz = quizService.getOneQuiz();
+
+        if(quiz == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("quiz 데이터가 존재하지 않습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            ResponseQuiz responseQuiz = ResponseQuiz.builder()
+                    .question(quiz.getQuestion())
+                    .hint(quiz.getHint())
+                    .answer(quiz.getAnswer())
+                    .build();
+
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(responseQuiz)
+                    .build();
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
 
