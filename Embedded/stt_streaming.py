@@ -13,8 +13,8 @@ RATE = 16000
 CHUNK = int(RATE / 10)  
 
 # Audio strings
-arr_str = [["시작", "재생", "진행"],["종료","그만","정지","중지"],["다음","넥스트"], ["이전"],["아니","싫어"],["응","좋아","그래"],["사진"]]
-arr_voicecmd = ["video_start","video_stop","video_next","video_prev","answer_negative","answer_positive","take_picture"]
+# arr_str = [["시작", "재생", "진행"],["종료","그만","정지","중지"],["다음","넥스트"], ["이전"],["아니","싫어"],["응","좋아","그래"],["사진"]]
+# arr_voicecmd = ["video_start","video_stop","video_next","video_prev","answer_negative","answer_positive","take_picture"]
 
 
 
@@ -129,8 +129,8 @@ def listen_print_loop(responses):
             #     ws.send(json.dumps(audio_data))
 
 
-            voicecmd = find_command_by_transcript(transcript)
-
+            # voicecmd = find_command_by_transcript(transcript)
+            voicecmd = transcript.strip()
             if voicecmd != "none":
                 audio_data = {
                     "cmd": "voice_input",
