@@ -8,10 +8,11 @@ var prevKey = 0;      // 이전에 보냈던 메세지
 var prevType = 0;     // 현재 상태.
 
 var quizMode = 0; //현재 퀴즈 상태인가?
-var quizString = ""
+var quizString = "";
+var quizHint = "";
 var quizAnswer = "";
 
-var current_user;     // 유저 상태
+var current_user = "fSBS-lCHb";     // 유저 상태
 var serialNumber = "8DLL-44yh-x7vB-VuWK"
 var kidsMode = false;
 var personExist = false;
@@ -177,7 +178,7 @@ function TTS(str){
 
   PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
     if (err) throw err;
-    console.log('results: %j', results);
+    // console.log('results: %j', results);
   });
 }
 
@@ -340,7 +341,7 @@ function takePicture(){
 function quiz(voice_input){
 
   const quiz_wrong_reply = ["다시 생각해보자~","아닌것 같아, 다시 생각해보자."];
-
+  const quiz_correct_reply = ["정답이야! 잘 맞추는걸?","정답이야!"]
   //퀴즈 정보를 받아온 후, 음성 출력
   if(quizMode == 0){
 
@@ -349,52 +350,53 @@ function quiz(voice_input){
     //   "content": "",
     // };
   
-    // let options = {
-    //   url: 'http://i8a201.p.ssafy.io/--',
-    //   method: 'POST',
-    //   body: {
-    //     // "serialNumber": serialNumber,
-    //     // "memberKey": current_user,
-    //   },
-    //   json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
-    // };
+    let options = {
+      url: 'http://i8a201.p.ssafy.io/mirror/getQuiz',
+      method: 'POST',
+      body: {
+        "serialNumber": serialNumber,
+        "memberKey": current_user,
+      },
+      json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
+    };
   
-    // rq.post(options, function (err, httpResponse, body) {
-    //   if(err){
-    //     console.log("error -> ", err);
-    //   }else{
-    //     data = {
-    //       "cmd": "yesorno",
-    //       "content": body.data,
-    //     }
-    //     prevKey = body.data.scriptKey;
-    //     prevType = body.data.type;
-    //     quizString = body.data.----;
-    //     wss.broadcast(JSON.stringify(data));
+    rq.post(options, function (err, httpResponse, body) {
+      if(err){
+        console.log("error -> ", err);
+      }else{
+        data = {
+          "cmd": "yesorno",
+          "content": body.data,
+        }
 
-    //     TTS(quizString);
-    //     quizMode = 1;
-    //   }
-    // });
+        quizString = body.data.question;
+        quizHint = body.data.hint;
+        quizAnswer =body.data.answer;
+        wss.broadcast(JSON.stringify(data));
 
-
-    quizString = "이 동물은 꼬리가 엄청 길대. 그리고 바나나를 진짜진짜 좋아한대. 나무도 엄청 잘 타. 이 동물은 무엇일까?";
-    quizAnswer = "원숭이"
-    TTS(quizString);
-    quizMode = 1;
-
+        quizMode = 1;
+        TTS(quizString);
+        
+      }
+    });
   }
     
   else if(quizMode == 1){
     console.log("아이의 정답: ",voice_input);
+
     //정답을 맞췄을 경우
     if(voice_input.indexOf(quizAnswer) != -1){
-      TTS("정답이야! 잘했어~");
-       quizMode = 0;
-       quizString = "";
+      const replayNum = getRandomInt(0,quiz_correct_reply.length);
+      TTS(quiz_correct_reply[replayNum]);
+      quizMode = 0;
+      quizString = "";
+      quizHint = "";
+      quizAnswer = "";
+    }
+    else if(voice_input === "answer_neutral"){ // 모른다고 했을때
+      TTS(quizHint);
     }
     else{
-
       const replayNum = getRandomInt(0,quiz_wrong_reply.length);
       TTS(quiz_wrong_reply[replayNum]);
     }
@@ -407,4 +409,16 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; 
+}
+
+function callName(name){
+  // const checkKorean = (name) => {
+  //   const lastChar = name.charCodeAt(name.length - 1)
+  //   const isThereLastChar = (lastChar - 0xac00) % 28
+  //   if (isThereLastChar) {
+  //     return ${name}아
+  //   }
+  //   return ${name}야
+  // }
+  
 }
