@@ -26,9 +26,9 @@ function Kids(props) {
   const [comp, setComp] = useState(""); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
 
-  // useEffect(() => {
-  //   setComp("default");
-  // }, []);
+  useEffect(() => {
+    setComp("default");
+  }, []);
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
   // useEffect(() => {
@@ -39,10 +39,10 @@ function Kids(props) {
   //   }
   // }, [comp]);
 
-  useEffect(() => {
-    setComp("video");
-    setVideo("wash_hands");
-  }, []);
+  // useEffect(() => {
+  //   setComp("video");
+  //   setVideo("wash_hands");
+  // }, []);
   // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
   if (comp === "greeting") {
     return (
