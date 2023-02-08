@@ -58,7 +58,7 @@ const GlobalParticles = createGlobalStyle`
 
 .animation-wrapper {
   background-color: transparent;
-  position: absolute;00
+  position: absolute;
   z-index: 0;
 }
 

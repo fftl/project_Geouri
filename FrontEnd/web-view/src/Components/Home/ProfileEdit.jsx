@@ -1,18 +1,28 @@
-import React from "react";
-import { useState, useSelector } from "react";
+import React, { useCallback } from "react";
+import { useState, useSelector, useEffect } from "react";
 import { Switch, Grid, FormControl } from "@mui/material/";
 import "./ProfileEdit.css";
 import { Button, Image, Text } from "../../Elements/index";
 import editimg from "../../assets/edit.png";
+import axios from "axios";
+import { useNavigate } from "react-router";
+
 
 const ProfileEdit = (props) => {
+  const token = useSelector((state) => state.Auth.token);
+  const navigate = useNavigate();
   const { member } = props;
+
   const [kidsmode, setKidsmode] = useState(false);
   const [youtube, setYoutube] = useState(false);
   const [news, setNews] = useState(false);
   const [cal, setCal] = useState(false);
   const [nickname, setNickname] = useState("엄마");
   const [isEdit, setIsEdit] = useState(false);
+  const [image, setImage] = useState({
+    image_file: "",
+    preview_URL= '../../assets/default.jpg'
+  })
 
   const handleKidsmodeChange = (event) => {
     setKidsmode(event.target.checked);
@@ -46,6 +56,23 @@ const ProfileEdit = (props) => {
   const handleClick = () => {};
   const submitHandler = () => {};
   const deleteHandler = () => {};
+
+  useEffect(() => {
+    const getNickname = async () => {
+      const { data } = await axios.get("");
+      return data;
+    };
+    getNickname().then((result) => {
+      setNickname(result.nick);
+      setImage({...image, preview_URL:''})
+    });
+  }, []);
+
+  const canSubmit = useCallback(()=>{
+    return nickname !== "";
+  },[nickname]);
+
+
 
   return (
     <div>

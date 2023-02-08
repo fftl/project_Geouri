@@ -9,6 +9,8 @@ import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
 import { useNavigate } from "react-router";
+import "bootstrap/dist/css/bootstrap.css";
+import KidsDefault from "../Components/Kids/KidsDefault";
 
 function Kids(props) {
   const { webSocket } = props;
@@ -21,8 +23,12 @@ function Kids(props) {
   const message = useSelector((state) => state?.mirror?.message);
 
   // const [comp, setComp] = useState(mirror_action); // component 설정
-  const [comp, setComp] = useState("camera"); // component 설정
-  const [video, setVideo] = useState("wash_hands"); // 비디오 url
+  const [comp, setComp] = useState(""); // component 설정
+  const [video, setVideo] = useState(""); // 비디오 url
+
+  // useEffect(() => {
+  //   setComp("default");
+  // }, []);
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
   // useEffect(() => {
@@ -96,6 +102,12 @@ function Kids(props) {
         <div className="balloon-text">수고했어~ </div>
         <Character />
       </div>
+    );
+  } else if (comp === "default") {
+    return (
+      <>
+        <KidsDefault />
+      </>
     );
   }
 }
