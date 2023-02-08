@@ -109,6 +109,29 @@ wss.on('connection', function (ws, request) {
 });
 
 
+
+
+
+
+
+function TTS(str){
+  var options = {
+    mode: 'text',
+    pythonPath: 'C:\\Users\\SSAFY\\anaconda3\\python.exe',
+    pythonOptions: ['-u'],
+    // scriptPath: '',
+    args: [serialNumber, current_user]
+  };
+
+  PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
+    if (err) throw err;
+    console.log('results: %j', results);
+    data.content = results;
+  });
+}
+
+
+
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
   var data = {
@@ -164,7 +187,6 @@ function person_leave(){
   }
   wss.broadcast(JSON.stringify(data));
 }
-
 
 function greetings(){
   var returnData  = {

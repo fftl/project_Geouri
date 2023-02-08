@@ -11,11 +11,11 @@ cap.set(3, 640)  # 너비
 cap.set(4, 480)  # 높이
 ret, frame = cap.read()  # 사진 촬영
 frame = cv2.flip(frame, 1)  # 좌우 대칭
-# serialNumber = sys.argv[1] #js로 받아온 argment
-# memberKey = sys.argv[2] #js로 받아온 argment
+serialNumber = sys.argv[1] #js로 받아온 argment
+memberKey = sys.argv[2] #js로 받아온 argment
 
-serialNumber = "8DLL-44yh-x7vB-VuWK"
-memberKey = "60lm-pxTc"
+# serialNumber = "8DLL-44yh-x7vB-VuWK"
+# memberKey = "60lm-pxTc"
 
 current_time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())) # yyyy-mm-dd
 pic_name = current_time + '_' + memberKey

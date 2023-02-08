@@ -7,6 +7,7 @@ pip install google-cloud-texttospeech
 
 # text-to-speech api로 텍스트 전달
 from playsound import playsound
+import sys
 
 def synthesize_text(text):
     """Synthesizes speech from the input string of text."""
@@ -39,5 +40,7 @@ def synthesize_text(text):
 
 
 
-synthesize_text("안녕 쏘영아, 양치할래??")
-playsound("output.mp3")
+if __name__ == '__main__':
+    string = sys.argv[1] #js로 받아온 argment
+    synthesize_text(string)
+    playsound("output.mp3")
