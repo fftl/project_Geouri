@@ -22,6 +22,8 @@ public class FireBaseService {
         Bucket bucket = StorageClient.getInstance().bucket(firebaseBucket);
         InputStream content = new ByteArrayInputStream(file.getBytes());
         Blob blob = bucket.create(nameFile.toString(), content, file.getContentType());
-        return blob.getMediaLink();
+        String fileUrl = "https://firebasestorage.googleapis.com/v0/b/" + firebaseBucket +"/o/" + nameFile + "?alt=media";
+
+        return fileUrl;
     }
 }

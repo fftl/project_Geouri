@@ -67,7 +67,7 @@ insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 11:3
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 15:23:00');
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-01 18:25:00');
 insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 08:03:00');
-insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-02 12:03:00');
+insert into visit (member_key, visit_time) values ("nh3b-494F", '2023-02-07 16:03:00');
 
 -- 양치기록 ( 양치한 기록입니다(키즈모드 설정 안할거면 안넣어도 됨!!) )
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-01-31 08:02:31');
@@ -75,7 +75,7 @@ insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-0
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 11:33:18');
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-01 18:28:31');
 insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 08:05:11');
-insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-02 12:06:38');
+insert into brushing (member_key, brushing_time) values ("nh3b-494F", '2023-02-07 12:30:38');
 
 -- 현정
 -- 방문기록 ( 거울에 방문했던 기록입니당 )
@@ -228,3 +228,5 @@ insert into kids_response (res_key, req_key, reaction, res_type) values (18,17,0
 
 --- 일반 멘트 모음
 -- 일반 멘트 응답관게
+insert into Quiz (question, hint, answer) values ("세상에서 제일 맛있는 음식은?", "내가 좋아하는 음식!", "떡볶이");
+insert into Quiz (question, hint, answer) values ("나는 짜장면과 짱뽕중에 뭘 더 좋아할까?", "까만거!", "짜장면");
