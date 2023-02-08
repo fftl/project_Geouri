@@ -12,8 +12,15 @@ var quizString = "";
 var quizHint = "";
 var quizAnswer = "";
 
-var current_user = "fSBS-lCHb";     // 유저 상태
+var current_user = "fSBS-lCHb";     // 유저 코드
 var serialNumber = "8DLL-44yh-x7vB-VuWK"
+
+// 유저 정보
+var user_data = {
+  "data" : {
+    "nickname" : "영현",
+  },
+};  
 var kidsMode = false;
 var personExist = false;
 
@@ -97,11 +104,13 @@ wss.on('connection', function (ws, request) {
         takePicture();
       }
 
-      else if (voice_input === "test") {
-        quiz("");
-        
+      else if (voice_input === "event_quiz") {
+        quiz(""); 
       }
 
+      else if(voice_input === "test"){
+        easteregg();
+      }
 
       else{
         if(quizMode===1){
@@ -131,7 +140,7 @@ function STT(voice_input){
 
 
   var arr_str = [
-    ["테스트"],
+    ["세상에서 누가"],
     ["시작", "재생", "진행"],
     ["종료","그만","정지","중지"],
     ["다음","넥스트"], 
@@ -157,7 +166,7 @@ function STT(voice_input){
 
   for(var i = 0 ; i < arr_str.length; i++){
     for(var j = 0 ; j < arr_str[i].length; j++){
-      if(arr_str[i][j].indexOf(voice_input) != -1)
+      if(voice_input.includes(arr_str[i][j]))
       return arr_voicecmd[i]
     }
   }
@@ -207,7 +216,7 @@ function person_appear(){
       if(body.data.kidsMode == true){
         kidsMode = true;
       }
-        
+      user_data = body.data;
       data = {
         "cmd": "person_appear",
         "content": body.data,
@@ -403,6 +412,14 @@ function quiz(voice_input){
   }
 }
 
+function easteregg(){
+  console.log(user_data.data.nickname);
+  const name = callName_ga(user_data.data.nickname);
+  var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
+  TTS(str);
+
+}
+
 
 
 function getRandomInt(min, max) {
@@ -411,14 +428,25 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; 
 }
 
-function callName(name){
-  // const checkKorean = (name) => {
-  //   const lastChar = name.charCodeAt(name.length - 1)
-  //   const isThereLastChar = (lastChar - 0xac00) % 28
-  //   if (isThereLastChar) {
-  //     return ${name}아
-  //   }
-  //   return ${name}야
-  // }
-  
+
+function callName_ga(name){
+
+  const lastChar = name.charCodeAt(name.length - 1)
+  const isThereLastChar = (lastChar - 0xac00) % 28
+  if (isThereLastChar) {
+    return `${name}이가`;
+  }
+  return `${name}가`;
+
+}
+
+function callName_ya(name){
+
+  const lastChar = name.charCodeAt(name.length - 1)
+  const isThereLastChar = (lastChar - 0xac00) % 28
+  if (isThereLastChar) {
+    return `${name}아`;
+  }
+  return `${name}야`;
+
 }
