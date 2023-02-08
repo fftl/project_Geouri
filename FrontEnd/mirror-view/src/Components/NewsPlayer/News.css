@@ -1,19 +1,37 @@
-.news-player-box{
-    display: flex;
+.news-wrapper{
+    display: inline-flex;
     justify-content: end;
     margin: 0 4rem ;
     height: 440px;
     overflow-y: hidden;
+    position: relative;
 }
 
 .news-player {
     display: grid;
 }
 
+.news-wrapper .item{
+    display: none;
+}
+
+.news-wrapper .active {
+    animation: slider 1s;
+  }
+  
+@keyframes slider {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+}
+
 .news-box{
     display: flex;
     width: 100%;
-    border: 1px solid rgb(255, 255, 255, 0.5);
+    border: 4px solid rgb(255, 255, 255, 0.5);
     border-radius: 10px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -30,5 +48,6 @@
     padding: 8px;
     border: 1px solid white;
     display: flex;
+    border-radius: 10px;
     align-items: center;
 }

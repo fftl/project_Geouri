@@ -6,11 +6,9 @@ import { useSelector } from "react-redux";
 import PhotoTimer from "../Components/Kids/PhotoTimer";
 
 function Home() {
-  const isChild = useSelector((state) => state?.member?.isChild);
-  const isAdult = useSelector((state) => state?.member?.isAdult);
-
   return (
     <React.Fragment>
+      
     </React.Fragment>
   );
 }

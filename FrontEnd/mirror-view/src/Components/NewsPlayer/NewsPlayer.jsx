@@ -4,6 +4,9 @@ import "./News.css";
 
 function NewsPlayer () {
     // const newsData = useState((state) => state?.mirror?.member?.news);
+    
+    const [count, setCount] = useState(0);
+
     const newsData = [
         {
             'id': 1,
@@ -37,12 +40,12 @@ function NewsPlayer () {
         },
     ]
     return (
-        <div className="news-player-box">
+        <div className="news-wrapper">
             <div className="news-player">
             {newsData?.map((news) => {
                 return (
                     <>
-                        <News news={news} key={news.id}/>     
+                        <News setCount={setCount} count={count} news={news} key={news.id}/>     
                         {/* // 추후에 index 말고 id 값으로 줘야해 */}
                     </>
                 )

@@ -49,7 +49,8 @@ function YoutubePlayer(){
             type="text/html" 
             enablejsapi="1"
             width="640" height="360"
-            src={url} ref={iframeRef}
+            src={url} 
+            // ref={iframeRef}
             ></iframe>
 
             
