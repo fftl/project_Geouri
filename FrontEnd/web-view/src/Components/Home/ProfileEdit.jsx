@@ -3,6 +3,7 @@ import { useState, useSelector } from "react";
 import { Switch, Grid, FormControl } from "@mui/material/";
 import "./ProfileEdit.css";
 import { Button, Image, Text } from "../../Elements/index";
+import editimg from "../../assets/edit.png";
 
 const ProfileEdit = (props) => {
   const { member } = props;
@@ -10,6 +11,8 @@ const ProfileEdit = (props) => {
   const [youtube, setYoutube] = useState(false);
   const [news, setNews] = useState(false);
   const [cal, setCal] = useState(false);
+  const [nickname, setNickname] = useState("엄마");
+  const [isEdit, setIsEdit] = useState(false);
 
   const handleKidsmodeChange = (event) => {
     setKidsmode(event.target.checked);
@@ -27,6 +30,18 @@ const ProfileEdit = (props) => {
     setCal(event.target.checked);
     event.preventDefault();
   };
+  const toggleIsEdit = () => {
+    setIsEdit(!isEdit);
+    console.log(isEdit);
+  };
+
+  const changeNick = (e) => {
+    setNickname(e.target.value);
+  };
+
+  const inputNick = (e) => {
+    console.log(e.target.value);
+  };
 
   const handleClick = () => {};
   const submitHandler = () => {};
@@ -36,8 +51,23 @@ const ProfileEdit = (props) => {
     <div>
       {/* <Image src={member.image} />
       <Text>{member.name}</Text> */}
-      <img src="../../assets/edit.png" alt="edit" />
+      <img src={editimg} alt="edit" onClick={toggleIsEdit} />
+      <div className="nick">
+        {isEdit ? (
+          <>
+            <input value={nickname} onChange={changeNick} />
+          </>
+        ) : (
+          <>{nickname}</>
+        )}
 
+        {isEdit ? (
+          <>
+            <button onClick={changeNick}>수정</button>
+            <button onClick={toggleIsEdit}>수정 취소</button>
+          </>
+        ) : null}
+      </div>
       <FormControl id="profileEdit" variant="standard">
         <Grid container spacing={1}>
           <Grid item xs={6}>
