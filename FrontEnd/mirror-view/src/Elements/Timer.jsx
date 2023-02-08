@@ -17,7 +17,12 @@ function Timer(props) {
         setSec((prev) => prev - 1);
       }
     }, 1000);
-    return () => clearInterval(timer);
+      if (sec === 0) {
+        setShoot(true);
+      }
+    return (() => {
+      clearInterval(timer); 
+    });
   }, [sec]);
 
   useEffect(() => {

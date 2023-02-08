@@ -2,6 +2,7 @@ import { useState } from "react";
 import YouTubePlayer from "../Components/YoutubePlayer/YoutubePlayer";
 import NewsPlayer from "../Components/NewsPlayer/NewsPlayer";
 import Schedule from "../Components/Schedule/Schedule";
+import './Home.css';
 
 function GeneralView(props) {
     const { webSocket } = props;
@@ -9,7 +10,7 @@ function GeneralView(props) {
 
     return (
         <div className="general-view-box">
-            <YouTubePlayer />
+            {/* <YouTubePlayer /> */}
             <NewsPlayer />
             <Schedule />
         </div>
