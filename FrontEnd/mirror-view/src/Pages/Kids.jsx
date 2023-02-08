@@ -8,7 +8,6 @@ import Timer from "../Elements/Timer";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
-import { useNavigate } from "react-router";
 import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
 
@@ -16,100 +15,105 @@ function Kids(props) {
   const { webSocket } = props;
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const member_info = useSelector((state) => state?.mirror?.member?.data);
+  const member_info = useSelector((state) => state?.mirror?.member);
+  const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  // const [comp, setComp] = useState(mirror_action); // component 설정
-  const [comp, setComp] = useState(""); // component 설정
-  const [video, setVideo] = useState(""); // 비디오 url
+  const [comp, setComp] = useState(''); // component 설정
+  // const [comp, setComp] = useState('camera'); // component 설정
+  const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
+  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
   useEffect(() => {
-    setComp("default");
-  }, []);
-
-  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
-  // useEffect(() => {
-  //   if (comp === "ending") {
-  //     setTimeout(() => {
-  //       dispatch(mirrorActions.finish());
-  //     }, 4000);
-  //   }
-  // }, [comp]);
-
-  // useEffect(() => {
-  //   setComp("video");
-  //   setVideo("wash_hands");
-  // }, []);
-  // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
-  if (comp === "greeting") {
-    return (
-      <>
-        {member_info ? (
-          <div className="total">
-            <div className="balloon">
-              <p className="balloon-text">
-                {member_info?.nickname}, {mirror_action?.message}
-                {/* {member_info?.nickname}, 안녕 좋은 아침이야 */}
-              </p>
-            </div>
-            <Character />
-          </div>
-        ) : null}
-      </>
-    );
-  } else if (comp === "message") {
-    return (
-      <>
-        {mirror_action?.msg ? (
-          <div className="balloon">
-            <p className="balloon-text">{mirror_action?.msg}</p>
-            <Character />
-          </div>
-        ) : null}
-      </>
-    );
-  } else if (comp === "video") {
-    if (video === "wash_hands") {
-      return (
-        <div className="video-box">
-          <PageParticles />
-          <Effect />
-          <WashHandsVideo webSocket={webSocket} setComp={setComp} />
-        </div>
-      );
-    } else if (video === "brush_teeth") {
-      return (
-        <div className="video-box">
-          <PageParticles />
-          <Effect />
-          <BrushTeethVideo webSocket={webSocket} setComp={setComp} />
-        </div>
-      );
+    if( mirror_action === 'greeting' ){
+      setComp('greeting')
     }
-  } else if (comp === "camera") {
-    return (
-      <>
-        <Timer setComp={setComp} />
-      </>
-    );
-  } else if (comp === "ending") {
-    return (
-      <div className="balloon">
-        {/* <div className="balloon-text">{mirror_action?.msg}</div> */}
-        <div className="balloon-text">수고했어~ </div>
-        <Character />
-      </div>
-    );
-  } else if (comp === "default") {
-    return (
-      <>
-        <KidsDefault />
-      </>
-    );
+    if( mirror_action === 'ending' ){
+      setComp('ending')
+    }
+    if( mirror_action === 'wash_hands' ){
+      setComp('video');
+      setVideo('wash_hands');
+    }
+    if( mirror_action === 'brush_teeth' ){
+      setComp('video');
+      setVideo('wash_hands');
+    }
+    if( mirror_action === 'message' ){
+      setComp('message');
+    }
+    if (mirror_action === '') 
+    if (comp === 'ending'){
+      setTimeout(() => {
+        dispatch(mirrorActions.finish())
+      }, 4000);
+    }
+  }, [mirror_action]);
+
+  const checkKorean = (name) => {
+    const lastChar = name.charCodeAt(name.length - 1)
+    const isThereLastChar = (lastChar - 0xac00) % 28
+    if (isThereLastChar) {
+      return `${name}아`
+    }
+    return `${name}야`
   }
+  
+  return (
+    <>
+      <div className="main-box">
+        {
+          {
+            none : 
+              <div className="text-div">
+              </div>,
+            greeting : 
+              <div className="text-div">
+                <p className="text">{mirror_action?.msg}, {checkKorean(name)}</p>
+              </div>,
+            message : 
+              <>
+                <div className="text-div">
+                  <p className="text">{mirror_action?.msg}</p>
+                </div>
+                <Character />
+              </>,
+            ending : 
+              <>
+                <div className="text-div">
+                  <div className="text">{mirror_action?.msg}</div>
+                </div>  
+                <Character />
+              </>,
+            camera :
+              <>
+                <Timer setComp={setComp} />
+              </>,
+            kidsDefault : 
+              <>
+                <KidsDefault />
+              </>
+          }[comp]
+        }
+      </div>
+      { video === 'brush_teeth' && 
+        <div className="video-box">
+          <PageParticles />
+          <Effect />
+          <BrushTeethVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo}/>
+        </div> 
+      }
+      { video === 'wash_hands' && 
+        <div className="video-box">
+          <PageParticles />
+          <Effect />
+          <WashHandsVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo} />
+        </div> 
+      }
+    </>
+  )
 }
 
 export default Kids;

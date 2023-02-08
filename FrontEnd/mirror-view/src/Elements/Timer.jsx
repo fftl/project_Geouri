@@ -29,20 +29,11 @@ function Timer(props) {
     return () => clearInterval(countdown);
   }, [shoot]);
 
-  // const ele = document.getElementById("shooting");
-  // const shootover = () => {
-  //   const ele = document.getElementById("shooting");
-  //   setTimeout(() => {
-  //     setComp("ending");
-  //   }, 1000);
-  // }, []);
-
   return (
     <div className="timer">
       <p className="timer-num">
-        {sec !== 0 && sec}
+        {shoot ? null : sec}
       </p>
-      {/* {sec === 0 && <img id="shooting" src={snap} alt="shooting" />} */}
       {shoot ? <img id="shooting" src={snap} alt="shooting" /> : null}
     </div>
   );
