@@ -1,12 +1,14 @@
 import React from "react";
 import HeartEffect from "../../Elements/HeartEffect";
+import KidsLevel from "./KidsLevel";
 
-const KidsMain = () => {
+const KidsDefault = () => {
   return (
     <div>
+      <KidsLevel />
       <HeartEffect />
     </div>
   );
 };
 
-export default KidsMain;
+export default KidsDefault;

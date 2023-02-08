@@ -8,6 +8,8 @@ import Timer from "../Elements/Timer";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
+import "bootstrap/dist/css/bootstrap.css";
+import KidsDefault from "../Components/Kids/KidsDefault";
 
 function Kids(props) {
   const { webSocket } = props;

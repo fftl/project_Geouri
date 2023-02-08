@@ -7,7 +7,7 @@ const HeartEffect = () => {
     var r_size = Math.floor(Math.random() * 30) + 10;
     var r_left = Math.floor(Math.random() * 100) + 1;
     var r_bg = Math.floor(Math.random() * 25) + 100;
-    var r_time = Math.floor(Math.random() * 5) + 50;
+    var r_time = Math.floor(Math.random() * 5) + 60;
 
     $(".heartdiv").append(
       "<div class='heartpp' style='width:" +
