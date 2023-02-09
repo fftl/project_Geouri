@@ -9,6 +9,7 @@ const BrushTeethVideo = (props) => {
   const videoOff = () => {
     setComp("camera");
     setVideo("");
+    webSocket.send('brush_teeth_finish');
   };
 
   const [teethver, setTeethver] = useState(false);
