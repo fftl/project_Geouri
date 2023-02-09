@@ -5,8 +5,9 @@ const WashHandsVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
   const videoOff = () => {
-    setComp('camera')
+    setComp('default');
     setVideo('')
+    webSocket.send('wash_hands_finish');
   }
 
   return (

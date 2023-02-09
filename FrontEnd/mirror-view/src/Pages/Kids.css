@@ -10,78 +10,7 @@
   height: 10rem;
 }
 .text{
+  font-family: 'binggrae';
   font-size: 8rem;
   font-weight: 400;
 }
-/* if ( comp === '' ) {
-  return (
-    <>
-      <div className="balloon">
-        <p className="balloon-text">
-
-        </p>
-      </div>
-    </>
-  )
-}
-if (comp === "message") {
-  return (
-    <>
-      {mirror_action?.msg ? (
-        <div className="balloon">
-          <p className="balloon-text">{mirror_action?.msg}</p>
-          <Character />
-        </div>
-      ) : null}
-    </>
-  );
-}
-else if (comp === 'greeting') {
-  return (
-    <>
-      {member_info ? (
-        <div className="total">
-          <div className="balloon">
-            <p className="balloon-text">
-              {{member_info?.nickname}, {mirror_action?.message}}
-              /* {member_info?.nickname}, 안녕 좋은 아침이야
-            </p>
-          </div>
-          <Character />
-        </div>
-      ) : null}
-    </>
-  );
-}else if (comp === "ending") {
-  return (
-    <div className="balloon">
-      <div className="balloon-text">{mirror_action?.msg}</div>
-      <Character />
-    </div>
-  );
-}
-if (comp === 'video') {
-  if (video === "wash_hands") {
-    return (
-      <div className="video-box">
-        <PageParticles />
-        <Effect />
-        <WashHandsVideo webSocket={webSocket} setComp={setComp} />
-      </div>
-    );
-  } else if (video === "brush_teeth") {
-    return (
-      <div className="video-box">
-        <PageParticles />
-        <Effect />
-        <BrushTeethVideo webSocket={webSocket} setComp={setComp} />
-      </div>
-    );
-  }
-} else if (comp === "camera") {
-  return (
-    <>
-      <Timer setComp={setComp} />
-    </>
-  );
-}  */ 
