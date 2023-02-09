@@ -1,10 +1,10 @@
-import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
-import WashHandsVideo from "../Components/Kids/WashHandsVideo";
-import Effect from "../Components/Kids/Effect";
 import "./Kids.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Timer from "../Elements/Timer";
+import { Timer } from "../Elements";
+import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
+import WashHandsVideo from "../Components/Kids/WashHandsVideo";
+import Effect from "../Components/Kids/Effect";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
@@ -15,23 +15,18 @@ function Kids(props) {
   const { webSocket } = props;
 
   const dispatch = useDispatch();
-
+  
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
-
-  const [comp, setComp] = useState(''); // component 설정
-  // const [comp, setComp] = useState('camera'); // component 설정
-  const [video, setVideo] = useState("wash_hands"); // 비디오 url
-
-  // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
+  
+  const [comp, setComp] = useState('default'); // component 설정
+  const [video, setVideo] = useState(''); // 비디오 url
+  
   useEffect(() => {
     if( mirror_action === 'greetings' ){
       setComp('greeting')
-    }
-    if( mirror_action === 'ending' ){
-      setComp('ending')
     }
     if( mirror_action === 'wash_hands' ){
       setComp('video');
@@ -44,17 +39,12 @@ function Kids(props) {
     if( mirror_action === 'message' ){
       setComp('message');
     }
-    if (mirror_action === '') {
-      setComp('kidsDefault');
+    if (mirror_action === 'default') {
+      setComp('default');
     } 
-    console.log(comp)
-    if (comp === 'ending'){
-      setTimeout(() => {
-        dispatch(mirrorActions.finish())
-      }, 4000);
-    }
   }, [mirror_action]);
 
+  // 한글이름에 따라 'ㅇㅇ아' or 'ㅇㅇ야' 체크
   const checkKorean = (name) => {
     const lastChar = name.charCodeAt(name.length - 1)
     const isThereLastChar = (lastChar - 0xac00) % 28
@@ -74,7 +64,7 @@ function Kids(props) {
               </div>,
             greeting : 
               <div className="text-div">
-                <p className="text">{message}, {checkKorean(name)}</p>
+                <p className="text">손을 씻어볼까?{message}, {checkKorean(name)}</p>
               </div>,
             message : 
               <>
@@ -94,7 +84,7 @@ function Kids(props) {
               <>
                 <Timer setComp={setComp} />
               </>,
-            kidsDefault : 
+            default : 
               <>
                 <KidsDefault />
               </>
@@ -105,14 +95,20 @@ function Kids(props) {
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <BrushTeethVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo}/>
+          <BrushTeethVideo 
+            webSocket={webSocket} 
+            setComp={setComp} 
+            setVideo={setVideo}/>
         </div> 
       }
       { comp === 'video' && video === 'wash_hands' && 
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <WashHandsVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo} />
+          <WashHandsVideo 
+            webSocket={webSocket} 
+            setComp={setComp} 
+            setVideo={setVideo} />
         </div> 
       }
     </>
