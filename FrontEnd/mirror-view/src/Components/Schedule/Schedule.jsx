@@ -23,10 +23,12 @@ function Schedule () {
           {new_schedule ? 
             new_schedule.map((item) => {
             <div className="schedule-box">
-                <ScheduleItem item={item}/>
+                <ScheduleItem item={item} index={item.index}/>
             </div>
           }) : 
-           null
+           <div className="schedule-box">
+            <p className="no-schedule">오늘은 일정이 없습니다.</p>
+           </div>
           }
         </>
     )

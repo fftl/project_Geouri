@@ -47,6 +47,7 @@ function Kids(props) {
     if (mirror_action === '') {
       setComp('kidsDefault');
     } 
+    console.log(comp)
     if (comp === 'ending'){
       setTimeout(() => {
         dispatch(mirrorActions.finish())
