@@ -74,19 +74,19 @@ function Kids(props) {
               </div>,
             greeting : 
               <div className="text-div">
-                <p className="text">{mirror_action?.message}, {checkKorean(name)}</p>
+                <p className="text">{message}, {checkKorean(name)}</p>
               </div>,
             message : 
               <>
                 <div className="text-div">
-                  <p className="text">{mirror_action?.message}</p>
+                  <p className="text">{message}</p>
                 </div>
                 <Character />
               </>,
             ending : 
               <>
                 <div className="text-div">
-                  <div className="text">{mirror_action?.message}</div>
+                  <div className="text">{message}</div>
                 </div>  
                 <Character />
               </>,
