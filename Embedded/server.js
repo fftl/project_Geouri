@@ -237,13 +237,78 @@ function typeCheck(){
     "cmd": "",
     "content": "",
   };
-  if(prevType == 5){ // 양치제안
+  if(prevType == 5){ // 능동적 양치
 
+    let options = {
+      url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+      method: 'POST',
+      body: {
+        "serialNumber": serialNumber,
+        "memberKey": current_user,
+        "reqKey": 0,
+        "type": prevType,
+        "reaction": 1
+      },
+      json: true,
+    };
+  
+    rq.post(options, function (err, httpResponse, body) {
+      if(err){
+        console.log("error -> ", err);
+      }else{
+        data = {
+          "cmd": "message",
+          "content": body.data.script,
+        }
+  
+        prevKey = body.data.res_key;
+        prevType = body.data.type;
+  
+        TTS(body.data.script);
+        wss.broadcast(JSON.stringify(data));
+      }
+    });
   }
-  if(prevType == 6){ //양치시작
+
+  else if(prevType == 6){ //양치시작
     data.cmd = "brush_teeth"
     wss.broadcast(JSON.stringify(data));
   }
+
+  else if(prevType == 7){ // 능동적 손씻기
+
+    let options = {
+      url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+      method: 'POST',
+      body: {
+        "serialNumber": serialNumber,
+        "memberKey": current_user,
+        "reqKey": 0,
+        "type": prevType,
+        "reaction": 1
+      },
+      json: true,
+    };
+  
+    rq.post(options, function (err, httpResponse, body) {
+      if(err){
+        console.log("error -> ", err);
+      }else{
+        data = {
+          "cmd": "message",
+          "content": body.data.script,
+        }
+  
+        prevKey = body.data.res_key;
+        prevType = body.data.type;
+  
+        TTS(body.data.script);
+        wss.broadcast(JSON.stringify(data));
+      }
+    });
+  }
+
+
   else if(prevType == 8){ // 손씻기시작
     data.cmd = "wash_hands"
     wss.broadcast(JSON.stringify(data));
@@ -345,7 +410,6 @@ function greetings(){
 
 function answerAndReply(reaction){
 
-  // if(prevType == 1 || prevType == 2 ||prevType == 3 ||prevType == 4 )
 
   var data = {
     "cmd": "message",
