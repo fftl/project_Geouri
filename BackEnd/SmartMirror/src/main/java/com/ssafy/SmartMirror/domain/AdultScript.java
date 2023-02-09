@@ -21,4 +21,5 @@ public class AdultScript {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scriptKey;
     private String script;
+    private int type;
 }
