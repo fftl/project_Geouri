@@ -1,6 +1,7 @@
 package com.ssafy.SmartMirror.controller;
 
 import com.ssafy.SmartMirror.config.FireBaseService;
+import com.ssafy.SmartMirror.config.ScriptDetail;
 import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,16 +23,15 @@ import java.util.List;
 @RestController
 public class MirrorController {
 
-    static final int START = 0; // 시작
-    static final int MORNING = 1; // 오전
-    static final int AFTERNOON = 2; // 오후
-    static final int EVENING = 3; // 저녁
-    static final int ALLTIME = 4; // 평시
-    static final int BRUSHING_ASK = 5; // 양치 제안
-    static final int BRUSHING_START = 6; // 양치 시작
-    static final int HADN_ASK = 7; // 손씻기 제안
-    static final int HAND_START = 8; // 손씻기 시작
-
+    static final int START = 0;         // 시작
+    static final int MORNING = 1;       // 오전
+    static final int AFTERNOON = 2;     // 오후
+    static final int EVENING = 3;       // 저녁
+    static final int ALLTIME = 4;       // 평시
+    static final int BRUSHING_ASK = 5;  // 양치 제안
+    static final int BRUSHING_START = 6;// 양치 시작
+    static final int HADN_ASK = 7;      // 손씻기 제안
+    static final int HAND_START = 8;    // 손씻기 시작
 
     private KidsScriptService kidsScriptService;
     private KidsResponseService kidsResponseService;
@@ -49,12 +49,12 @@ public class MirrorController {
     private SnapshotService snapshotService;
     private QuizService quizService;
     private FortuneService fortuneService;
+    private ScriptDetail scriptDetail;
+    private Utils utils;
     private LevelService levelService;
 
-    private Utils utils;
-
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, LevelService levelService, Utils utils) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, ScriptDetail scriptDetail, Utils utils, LevelService levelService) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -71,10 +71,10 @@ public class MirrorController {
         this.snapshotService = snapshotService;
         this.quizService = quizService;
         this.fortuneService = fortuneService;
-        this.levelService = levelService;
+        this.scriptDetail = scriptDetail;
         this.utils = utils;
+        this.levelService = levelService;
     }
-
 
     /* ***************************** Member ***************************** */
 
@@ -294,197 +294,96 @@ public class MirrorController {
         // 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestGetScript.getSerialNumber();
         String memberKey = requestGetScript.getMemberKey();
+        Long reqkey = requestGetScript.getReqKey();
+        int reaction = requestGetScript.getReaction();
+        int type = requestGetScript.getType();
+
         if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
-        /** 1. 일단 우선적으로 오자마자 멤버의 정보를 가지고와 어린이인지 어른인지 확인합니다. */
+        // 유저의 정보를 가져옵니다.
         Member getMember = memberService.findByMemberKey(requestGetScript.getMemberKey());
-        if (getMember == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
 
-        /** 어린이라면 !! */
+        // 요청이 도착한 현재 시간을 파악해놓습니다.
+        LocalDateTime now = LocalDateTime.now();
+        String strDate = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        //Return을 위한 객체
+        KidsScript kidsScript = null;
+        AdultScript adultScript = null;
+        ResponseScript responseScript = null;
+
+        // 유저가 어린이 Member 라면!
         if (getMember.isKidsMode()) {
+            /** 첫 질문이라면(START)라면 */
+            if (requestGetScript.getReqKey() == START && requestGetScript.getReaction() == 0 && requestGetScript.getType() == 0) {
 
-            /** 1. 첫 질문일 때 if ( req_key == START(0) ) : 시간에 맞는 인사말을 리턴합니다. */
-            if (requestGetScript.getReqKey() == START) {
+                kidsScript = scriptDetail.getHelloScript(now, getMember, reqkey, reaction);
 
-                // 응답할 수 있는 응답 List를 가져옵니다. 그리고 Shuffle을 이용해서 순서를 섞어줍니다.
-                List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
-                Collections.shuffle(kidsResponseList);
-
-                // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
-                KidsResponse kidsResponse = kidsResponseList.get(0); // 현 조건에 맞는 resKey 랜덤 추출
-                KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey()); // resKey 에 맞는 스트링 문장 추출
-
-                //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
-                ResponseScript responseScript = ResponseScript.builder()
-                        .script(kidsScript.getScript())
-                        .res_key(kidsScript.getScriptKey())
-                        .type(kidsScript.getType())
-                        .build();
-
-                //첫 인사 Return!
-                responseDefault = ResponseDefault.builder()
-                        .success(true)
-                        .data(responseScript)
-                        .build();
-
-                return new ResponseEntity(responseDefault, HttpStatus.OK);
-
-                /** 첫 질문이 아닐 때 if (req_key != 0) */
+            /** 첫 질문이 아닐 때 START가 아닐 때! */
             } else {
-                /** 전 멘트 타입이 인사(1~4) 이고 그에 대한 대답이 긍정이었을 경우, 양치 여부를 판단하여 제안으로 감 */
-                if(requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1) {
 
-                    //현재 시간의 정보와 마지막 양치 기록의 시간을 확인하여 양치 여부를 판단합니다.
-                    LocalDateTime now = LocalDateTime.now();
-                    int year = now.getYear();
-                    int month = now.getMonthValue();
-                    int day = now.getDayOfMonth();
+                /** 전 멘트 타입이 인사(1~4) 이고 그에 대한 대답이 긍정이었을 경우, 양치 여부를 판단하여 제안으로 감 */
+                if( requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1 ) {
 
                     //현재 어린이의 양치기록들을 모두 가져온 뒤 가장 최근값 즉 마지막 인덱스 기록을 가져옵니다.
                     List<Brushing> brushingList = brushingService.findAllByMember(requestGetScript.getMemberKey());
-                    Brushing brushing = brushingList.get(brushingList.size()-1);
-                    String[] date = brushing.getBrushingTime().split(" ");
-                    String[] days = date[0].split("-");
-                    String[] times = date[1].split(":");
+                    kidsScript = scriptDetail.getAskScript(now, getMember, reqkey, reaction, brushingList);
 
-                    //오늘 시간과, 마지막 양치기록의 시각을 더해주어 비교하기 쉽도록 만들어줍니다.
-                    int daysSum = year+month+day;
-                    int brushingDaysSum = Integer.parseInt(days[0]) + Integer.parseInt(days[1]) + Integer.parseInt(days[2]);
+                    /** 양치 제안에 대한 응답이 아까 양치 했어! 일 경우 */
+                } else if ( requestGetScript.getType() == 5 && requestGetScript.getReaction() == 2){
 
-                    /** daysSum과 brushingDaysSum의 값이 같다면 오늘 양치를 이미 했었다는 뜻! */
-                    if(daysSum == brushingDaysSum) {
-                        int historyType = utils.whatTime(Integer.parseInt(times[0]));
-                        int nowType = utils.whatTime(now.getHour());
+                    kidsScript = scriptDetail.getBasicScript(reqkey, reaction);
 
-                        /**
-                         *  날짜가 같다면 시간타입을 구해서 비교합니다. 이미 양치를 했다면 손씻기를 제안합니다.
-                         * */
-                        if(historyType==nowType){
-                            //응답중에
-                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 7);
+                    //외부에서 양치를 한 경우에 양치기록을 추가합니다 (type == 1)
+                    brushingService.saveBrushing(getMember, strDate, 1);
 
-                            //질문을 무사히 가져왔다면!
-                            if(kidsResponseList.size()>0){
-                                KidsResponse kidsResponse = kidsResponseList.get(0);
-                                KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
+                    /** 기본 화면에서 능동적인 양치 시작, 손씻기 시작  */
+                } else if ( (requestGetScript.getReaction() == 1 && requestGetScript.getType() == 5) || (requestGetScript.getReaction() == 1 && requestGetScript.getType() == 7)){
 
-                                //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
-                                ResponseScript responseScript = ResponseScript.builder()
-                                        .script(kidsScript.getScript())
-                                        .res_key(kidsScript.getScriptKey())
-                                        .type(kidsScript.getType())
-                                        .build();
+                    kidsScript = scriptDetail.getStartScript(reqkey, reaction, type);
 
-                                //첫 인사 Return!
-                                responseDefault = ResponseDefault.builder()
-                                        .success(true)
-                                        .data(responseScript)
-                                        .build();
-
-                                return new ResponseEntity(responseDefault, HttpStatus.OK);
-                            } else {
-                                return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
-                            }
-
-                            /** 오늘 양치를 하긴 했지만, 지금 시간타임이 아니었으므로 양치를 해야합니다.
-                             *  양치를 제안! 양치 제안 resType == 5
-                             * */
-                        } else {
-                            System.out.println("log - 이번 시간타임에는 양치를 하지 않았으므로 양치를 제안합니다.");
-                            List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 5);
-
-                            //질문을 무사히 가져왔다면!
-                            if(kidsResponseList.size()>0){
-                                KidsResponse kidsResponse = kidsResponseList.get(0);
-                                KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
-                                //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
-                                ResponseScript responseScript = ResponseScript.builder()
-                                        .script(kidsScript.getScript())
-                                        .res_key(kidsScript.getScriptKey())
-                                        .type(kidsScript.getType())
-                                        .build();
-
-                                //첫 인사 Return!
-                                responseDefault = ResponseDefault.builder()
-                                        .success(true)
-                                        .data(responseScript)
-                                        .build();
-
-                                return new ResponseEntity(responseDefault, HttpStatus.OK);
-                            } else {
-                                return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
-                            }
-                        }
-                        /** 오늘의 날짜에 양치한 기록이 아직 남아있지 않습니다!
-                         *  양치를 제안! 양치 제안 resType == 5
-                         * */
-                    } else {
-                        System.out.println("log - 오늘 한번도 양치를 하지 않았습니다. 양치를 제안합니다.");
-                        List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponseSelect(requestGetScript.getReqKey(), requestGetScript.getReaction(), 5);
-
-                        //질문을 무사히 가져왔다면!
-                        if(kidsResponseList.size()>0){
-                            KidsResponse kidsResponse = kidsResponseList.get(0);
-                            KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
-                            //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
-                            ResponseScript responseScript = ResponseScript.builder()
-                                    .script(kidsScript.getScript())
-                                    .res_key(kidsScript.getScriptKey())
-                                    .type(kidsScript.getType())
-                                    .build();
-
-                            //첫 인사 Return!
-                            responseDefault = ResponseDefault.builder()
-                                    .success(true)
-                                    .data(responseScript)
-                                    .build();
-
-                            return new ResponseEntity(responseDefault, HttpStatus.OK);
-                        } else {
-                            return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
-                        }
-                    }
-                } // 인사 멘트에 대한 긍정 반응이었을 경우, 제안으로 감
-
-                /** 그 외의 경우는 맞춰서 보내면 됨 */
-                List<KidsResponse> kidsResponseList = kidsResponseService.getKidsResponse(requestGetScript.getReqKey(), requestGetScript.getReaction());
-
-                //질문을 무사히 가져왔다면!
-                if(kidsResponseList.size()>0){
-                    KidsResponse kidsResponse = kidsResponseList.get(0);
-                    KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
-                    //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
-                    ResponseScript responseScript = ResponseScript.builder()
-                            .script(kidsScript.getScript())
-                            .res_key(kidsScript.getScriptKey())
-                            .type(kidsScript.getType())
-                            .build();
-
-                    //첫 인사 Return!
-                    responseDefault = ResponseDefault.builder()
-                            .success(true)
-                            .data(responseScript)
-                            .build();
-                    return new ResponseEntity(responseDefault, HttpStatus.OK);
+                    /** 분기가 필요없는 멘트까지 도달!! */
                 } else {
-                    return new ResponseEntity("가능한 질문이 존재하지 않습니다.", HttpStatus.OK);
+
+                    kidsScript = scriptDetail.getBasicScript(reqkey, reaction);
                 }
-
-
             }
-        } // 어린이
 
-        /* 어른이라면 */
+            //선택한 kidsScript를 가지고 resopnseDto를 만듭니다.
+            responseScript = ResponseScript.builder()
+                    .script(kidsScript.getScript())
+                    .res_key(kidsScript.getScriptKey())
+                    .type(kidsScript.getType())
+                    .build();
+
+
+        } /** 어린이 타입 종료 !! */
+
+        /** 어른이라면 */
         if (!getMember.isKidsMode()) {
-            return new ResponseEntity("어른 서비스는 아직 만들지 못했어요..", HttpStatus.OK);
-        } // 어른
 
-        return new ResponseEntity("어른과 아이 모두 아님", HttpStatus.OK);
+            /* responseScript = ResponseScript.builder()
+                    .script(adultScript.getScript())
+                    .res_key(adultScript.getScriptKey())
+                    .type(kidsScript.getType())
+                    .build(); */
+
+            responseScript = ResponseScript.builder()
+                    .script("어른의 스크립트는 아직 준비되지 않았어요!")
+                    .res_key(0L)
+                    .type(0)
+                    .build();
+
+        } /** 어른 타입 종료 !! */
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .data(responseScript)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
     /***
@@ -526,6 +425,4 @@ public class MirrorController {
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
-
-
 }

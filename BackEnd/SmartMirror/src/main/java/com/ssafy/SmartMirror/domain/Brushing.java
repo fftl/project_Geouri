@@ -17,6 +17,7 @@ public class Brushing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long brushingKey; // 양치 키
     private String brushingTime; // 양치 시간
+    private int type;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "member_key", name = "memberKey")
