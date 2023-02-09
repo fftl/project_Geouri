@@ -1,0 +1,10 @@
+.general-view-box{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+  }
+  .youtube-box{
+    display: flex;
+  }
+  

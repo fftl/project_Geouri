@@ -1,25 +1,16 @@
-div {
-    color: white;
-    margin: 0 auto;
-    background-color: black;
-  }
-  .container {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-  }
-  .ytplayer-iframe-div {
-      position: relative;
+
+  .youtube-box {
+      position: absolute;
       padding-top: 23%;
       width: 40%;
       height: 0;
   }
   /* 부모요소에서 padding-top: 56% 을 넣어줌으로써 높이를 차지하게 만들어준다. 이 경우는 영상이 16:9의 비율인 경우이다. 만약 영상이 4:3 비율인 경우에 padding-top: 75% 로 설정해준다. */
-  .ytplayer-iframe {
+  .ytplayer {
+      /* position: absolute; */
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
   }
-  

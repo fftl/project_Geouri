@@ -1,20 +1,55 @@
+ 
 .header {
   display: flex;
+  justify-content: space-between;
+  font-family: 'Pretendard';
+  align-items: center;
   height: 20%;
-  position: relative;
+}
+.date {
+  font-weight: 300;
+  font-size: 4rem;
+  margin-bottom: 0px;
 }
 .clock {
-  display: grid;
-  height: 100%;
+  font-weight: 800;
+  font-size: 6rem;
+  align-items: center;
+  margin-bottom: 0px;
 }
 .weather {
-  /* background-color: black; */
-  /* position: absolute; */
-  display: grid;
-  height: 100%;
+  
+  text-align: end;
+  width: 30%;
+  padding-top: 25px;
+}
+.weather-address {
+  display: flex;
+  text-align: end ;
+  justify-content: end;
+}
+.weather-address p {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+.weather-icon-box {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
 }
 .weather-icon {
-  position: absolute;
-  top: 0%;
-  height: 100%;
+  width: 50%;
+  margin-right:1rem;
+}
+.weather-temp{
+  display: block;
+  font-weight: 500;
+  font-size: 4rem;
+  margin-bottom: 0px;
+}
+.weather-weather{
+  margin-bottom: 0px;
+  font-size: 2rem;
 }
