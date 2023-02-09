@@ -176,6 +176,7 @@ function STT(voice_input){
 
 
   var arr_str = [
+    ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
     ["시작", "재생", "진행"],
     ["종료","그만","정지","중지"],
@@ -190,6 +191,7 @@ function STT(voice_input){
   ]
 
   var arr_voicecmd = [
+    "quiz",
     "test",
     "video_start",
     "video_stop",
