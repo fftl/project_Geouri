@@ -83,20 +83,20 @@ wss.on('connection', function (ws, request) {
 
       // db
       // 어린이의 양치 손씻기에 대한 대답 전송
-      // else if (voice_input.includes("answer")) {
+      else if (voice_input.includes("answer")) {
 
-      //   // 긍정 : 1, 부정 : 0
-      //   // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
-      //   // prevKey : 전에 받았던 멘트 키
-      //   const reaction = -1;
+        // 긍정 : 1, 부정 : 0
+        // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
+        // prevKey : 전에 받았던 멘트 키
+        const reaction = -1;
 
-      //   if (voice_input == "answer_positive")
-      //     reaction = 1;
-      //   else if (voice_input == "answer_negative")
-      //     reaction = 0;
+        if (voice_input == "answer_positive")
+          reaction = 1;
+        else if (voice_input == "answer_negative")
+          reaction = 0;
 
-      //   answerAndReply(reaction);        
-      // }
+        answerAndReply(reaction);        
+      }
       
       // db 
       // 사진 촬영을 하는 경우
@@ -289,9 +289,11 @@ function greetings(){
 
 function answerAndReply(reaction){
 
-  var returnData = {
-    "cmd": "yesorno",
-    "content": body.data,
+  // if(prevType == 1 || prevType == 2 ||prevType == 3 ||prevType == 4 )
+
+  var data = {
+    "cmd": "message",
+    "content": ""
   };
 
   let options = {
@@ -304,7 +306,7 @@ function answerAndReply(reaction){
       "prevType": prevType,
       "reaction": reaction
     },
-    json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
+    json: true,
   };
 
   rq.post(options, function (err, httpResponse, body) {
@@ -312,11 +314,13 @@ function answerAndReply(reaction){
       console.log("error -> ", err);
     }else{
       data = {
-        "cmd": "yesorno",
+        "cmd": "message",
         "content": body.data,
       }
       prevKey = body.data.scriptKey;
       prevType = body.data.type;
+
+      TTS(body.data.script);
       wss.broadcast(JSON.stringify(data));
     }
   });
