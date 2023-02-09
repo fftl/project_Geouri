@@ -88,7 +88,7 @@ wss.on('connection', function (ws, request) {
         // 긍정 : 1, 부정 : 0
         // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
         // prevKey : 전에 받았던 멘트 키
-        const reaction = -1;
+        var reaction = 1;
 
         if (voice_input == "answer_positive")
           reaction = 1;
