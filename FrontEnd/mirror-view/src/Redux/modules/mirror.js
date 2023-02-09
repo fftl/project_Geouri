@@ -41,12 +41,10 @@ const mirrorSlice = createSlice({
     },
     reducers: {
         getMember(state, action) {
-            console.log(action.payload);    
             state.member = action.payload;
         },
 
         getAction(state, action) {
-            console.log(action.payload);
             state.action = action.payload.cmd;
             state.message = action.payload.content;
         },

@@ -19,7 +19,7 @@ function Kids(props) {
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
-  const message = useSelector((state) => state?.mirror?.content);
+  const message = useSelector((state) => state?.mirror?.message);
 
   const [comp, setComp] = useState(''); // component 설정
   // const [comp, setComp] = useState('camera'); // component 설정

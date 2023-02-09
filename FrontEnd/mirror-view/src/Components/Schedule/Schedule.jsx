@@ -3,7 +3,25 @@ import "./Schedule.css";
 import ScheduleItem from "./ScheduleItem";
 
 function Schedule () {
-    const schedule = useState((state) => state?.mirror?.member?.calendar);
+    // const schedule = useState((state) => state?.mirror?.member?.calendar);
+
+    const schedule = [
+      {
+        'content': '본앤브레드',
+        'date': '2023-02-12',
+        'time': '13:00',
+      },
+      {
+        'content': '미용실',
+        'date': '2023-02-12',
+        'time': '16:00',
+      },
+      {
+        'content': '네일아트',
+        'date': '2023-02-12',
+        'time': '18:00',
+      },
+    ]
     
     const date = new Date()
     const current_hour = date.getHours();
@@ -16,7 +34,7 @@ function Schedule () {
           sch.hour === current_hour && sch.minute >= current_minute
         )
       )
-    }).slice(0, 5);
+    }).slice(0, 3);
 
     return (
         <>
