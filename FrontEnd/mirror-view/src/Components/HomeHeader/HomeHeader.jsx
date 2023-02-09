@@ -62,10 +62,10 @@ function HomeHeader() {
       // 위치정보는 mock data
       const member = useState((state) => state?.mirror?.member);
     
-      // const lon = member?.lng;
-      // const lat = member?.lon;
+      const lon = member?.lng;
+      const lat = member?.lon;
     
-      const [lat, lon] = [37, 127];
+      // const [lat, lon] = [37, 127];
       const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
       const [temp, setTemp] = useState("");
       const [weather, setWeather] = useState("");

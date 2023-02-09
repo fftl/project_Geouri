@@ -21,7 +21,7 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  const [comp, setComp] = useState('camera'); // component 설정
+  const [comp, setComp] = useState(''); // component 설정
   // const [comp, setComp] = useState('camera'); // component 설정
   const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
@@ -44,7 +44,7 @@ function Kids(props) {
     if( mirror_action === 'message' ){
       setComp('message');
     }
-    if (mirror_action === 'none') {
+    if (mirror_action === '') {
       setComp('kidsDefault');
     } 
     if (comp === 'ending'){
