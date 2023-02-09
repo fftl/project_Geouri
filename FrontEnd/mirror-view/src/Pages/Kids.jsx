@@ -21,13 +21,13 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  const [comp, setComp] = useState("kidsDefault"); // component 설정
+  const [comp, setComp] = useState(""); // component 설정
   // const [comp, setComp] = useState('camera'); // component 설정
   const [video, setVideo] = useState("wash_hands"); // 비디오 url
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
   useEffect(() => {
-    if (mirror_action === "greeting") {
+    if (mirror_action === "greetings") {
       setComp("greeting");
     }
     if (mirror_action === "ending") {
@@ -44,9 +44,10 @@ function Kids(props) {
     if (mirror_action === "message") {
       setComp("message");
     }
-    if (mirror_action === "none") {
+    if (mirror_action === "") {
       setComp("kidsDefault");
     }
+    console.log(comp);
     if (comp === "ending") {
       setTimeout(() => {
         dispatch(mirrorActions.finish());
@@ -72,14 +73,14 @@ function Kids(props) {
             greeting: (
               <div className="text-div">
                 <p className="text">
-                  {mirror_action?.msg}, {checkKorean(name)}
+                  {message}, {checkKorean(name)}
                 </p>
               </div>
             ),
             message: (
               <>
                 <div className="text-div">
-                  <p className="text">{mirror_action?.msg}</p>
+                  <p className="text">{message}</p>
                 </div>
                 <Character />
               </>
@@ -87,7 +88,7 @@ function Kids(props) {
             ending: (
               <>
                 <div className="text-div">
-                  <div className="text">{mirror_action?.msg}</div>
+                  <div className="text">{message}</div>
                 </div>
                 <Character />
               </>
