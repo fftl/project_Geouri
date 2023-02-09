@@ -4,11 +4,14 @@ import "./WashHandsVideo.css";
 const WashHandsVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
+  const msg = { cmd: "wash_hands_finish", content: "" };
+  const jsonMsg = JSON.stringify(msg);
+
   const videoOff = () => {
-    setComp('default');
-    setVideo('')
-    webSocket.send('wash_hands_finish');
-  }
+    setComp("default");
+    setVideo("");
+    webSocket.send(jsonMsg);
+  };
 
   return (
     <div className="container">
