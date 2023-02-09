@@ -279,6 +279,8 @@ function greetings(){
       }
       prevKey = body.data.res_key;
       prevType = body.data.type;
+
+      TTS(body.data.script);
       wss.broadcast(JSON.stringify(returnData));
     }
   });
@@ -329,7 +331,7 @@ function takePicture(){
 
   var options = {
     mode: 'text',
-    pythonPath: 'C:\\Users\\SSAFY\\anaconda3\\python.exe',
+    pythonPath: '/src/usr/python3',
     pythonOptions: ['-u'],
     // scriptPath: '',
     args: [serialNumber, current_user]
