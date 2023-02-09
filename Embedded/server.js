@@ -397,6 +397,10 @@ function greetings(){
     if(err){
       console.log("error -> ", err);
     } else{
+
+      console.log(options)
+      console.log(body)
+
       returnData  = {
         "cmd": "greetings",
         "content" : body.data.script,
@@ -435,6 +439,10 @@ function answerAndReply(reaction){
     if(err){
       console.log("error -> ", err);
     }else{
+
+      console.log(options)
+      console.log(body)
+
       data = {
         "cmd": "message",
         "content": body.data.script,
