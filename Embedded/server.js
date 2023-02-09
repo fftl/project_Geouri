@@ -50,15 +50,15 @@ wss.on('connection', function (ws, request) {
 
 
     if (command == "face_name") {
-      console.log("face_name => ", obj.content)
-      const face_name = obj.content
-      current_user = face_name
-      
+      console.log("face_name => ", obj.content);
+      const face_name = obj.content;
+      //current_user = face_name
+      current_user = "nh3b-494F";
       person_appear();
     }
 
     else if (command === "person_leave") {
-      console.log("PERSON_LEAVE")
+      console.log("PERSON_LEAVE");
       person_leave();
     }
 
@@ -263,9 +263,9 @@ function greetings(){
     body: {
       "serialNumber": serialNumber,
       "memberKey": current_user,
-      "reaction" : 0,
-      "reqKey" : prevKey,
-      "type" : prevType,
+      "reqKey": prevKey,
+      "type": prevType,
+      "reaction": 0
     },
     json: true,
   };
@@ -302,8 +302,8 @@ function answerAndReply(reaction){
     body: {
       "serialNumber": serialNumber,
       "memberKey": current_user,
-      "prevKey": prevKey,
-      "prevType": prevType,
+      "reqKey": prevKey,
+      "type": prevType,
       "reaction": reaction
     },
     json: true,
@@ -317,7 +317,10 @@ function answerAndReply(reaction){
         "cmd": "message",
         "content": body.data,
       }
-      prevKey = body.data.scriptKey;
+      console.log(options.body);
+      console.log(body)
+      
+      prevKey = body.data.res_key;
       prevType = body.data.type;
 
       TTS(body.data.script);
