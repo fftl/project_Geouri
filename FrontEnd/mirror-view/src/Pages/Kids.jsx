@@ -15,33 +15,33 @@ function Kids(props) {
   const { webSocket } = props;
 
   const dispatch = useDispatch();
-  
+
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
-  
-  const [comp, setComp] = useState('kidsDefault'); // component 설정
-  const [video, setVideo] = useState(''); // 비디오 url
-  
+
+  const [comp, setComp] = useState("kidsDefault"); // component 설정
+  const [video, setVideo] = useState(""); // 비디오 url
+
   useEffect(() => {
     if (mirror_action === "greetings") {
       setComp("greeting");
     }
-    if( mirror_action === 'wash_hands' ){
-      setComp('video');
-      setVideo('wash_hands');
+    if (mirror_action === "wash_hands") {
+      setComp("video");
+      setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
       setComp("video");
-      setVideo("brush_teeth");
+      setVideo("wash_hands");
     }
     if (mirror_action === "message") {
       setComp("message");
     }
-    if (mirror_action === 'default') {
-      setComp('kidsDefault');
-    } 
+    if (mirror_action === "default") {
+      setComp("kidsDefault");
+    }
   }, [mirror_action]);
 
   // 한글이름에 따라 'ㅇㅇ아' or 'ㅇㅇ야' 체크
@@ -66,7 +66,7 @@ function Kids(props) {
                     {message}, {checkKorean(name)}
                   </p>
                 </div>
-              <Character />
+                <Character />
               </>
             ),
             message: (

@@ -7,7 +7,6 @@ import { Routes, Route } from "react-router-dom";
 import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
 import Slideshow from "./Elements/Slideshow";
-import BrushTeethVideo from "./Components/Kids/BrushTeethVideo";
 
 function App() {
   // 어플리케이션의 최상위에서 websocket 실행
@@ -21,13 +20,9 @@ function App() {
       {/* React-Router */}
       <Routes>
         {/* 기본화면 */}
-        <Route 
-          path="/" 
-          element={<Home />} />
+        <Route path="/" element={<Home />} />
         {/* 아이모드 */}
-        <Route 
-          path="/kids" 
-          element={<Kids webSocket={webSocket} />} />
+        <Route path="/kids" element={<Kids webSocket={webSocket} />} />
         {/* 일반모드 */}
         <Route
           path="/general"

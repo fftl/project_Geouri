@@ -32,7 +32,7 @@ const BrushTeethVideo = (props) => {
           onEnded={videoOff}
         />
       ) : (
-        <Slideshow />
+        <Slideshow slideShowOff={videoOff} />
       )}
     </div>
   );
