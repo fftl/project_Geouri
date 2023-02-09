@@ -85,17 +85,22 @@ wss.on('connection', function (ws, request) {
       // 어린이의 양치 손씻기에 대한 대답 전송
       else if (voice_input.includes("answer")) {
 
-        // 긍정 : 1, 부정 : 0
-        // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
-        // prevKey : 전에 받았던 멘트 키
-        var reaction = 1;
+        if(quizMode==1){
+          quiz(voice_input);
+        }
+        else{
+          // 긍정 : 1, 부정 : 0
+          // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
+          // prevKey : 전에 받았던 멘트 키
+          var reaction = 1;
 
-        if (voice_input == "answer_positive")
-          reaction = 1;
-        else if (voice_input == "answer_negative")
-          reaction = 0;
+          if (voice_input == "answer_positive")
+            reaction = 1;
+          else if (voice_input == "answer_negative")
+            reaction = 0;
 
-        answerAndReply(reaction);        
+          answerAndReply(reaction);   
+        }
       }
       
       // db 
@@ -105,7 +110,7 @@ wss.on('connection', function (ws, request) {
         takePicture();
       }
 
-      else if (voice_input === "event_quiz") {
+      else if (voice_input === "quiz") {
         quiz(""); 
       }
 
@@ -155,10 +160,6 @@ wss.on('connection', function (ws, request) {
     else if(command === "wash_hands"){
       prevType = 8;
       typeCheck();
-    }
-
-    else if(command === "quiz"){
-      quiz();
     }
 
     else if (command === "reply") {
