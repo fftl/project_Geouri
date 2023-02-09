@@ -3,6 +3,7 @@ var wss = new WebSocketServer({ port: 9998 });
 const rq = require('request');
 var PythonShell = require('python-shell');
 
+var pythonPath = "/usr/bin/python3";
 
 var prevKey = 0;      // 이전에 보냈던 메세지
 var prevType = 0;     // 현재 상태.
@@ -179,7 +180,7 @@ function STT(voice_input){
 function TTS(str){
   var options = {
     mode: 'text',
-    pythonPath: 'C:\\Users\\SSAFY\\anaconda3\\python.exe',
+    pythonPath: pythonPath,
     pythonOptions: ['-u'],
     // scriptPath: '',
     args: [str]
@@ -331,7 +332,7 @@ function takePicture(){
 
   var options = {
     mode: 'text',
-    pythonPath: '/src/usr/python3',
+    pythonPath: pythonPath,
     pythonOptions: ['-u'],
     // scriptPath: '',
     args: [serialNumber, current_user]
