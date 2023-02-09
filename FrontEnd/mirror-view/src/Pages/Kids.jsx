@@ -21,8 +21,8 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  // const [comp, setComp] = useState(""); // component 설정
-  const [comp, setComp] = useState("camera"); // component 설정
+  const [comp, setComp] = useState("video"); // component 설정
+  // const [comp, setComp] = useState('camera'); // component 설정
   const [video, setVideo] = useState("brush_teeth"); // 비디오 url
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨)
@@ -39,7 +39,7 @@ function Kids(props) {
     }
     if (mirror_action === "brush_teeth") {
       setComp("video");
-      setVideo("brush_teeth");
+      setVideo("wash_hands");
     }
     if (mirror_action === "message") {
       setComp("message");
@@ -68,12 +68,12 @@ function Kids(props) {
     <>
       <div className="main-box">
         {
-          ({
+          {
             none: <div className="text-div"></div>,
             greeting: (
               <div className="text-div">
                 <p className="text">
-                  {message}, {checkKorean(name)}
+                  {mirror_action?.msg}, {checkKorean(name)}
                 </p>
               </div>
             ),
@@ -103,8 +103,7 @@ function Kids(props) {
                 <KidsDefault />
               </>
             ),
-          },
-          [comp])
+          }[comp]
         }
       </div>
       {comp === "video" && video === "brush_teeth" && (

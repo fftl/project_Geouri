@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { current } from "@reduxjs/toolkit";
 
-const Slideshow = () => {
+const Slideshow = (props) => {
+  const { slideShowOff } = props;
+
   const Container = styled.div`
     overflow: hidden;
     width: 100vw;
@@ -42,6 +45,8 @@ const Slideshow = () => {
     { id: 8, url: process.env.PUBLIC_URL + "/images/guide/guide8.gif" },
     { id: 9, url: process.env.PUBLIC_URL + "/images/guide/guide9.gif" },
   ];
+  const [isOver, setIsOver] = useState(false);
+
   const settings = {
     centerMode: true,
     infinite: true,
@@ -49,6 +54,13 @@ const Slideshow = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 15000,
+    afterChange: (currentSlide) => {
+      const totalSlides = 9;
+      if (currentSlide === totalSlides - 1) {
+        setIsOver(true);
+        slideShowOff();
+      }
+    },
   };
   return (
     <Container>
