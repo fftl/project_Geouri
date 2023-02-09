@@ -15,6 +15,15 @@ insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) v
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("fSBS-lCHb", "짱윤", "1997-09-01", "JY.jpg", 1, "Fyw3-DOwW");
 insert into member (member_key, nickname, birth, img_url, kids_mode, user_key) values ("DnGc-bHAM", "동밍", "1995-07-10", "DM.jpg", 0, "Fyw3-DOwW");
 
+-- 멤버 ( kids_mode: true(1) false(0)  / user_key: 본인에 맞는 거! )
+insert into level (member_key, lv, exp) values ("nh3b-494F", 1, 10);
+insert into level (member_key, lv, exp) values ("B7T3-jX6r", 2, 40);
+insert into level (member_key, lv, exp) values ("GhhR-Habi", 3, 80);
+insert into level (member_key, lv, exp) values ("60lm-pxTc", 4, 20);
+insert into level (member_key, lv, exp) values ("fSBS-lCHb", 5, 0);
+insert into level (member_key, lv, exp) values ("DnGc-bHAM", 6, 70);
+
+
 -- 위젯 ( 멤버키, 뉴스 여부, 플레이리스트 여부, 사진찍기 여부, 일정 여부 // 1이 true 고 0이 false 입니다 )
 insert into widget (member_key, news, playlist, calender) values ("nh3b-494F", 1, 1, 1);
 insert into widget (member_key, news, playlist, calender) values ("B7T3-jX6r", 1, 1, 1);
@@ -47,15 +56,6 @@ insert into dong_code (member_key, dong_code) values ("GhhR-Habi", "2818510600")
 insert into dong_code (member_key, dong_code) values ("60lm-pxTc", "4121010600");
 insert into dong_code (member_key, dong_code) values ("fSBS-lCHb", "1117011500");
 insert into dong_code (member_key, dong_code) values ("DnGc-bHAM", "4119010900");
-
--- 법정동코드
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2823710700", "인천광역시", "부평구", "부개동", 126.7297474239, 37.4893497823);
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1168011100", "서울특별시", "강남구", "세곡동", 127.104583, 37.464369 );
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("2818510600", "인천광역시", "연수구", "송도동", 126.645656, 37.384532);
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4121010600", "경기도", "광명시", "일직동", 126.531533, 37.265020 );
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("1117011500", "서울특별시", "용산구", "산천동", 126.952396,37.535428);
--- insert into region (dong_code, sido_name, gugun_name, dong_name, lat, lng) values ("4119010900", "경기도", "부천시", "상동", 126.7544075,37.5005775);
-
 
 -- #####################################################################################################################################################################
 -- #####################################################################################################################################################################

@@ -30,6 +30,8 @@ public class ResponseMember {
 
     private String fortune; // 오늘의 한마디
 
+    private ResponseLevel level; // 레벨 정보
+
     private List<ResponseNews> news;
 
 }
