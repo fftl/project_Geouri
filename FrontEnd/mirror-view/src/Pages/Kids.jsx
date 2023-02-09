@@ -19,7 +19,7 @@ function Kids(props) {
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
-  const message = useSelector((state) => state?.mirror?.message);
+  const message = useSelector((state) => state?.mirror?.content);
 
   const [comp, setComp] = useState(''); // component 설정
   // const [comp, setComp] = useState('camera'); // component 설정
@@ -74,19 +74,19 @@ function Kids(props) {
               </div>,
             greeting : 
               <div className="text-div">
-                <p className="text">{mirror_action?.msg}, {checkKorean(name)}</p>
+                <p className="text">{mirror_action?.message}, {checkKorean(name)}</p>
               </div>,
             message : 
               <>
                 <div className="text-div">
-                  <p className="text">{mirror_action?.msg}</p>
+                  <p className="text">{mirror_action?.message}</p>
                 </div>
                 <Character />
               </>,
             ending : 
               <>
                 <div className="text-div">
-                  <div className="text">{mirror_action?.msg}</div>
+                  <div className="text">{mirror_action?.message}</div>
                 </div>  
                 <Character />
               </>,
