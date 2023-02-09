@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import News from "./News";
 import "./News.css";
 
 function NewsPlayer () {
-    const newsData = useState((state) => state?.mirror?.member?.news);
+    const newsData = useSelector((state) => state?.mirror?.member?.news);
     
     return (
         <div className="news-wrapper">

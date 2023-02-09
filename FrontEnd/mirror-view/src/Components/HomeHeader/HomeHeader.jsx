@@ -8,6 +8,7 @@ import sun from "../../assets/weatherIcons/039-sun.png";
 import windy from "../../assets/weatherIcons/010-windy.png";
 import React, { useState } from "react";
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 
 const dateBuilder = (d) => {
@@ -60,12 +61,12 @@ function HomeHeader() {
         base: "http://api.openweathermap.org/data/2.5/",
       };
       // 위치정보는 mock data
-      const member = useState((state) => state?.mirror?.member);
+      const member = useSelector((state) => state?.mirror?.member);
+      console.log(member)
+      const lat = Math.round(member?.region?.lng * 100)/100;
+      const lon = Math.round(member?.region?.lat * 100)/100;
     
-      const lon = member?.lng;
-      const lat = member?.lon;
-    
-      // const [lat, lon] = [37, 127];
+      // const [lat, lon] = [37.49, 126.73];
       const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
       const [temp, setTemp] = useState("");
       const [weather, setWeather] = useState("");
@@ -117,8 +118,8 @@ function HomeHeader() {
           {lat && lon ? 
             <div className='weather'>
               <div className='weather-address'>
-                {/* <p>{member?.sidoName} {member?.gugunName}</p> */}
-                <p>서울시 강남구</p>
+                <p>{member?.region?.sidoName} {member?.region?.gugunName}</p>
+                {/* <p>서울시 강남구</p> */}
               </div>
               <div className='weather-icon-box'>
                 <img className='weather-icon' src={icon} alt="weather-icon"/>

@@ -13,9 +13,9 @@
     display: grid;
     position: absolute;
     animation-name: news-slide;
-    animation-delay: 10s;
+    animation-delay: 1s;
     /* 기사 개수가 늘어나면 duration도 늘려줘야해 */
-    animation-duration: 100s; 
+    animation-duration: 550s; 
     animation-iteration-count: infinite;
 
 }
@@ -23,7 +23,7 @@
 @keyframes news-slide {
     from{
         /* 기사 개수 늘어나면 bottom도 더 -로 늘려줘야해 */
-        bottom: -600px;
+        bottom: -2700px;
     }
     to{
         bottom: 300px;

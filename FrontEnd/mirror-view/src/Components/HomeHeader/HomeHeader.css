@@ -5,23 +5,27 @@
   font-family: 'Pretendard';
   align-items: center;
   height: 20%;
+  padding-bottom: 1rem;
 }
 .date {
   font-weight: 300;
-  font-size: 4rem;
+  font-size: 3.5rem;
   margin-bottom: 0px;
 }
 .clock {
   font-weight: 800;
   font-size: 6rem;
   align-items: center;
+}
+.clock p {
   margin-bottom: 0px;
+
 }
 .weather {
   
   text-align: end;
   width: 30%;
-  padding-top: 25px;
+  padding-top: 1rem;
 }
 .weather-address {
   display: flex;
