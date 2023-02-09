@@ -13,7 +13,7 @@ function GeneralView(props) {
     return (
         <div className="general-view-box">
             { member_info_widget?.playlist && <YouTubePlayer /> }
-            { member_info_widget?.news && <NewsPlayer /> } 
+            {/* { member_info_widget?.news && <NewsPlayer /> }  */}
             { member_info_widget?.calender && <Schedule /> }
         </div>
     )
