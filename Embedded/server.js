@@ -157,6 +157,10 @@ wss.on('connection', function (ws, request) {
       typeCheck();
     }
 
+    else if(command === "quiz"){
+      quiz();
+    }
+
     else if (command === "reply") {
       console.log("응답받음")
     }
@@ -552,8 +556,8 @@ function quiz(voice_input){
 }
 
 function easteregg(){
-  console.log(user_data.data.nickname);
-  const name = callName_ga(user_data.data.nickname);
+  console.log(user_data.nickname);
+  const name = callName_ga(user_data.nickname);
   var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
   TTS(str);
 
