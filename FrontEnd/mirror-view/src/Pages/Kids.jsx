@@ -63,7 +63,7 @@ function Kids(props) {
               <>
                 <div className="text-div">
                   <p className="text">
-                    {mirror_action?.msg}, {checkKorean(name)}
+                    {message}, {checkKorean(name)}
                   </p>
                 </div>
               <Character />
