@@ -192,7 +192,17 @@ function TTS(str){
   });
 }
 
+// 분기를 담당하는 함수?
+function typeCheck(){
+  if(prevType == 6){
 
+    var data = {
+      "cmd": "brush_start",
+      "content": "",
+    };
+    wss.broadcast(JSON.stringify(data));
+  }
+}
 
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
@@ -315,19 +325,25 @@ function answerAndReply(reaction){
     }else{
       data = {
         "cmd": "message",
-        "content": body.data,
+        "content": body.data.script,
       }
-      console.log(options.body);
-      console.log(body)
-      
+
       prevKey = body.data.res_key;
       prevType = body.data.type;
 
       TTS(body.data.script);
       wss.broadcast(JSON.stringify(data));
+
+      typeCheck();
     }
   });
 }
+
+
+function startToothBrush(){
+
+}
+
 
 
 function takePicture(){
@@ -364,11 +380,6 @@ function quiz(voice_input){
   //퀴즈 정보를 받아온 후, 음성 출력
   if(quizMode == 0){
 
-    // var returnData = {
-    //   "cmd": "quizdata",
-    //   "content": "",
-    // };
-  
     let options = {
       url: 'http://i8a201.p.ssafy.io/mirror/getQuiz',
       method: 'POST',
@@ -383,18 +394,21 @@ function quiz(voice_input){
       if(err){
         console.log("error -> ", err);
       }else{
-        data = {
-          "cmd": "yesorno",
-          "content": body.data,
-        }
+
 
         quizString = body.data.question;
         quizHint = body.data.hint;
         quizAnswer =body.data.answer;
+
+        data = {
+          "cmd": "message",
+          "content": quizString,
+        }
+
+        TTS(quizString);
         wss.broadcast(JSON.stringify(data));
 
         quizMode = 1;
-        TTS(quizString);
         
       }
     });
