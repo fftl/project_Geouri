@@ -15,14 +15,14 @@ const KidsLevel = (props) => {
   // setLevel(pointNow);
   // setPoint(levelNow);
   //   }, []);
-  const pointNow = 30;
-  const memlevel = "lv1";
+  const pointNow = 40;
+  const memlevel = "lv0";
 
   return (
     <div>
       <div className="chaimg">
         <img
-          src={process.env.PUBLIC_URL + `/images/${memlevel}.png`}
+          src={process.env.PUBLIC_URL + `/images/lv/${memlevel}.png`}
           alt="캐릭터"
           id="levcha"
         />
@@ -30,14 +30,6 @@ const KidsLevel = (props) => {
       </div>
     </div>
   );
-  // if(level == 0){
-  //     return(
-  //         <div></div>
-  //         )
-  //     }
-  //     if(level == 1){
-
-  //     }
 };
 
 export default KidsLevel;
