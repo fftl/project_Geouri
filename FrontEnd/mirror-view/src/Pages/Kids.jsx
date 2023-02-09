@@ -27,7 +27,7 @@ function Kids(props) {
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
   useEffect(() => {
-    if( mirror_action === 'greeting' ){
+    if( mirror_action === 'greetings' ){
       setComp('greeting')
     }
     if( mirror_action === 'ending' ){
@@ -44,7 +44,10 @@ function Kids(props) {
     if( mirror_action === 'message' ){
       setComp('message');
     }
-    if (mirror_action === '') 
+    if (mirror_action === '') {
+      setComp('kidsDefault');
+    } 
+    console.log(comp)
     if (comp === 'ending'){
       setTimeout(() => {
         dispatch(mirrorActions.finish())
@@ -71,19 +74,19 @@ function Kids(props) {
               </div>,
             greeting : 
               <div className="text-div">
-                <p className="text">{mirror_action?.msg}, {checkKorean(name)}</p>
+                <p className="text">{message}, {checkKorean(name)}</p>
               </div>,
             message : 
               <>
                 <div className="text-div">
-                  <p className="text">{mirror_action?.msg}</p>
+                  <p className="text">{message}</p>
                 </div>
                 <Character />
               </>,
             ending : 
               <>
                 <div className="text-div">
-                  <div className="text">{mirror_action?.msg}</div>
+                  <div className="text">{message}</div>
                 </div>  
                 <Character />
               </>,
@@ -98,14 +101,14 @@ function Kids(props) {
           }[comp]
         }
       </div>
-      { video === 'brush_teeth' && 
+      { comp === 'video' && video === 'brush_teeth' && 
         <div className="video-box">
           <PageParticles />
           <Effect />
           <BrushTeethVideo webSocket={webSocket} setComp={setComp} setVideo={setVideo}/>
         </div> 
       }
-      { video === 'wash_hands' && 
+      { comp === 'video' && video === 'wash_hands' && 
         <div className="video-box">
           <PageParticles />
           <Effect />

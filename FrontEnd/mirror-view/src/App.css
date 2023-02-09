@@ -1,7 +1,6 @@
 .App {
   text-align: center;
 }
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,14 +34,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-.general-view-box{
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.youtube-box{
-  display: flex;
 }
 
 @font-face {

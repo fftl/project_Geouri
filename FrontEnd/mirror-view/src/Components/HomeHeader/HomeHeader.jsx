@@ -62,10 +62,10 @@ function HomeHeader() {
       // 위치정보는 mock data
       const member = useState((state) => state?.mirror?.member);
     
-      // const lon = member?.lng;
-      // const lat = member?.lon;
+      const lon = member?.lng;
+      const lat = member?.lon;
     
-      const [lat, lon] = [37, 127];
+      // const [lat, lon] = [37, 127];
       const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
       const [temp, setTemp] = useState("");
       const [weather, setWeather] = useState("");
@@ -116,13 +116,17 @@ function HomeHeader() {
           </div>
           {lat && lon ? 
             <div className='weather'>
-              <div className='weather-text-box'>
-                {/* <p style={{alignItems:'end'}}>{member?.sidoName} {member?.gugunName}</p> */}
-                <p style={{display:'flex', alignItems:'end'}}>서울시 강남구</p>
+              <div className='weather-address'>
+                {/* <p>{member?.sidoName} {member?.gugunName}</p> */}
+                <p>서울시 강남구</p>
               </div>
               <div className='weather-icon-box'>
                 <img className='weather-icon' src={icon} alt="weather-icon"/>
-                <p style={{textAlign:'start'}}>{temp}º <br/>{weather} </p>
+                <div className="weather-text-box">
+                  <p className="weather-temp">{temp}º</p>
+                  <p className="weather-weather">{weather}</p>
+                </div>
+                  
               </div>
             </div>
               : 
