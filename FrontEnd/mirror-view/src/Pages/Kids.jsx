@@ -14,14 +14,12 @@ import KidsDefault from "../Components/Kids/KidsDefault";
 function Kids(props) {
   const { webSocket } = props;
 
-  const dispatch = useDispatch();
-
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  const [comp, setComp] = useState("kidsDefault"); // component 설정
+  const [comp, setComp] = useState("camera"); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
 
   useEffect(() => {
