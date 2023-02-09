@@ -2,10 +2,11 @@ import ReactPlayer from "react-player";
 import "./BrushTeethVideo.css";
 
 const BrushTeethVideo = (props) => {
-  const { webSocket, setComp } = props;
+  const { webSocket, setComp, setVideo } = props;
 
   const videoOff = () => {
-    setComp('camera')
+    setComp('camera');
+    setVideo('');
   }
   return (
     <div className="container">
@@ -14,7 +15,6 @@ const BrushTeethVideo = (props) => {
         width="1000px"
         height="700px"
         playing={true}
-        muted={false}
         controls={true}
         loop={true}
         id="player"

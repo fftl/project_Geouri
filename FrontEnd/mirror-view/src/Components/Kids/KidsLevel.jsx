@@ -22,7 +22,7 @@ const KidsLevel = (props) => {
     <div>
       <div className="chaimg">
         <img
-          src={process.env.PUBLIC_URL + `/images/${memlevel}.png`}
+          src={process.env.PUBLIC_URL + `/images/lv/${memlevel}.png`}
           alt="캐릭터"
           id="levcha"
         />

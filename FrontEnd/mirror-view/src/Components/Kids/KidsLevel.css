@@ -1,6 +1,6 @@
 #levelBar {
   width: 40%;
-  margin: 10px;
+  margin: 0 auto;
 }
 
 .progress-bar {
@@ -10,12 +10,12 @@
 #levcha {
   width: 40%;
   padding: 0;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .chaimg {
-  width: 50%;
+  width: 40%;
   position: fixed;
-  right: -200px;
+  right: 0px;
   bottom: 50px;
 }

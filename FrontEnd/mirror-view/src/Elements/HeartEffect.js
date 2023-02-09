@@ -18,7 +18,7 @@ const HeartEffect = () => {
           r_size +
           "px;left:" +
           r_left +
-          "%;background:rgba(255," +
+          "%; background:rgba(255," +
           (r_bg - 25) +
           "," +
           r_bg +
