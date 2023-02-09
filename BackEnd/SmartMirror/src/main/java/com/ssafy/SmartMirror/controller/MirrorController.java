@@ -49,10 +49,12 @@ public class MirrorController {
     private SnapshotService snapshotService;
     private QuizService quizService;
     private FortuneService fortuneService;
+    private LevelService levelService;
+
     private Utils utils;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, Utils utils) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, LevelService levelService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -69,8 +71,214 @@ public class MirrorController {
         this.snapshotService = snapshotService;
         this.quizService = quizService;
         this.fortuneService = fortuneService;
+        this.levelService = levelService;
         this.utils = utils;
     }
+
+
+    /* ***************************** Member ***************************** */
+
+    /**
+     * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
+     * @param requestInfo
+     * @return
+     */
+    @PostMapping("/member")
+    public ResponseEntity getMember(@RequestBody RequestInfo requestInfo) throws IOException {
+        ResponseDefault responseDefault = null; // response 객체 생성
+
+        // 거울 시리얼 넘버와 멤버키 유효성 확인
+        String serialNumber = requestInfo.getSerialNumber();
+        String memberKey = requestInfo.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        }
+
+        // 멤버 정보 가져오기
+        Member member = memberService.findByMemberKey(memberKey); // 멤버
+        Widget widget = widgetService.findByMemberKey(memberKey); // 위젯
+        String playlist = playlistService.findByMemberKey(memberKey); // 플레이리스트
+
+        // 지역 정보
+        String dongCode = dongCodeService.findByMemberKey(memberKey);
+        Region region = regionService.findByDongCode(dongCode);
+
+        // 캘린더
+        String calendar = calendarService.findByMemberKey(memberKey);
+        // 캘린더 링크 접속 후 파싱 필요 !!!
+
+        // 뉴스
+        List<News> newsList = newsService.findByPress("YTN");
+        List<ResponseNews> responseNewsList = new ArrayList<>();
+        for (News news : newsList) {
+            responseNewsList.add(ResponseNews.builder()
+                    .press(news.getPress())
+                    .title(news.getTitle())
+                    .build());
+        }
+
+        // 포춘
+        String fortune = fortuneService.getFortune(memberKey);
+
+        // 레벨
+        Level level = levelService.findByMemberKey(memberKey);
+        ResponseLevel responseLevel = ResponseLevel.builder()
+                .lv(level.getLv())
+                .exp(level.getExp())
+                .build();
+
+        // 방문기록 저장
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String visitTime = formatter.format(date);
+        visitService.saveVisit(member, visitTime);
+
+
+        // responseDto 꾸리기
+        ResponseWidget responseWidget = ResponseWidget.builder()
+                .news(widget.isNews())
+                .calender(widget.isCalender())
+                .playlist(widget.isPlaylist())
+                .build();
+
+        ResponseRegion responseRegion = ResponseRegion.builder()
+                .sidoName(region.getSidoName())
+                .gugunName(region.getGugunName())
+                .dongName(region.getDongName())
+                .lat(region.getLat())
+                .lng(region.getLng())
+                .build();
+
+        ResponseMember responseMember = ResponseMember.builder()
+                .memberKey(member.getMemberKey())
+                .nickname(member.getNickname())
+                .birth(member.getBirth())
+                .kidsMode(member.isKidsMode())
+                .widget(responseWidget)
+                .playlist(playlist)
+                .calender(calendar)
+                .region(responseRegion)
+                .news(responseNewsList)
+                .fortune(fortune)
+                .level(responseLevel)
+                .build();
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg("성공")
+                .data(responseMember)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+    /* ***************************** Level ***************************** */
+
+    /**
+     * 유저의
+     * @param requestExp
+     * @return
+     */
+    @PutMapping("/member/level")
+    public ResponseEntity increaseExp(@RequestBody RequestExp requestExp) {
+        // response 객체 생성
+        ResponseDefault responseDefault = null;
+
+        String serialNumber = requestExp.getSerialNumber();
+        String memberKey = requestExp.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        }
+
+        Level level = levelService.findByMemberKey(memberKey);
+        int exp = level.getExp();
+        int lv = level.getLv();
+        boolean levelUp = false;
+
+        switch (requestExp.getMission()) {
+            case "brushing": //
+                exp += 10;
+                break;
+            case "CMD2": //
+                exp += 10;
+                break;
+            case "CMD3": //
+                exp += 10;
+                break;
+        }
+
+        if(exp >= 100) {
+            exp -= 100;
+            lv += 1;
+            levelService.updateLv(lv, memberKey);
+            levelUp = true;
+        }
+
+        levelService.updateExp(exp, memberKey);
+
+        ResponseLevel responseLevel = ResponseLevel.builder()
+                .exp(exp)
+                .lv(lv)
+                .levelUp(levelUp)
+                .build();
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg("")
+                .data(responseLevel)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+    /* ***************************** SnapShot ***************************** */
+
+    /***
+     *
+     * @param requestInsertSnapShot
+     * @return
+     */
+    @PostMapping("/snapShot")
+    public ResponseEntity insertSnapShot(RequestInsertSnapShot requestInsertSnapShot) throws IOException {
+
+        // response 객체 생성
+        ResponseDefault responseDefault = null;
+        String serialNumber = requestInsertSnapShot.getSerialNumber();
+        String memberKey = requestInsertSnapShot.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        }
+
+        // memberKey에 해당하는 Member를 가져옵니다.
+        Member getMember = memberService.findByMemberKey(memberKey);
+        if (getMember == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
+
+        // fireBaseService.uploadFiles()를 통해서 firebase storage에 파일을 업로드하고 해당 파일에 대한 접근 url을
+        // url에 담습니다.
+        String url = fireBaseService.uploadFiles(requestInsertSnapShot.getImgFile(), requestInsertSnapShot.getImgName());
+
+        // 사진 저장 시간을 서버시간 기준으로 만들어냅니다.
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String snapShotTime = formatter.format(date);
+
+        // snapShot을 DB에 입력합니다.
+        Snapshot result = snapshotService.saveSnapShot(getMember, snapShotTime, url);
+
+        // 모두가 성공적으로 입력이 되었다면 DB에 입력합니다.
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .data(result.getImgUrl())
+                .msg(null)
+                .build();
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+
+
 
     /* ***************************** Script ***************************** */
 
@@ -83,8 +291,7 @@ public class MirrorController {
     public ResponseEntity getScript(@RequestBody RequestGetScript requestGetScript) {
         ResponseDefault responseDefault = null;
 
-        // 0. 유효한 접근인지 확인
-        // 1. 거울 시리얼 넘버와 멤버키 유효성 확인
+        // 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestGetScript.getSerialNumber();
         String memberKey = requestGetScript.getMemberKey();
         if(!utils.isValidAccess(serialNumber, memberKey)) {
@@ -124,7 +331,7 @@ public class MirrorController {
 
                 return new ResponseEntity(responseDefault, HttpStatus.OK);
 
-            /** 첫 질문이 아닐 때 if (req_key != 0) */
+                /** 첫 질문이 아닐 때 if (req_key != 0) */
             } else {
                 /** 전 멘트 타입이 인사(1~4) 이고 그에 대한 대답이 긍정이었을 경우, 양치 여부를 판단하여 제안으로 감 */
                 if(requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1) {
@@ -286,10 +493,12 @@ public class MirrorController {
      * @return
      */
     @PostMapping("/getQuiz")
-    public ResponseEntity getQuiz(@RequestBody RequestInfo requestInfo){
+    public ResponseEntity getQuiz(@RequestBody RequestInfo requestInfo) {
         ResponseDefault responseDefault = null;
 
-        if(!utils.isValidAccess(requestInfo.getSerialNumber(), requestInfo.getMemberKey())) {
+        String serialNumber = requestInfo.getSerialNumber();
+        String memberKey = requestInfo.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
@@ -314,136 +523,6 @@ public class MirrorController {
                     .data(responseQuiz)
                     .build();
         }
-
-        return new ResponseEntity(responseDefault, HttpStatus.OK);
-    }
-
-
-    /* ***************************** Member ***************************** */
-
-    /**
-     * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
-     * @param info
-     * @return
-     */
-    @PostMapping("/member")
-    public ResponseEntity getMember(@RequestBody RequestInfo info) throws IOException {
-        ResponseDefault responseDefault = null; // response 객체 생성
-
-        // 거울 시리얼 넘버와 멤버키 유효성 확인
-        String serialNumber = info.getSerialNumber();
-        String memberKey = info.getMemberKey();
-        if(!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
-        }
-
-        // 멤버 정보 가져오기
-        Member member = memberService.findByMemberKey(memberKey); // 멤버
-        Widget widget = widgetService.findByMemberKey(memberKey); // 위젯
-        String playlist = playlistService.findByMemberKey(memberKey); // 플레이리스트
-
-        // 지역 정보
-        String dongCode = dongCodeService.findByMemberKey(memberKey);
-        Region region = regionService.findByDongCode(dongCode);
-
-        // 캘린더
-        String calendar = calendarService.findByMemberKey(memberKey);
-        // 캘린더 링크 접속 후 파싱 필요 !!!
-
-        // 뉴스
-        List<News> newsList = newsService.findByPress("YTN");
-        List<ResponseNews> responseNewsList = new ArrayList<>();
-        for (News news : newsList) {
-            responseNewsList.add(ResponseNews.builder()
-                    .press(news.getPress())
-                    .title(news.getTitle())
-                    .build());
-        }
-
-        // 포춘
-        String fortune = fortuneService.getFortune(memberKey);
-
-        // 방문기록 저장
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String visitTime = formatter.format(date);
-        visitService.saveVisit(member, visitTime);
-
-
-        // responseDto 꾸리기
-        ResponseWidget responseWidget = ResponseWidget.builder()
-                .news(widget.isNews())
-                .calender(widget.isCalender())
-                .playlist(widget.isPlaylist())
-                .build();
-
-//        ResponseRegion responseRegion = ResponseRegion.builder()
-//                .sidoName(region.getSidoName())
-//                .gugunName(region.getGugunName())
-//                .dongName(region.getDongName())
-//                .lat(region.getLat())
-//                .lng(region.getLng())
-//                .build();
-
-        ResponseMember responseMember = ResponseMember.builder()
-                .memberKey(member.getMemberKey())
-                .nickname(member.getNickname())
-                .birth(member.getBirth())
-                .kidsMode(member.isKidsMode())
-                .widget(responseWidget)
-                .playlist(playlist)
-                .calender(calendar)
-//                .region(responseRegion)
-                .news(responseNewsList)
-                .fortune(fortune)
-                .build();
-
-        responseDefault = ResponseDefault.builder()
-                .success(true)
-                .msg("성공")
-                .data(responseMember)
-                .build();
-
-        return new ResponseEntity(responseDefault, HttpStatus.OK);
-    }
-
-    /***
-     *
-     * @param insertSnapShot
-     * @return
-     */
-    @PostMapping("/snapShot")
-    public ResponseEntity insertSnapShot(RequestInsertSnapShot insertSnapShot) throws IOException {
-
-        // response 객체 생성
-        ResponseDefault responseDefault = null;
-        System.out.println(insertSnapShot.toString());
-        if(!utils.isValidAccess(insertSnapShot.getSerialNumber(), insertSnapShot.getMemberKey())) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
-        }
-
-        // memberKey에 해당하는 Member를 가져옵니다.
-        Member getMember = memberService.findByMemberKey(insertSnapShot.getMemberKey());
-        if (getMember == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
-
-        // fireBaseService.uploadFiles()를 통해서 firebase storage에 파일을 업로드하고 해당 파일에 대한 접근 url을
-        // url에 담습니다.
-        String url = fireBaseService.uploadFiles(insertSnapShot.getImgFile(), insertSnapShot.getImgName());
-
-        // 사진 저장 시간을 서버시간 기준으로 만들어냅니다.
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String snapShotTime = formatter.format(date);
-
-        // snapShot을 DB에 입력합니다.
-        Snapshot result = snapshotService.saveSnapShot(getMember, snapShotTime, url);
-
-        // 모두가 성공적으로 입력이 되었다면 DB에 입력합니다.
-        responseDefault = ResponseDefault.builder()
-                .success(true)
-                .data(result.getImgUrl())
-                .msg(null)
-                .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
