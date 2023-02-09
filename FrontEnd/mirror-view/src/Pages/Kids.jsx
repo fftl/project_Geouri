@@ -21,7 +21,7 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
   
-  const [comp, setComp] = useState('default'); // component 설정
+  const [comp, setComp] = useState('kidsDefault'); // component 설정
   const [video, setVideo] = useState(''); // 비디오 url
   
   useEffect(() => {
@@ -40,7 +40,7 @@ function Kids(props) {
       setComp("message");
     }
     if (mirror_action === 'default') {
-      setComp('default');
+      setComp('kidsDefault');
     } 
   }, [mirror_action]);
 
@@ -58,14 +58,16 @@ function Kids(props) {
     <>
       <div className="main-box">
         {
-          ({
-            none: <div className="text-div"></div>,
+          {
             greeting: (
-              <div className="text-div">
-                <p className="text">
-                  {message}, {checkKorean(name)}
-                </p>
-              </div>
+              <>
+                <div className="text-div">
+                  <p className="text">
+                    {mirror_action?.msg}, {checkKorean(name)}
+                  </p>
+                </div>
+              <Character />
+              </>
             ),
             message: (
               <>
@@ -88,36 +90,36 @@ function Kids(props) {
                 <Timer setComp={setComp} />
               </>
             ),
-            default : (
+            kidsDefault: (
               <>
                 <KidsDefault />
               </>
             ),
-          },
-          [comp])
+          }[comp]
         }
       </div>
       {comp === "video" && video === "brush_teeth" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <BrushTeethVideo 
-            webSocket={webSocket} 
-            setComp={setComp} 
-            setVideo={setVideo}/>
-        </div> 
-      )
-      }
-      { comp === 'video' && video === 'wash_hands' && 
+          <BrushTeethVideo
+            webSocket={webSocket}
+            setComp={setComp}
+            setVideo={setVideo}
+          />
+        </div>
+      )}
+      {comp === "video" && video === "wash_hands" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <WashHandsVideo 
-            webSocket={webSocket} 
-            setComp={setComp} 
-            setVideo={setVideo} />
-        </div> 
-      }
+          <WashHandsVideo
+            webSocket={webSocket}
+            setComp={setComp}
+            setVideo={setVideo}
+          />
+        </div>
+      )}
     </>
   );
 }

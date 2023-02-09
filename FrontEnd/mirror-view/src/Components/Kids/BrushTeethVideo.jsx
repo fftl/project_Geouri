@@ -7,15 +7,9 @@ const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
   const videoOff = () => {
-<<<<<<< HEAD
-    setComp('camera');
-    setVideo('');
-    webSocket.send('brush_teeth_finish');
-
-  }
-=======
     setComp("camera");
     setVideo("");
+    webSocket.send('brush_teeth_finish');
   };
 
   const [teethver, setTeethver] = useState(false);
@@ -24,7 +18,6 @@ const BrushTeethVideo = (props) => {
     setTeethver(Math.random() >= 0.5);
   }, []);
 
->>>>>>> 463b6a2da7c9151262a9aed7d41736615ec87599
   return (
     <div className="container">
       {teethver === false ? (
