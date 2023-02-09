@@ -122,6 +122,41 @@ wss.on('connection', function (ws, request) {
       }
     }
 
+
+    else if ( command === "hand_wash_finish"){
+      setTimeout(() => {
+        var data = {
+          "cmd": "default",
+          "content": "",
+        };
+        wss.broadcast(JSON.stringify(data));
+      }, 2000);
+    }
+
+    //양치가 끝나면,3 초후 사진을 찍은 다음 평시 상황으로 돌아간다.
+    else if (command === "brush_teeth_finish"){ 
+      setTimeout(() => {
+        takePicture();
+        setTimeout(() => {
+          var data = {
+            "cmd": "default",
+            "content": "",
+          };
+          wss.broadcast(JSON.stringify(data));
+        }, 2000);
+      }, 3000);
+    }
+
+    else if(command === "brush_teeth"){
+      prevType = 5;
+      typeCheck();
+    }
+
+    else if(command === "wash_hands"){
+      prevType = 8;
+      typeCheck();
+    }
+
     else if (command === "reply") {
       console.log("응답받음")
     }
@@ -149,7 +184,9 @@ function STT(voice_input){
     ["아니","싫어"],
     ["응","좋아","그래"],
     ["몰라","모르겠어","글쎄","힌트"],
-    ["사진","촬영"]
+    ["사진","촬영"],
+    ["양치","치카","칫솔질"],
+    ["손 씻기","손 씻을래", "손 닦"]
   ]
 
   var arr_voicecmd = [
@@ -161,7 +198,9 @@ function STT(voice_input){
     "answer_negative",
     "answer_positive",
     "answer_neutral",
-    "take_picture"
+    "take_picture",
+    "brush_teeth",
+    "wash_hands"
   ];
 
 
@@ -194,12 +233,19 @@ function TTS(str){
 
 // 분기를 담당하는 함수?
 function typeCheck(){
-  if(prevType == 6){
+  var data = {
+    "cmd": "",
+    "content": "",
+  };
+  if(prevType == 5){ // 양치제안
 
-    var data = {
-      "cmd": "brush_start",
-      "content": "",
-    };
+  }
+  if(prevType == 6){ //양치시작
+    data.cmd = "brush_teeth"
+    wss.broadcast(JSON.stringify(data));
+  }
+  else if(prevType == 8){ // 손씻기시작
+    data.cmd = "wash_hands"
     wss.broadcast(JSON.stringify(data));
   }
 }
@@ -340,17 +386,12 @@ function answerAndReply(reaction){
 }
 
 
-function startToothBrush(){
-
-}
-
-
 
 function takePicture(){
   console.log("사진 촬영 시작");
   var data = {
-    "cmd" : "picturetaken",
-    "content" : "",
+    "cmd" : "message",
+    "content" : "picture taken",
   }
 
   var options = {
