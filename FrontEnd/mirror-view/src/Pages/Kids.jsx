@@ -27,7 +27,7 @@ function Kids(props) {
 
   // ending 메시지를 보여주고 4초 후 종료 (person_leave를 받으면 그 때 navigate('/')헤도됨) 
   useEffect(() => {
-    if( mirror_action === 'greeting' ){
+    if( mirror_action === 'greetings' ){
       setComp('greeting')
     }
     if( mirror_action === 'ending' ){
