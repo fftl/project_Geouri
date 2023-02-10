@@ -54,7 +54,7 @@ public class HandWashingService {
      * @param date
      * @return
      */
-    public List<HandWashing> findAllByMemberAndBrushingTimeStartingWith(Member member, String date){
+    public List<HandWashing> findAllByMemberAndHandWashingTimeStartingWith(Member member, String date){
         List<HandWashing> handWashingList = handWashingRepository.findAllByMemberAndHandWashingTimeStartingWith(member, date);
         return handWashingList;
     }
@@ -65,7 +65,7 @@ public class HandWashingService {
      * @param date
      * @return
      */
-    public int countAllByMemberAndBrushingTimeStartingWith(Member member, String date) {
+    public int countAllByMemberAndHandWashingTimeStartingWith(Member member, String date) {
         List<HandWashing> handWashingList = handWashingRepository.findAllByMemberAndHandWashingTimeStartingWith(member, date);
         if(handWashingList == null) return 0;
         return handWashingList.size();
