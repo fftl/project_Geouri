@@ -59,40 +59,23 @@
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
 
-            var toothbrush = 1;
             for (let i = 0; i < maxPredictions; i++) {
                 //추정한 자세와 정확도 나타내기
                 const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
                 labelContainer.childNodes[i].innerHTML = classPrediction;
-                // 양치 중이라고 판단
-                if (i == 0) {
-                    if (prediction[i].probability.toFixed(2) >= 0.7)
-                        toothbrush++;
-                }
-                // 양치 중이 아님을 판단하면 toothbrush를 0으로 초기화
-                // 어린이에게 양치중임을 확인(멘트로)
-                else {
-                    if (prediction[i].probability.toFixed(2) >= 0.7)
-                        toothbrush = 0;
-
-                }
-
             }
 
-
-            //drawPose(pose); //웹캠에 자세 skeleton 그리기
+            drawPose(pose); //웹캠에 자세 skeleton 그리기
         }
 
-        // 화면에 영상 띄우기
         function drawPose(pose) {
             if (webcam.canvas) {
                 ctx.drawImage(webcam.canvas, 0, 0);
                 // draw the keypoints and skeleton
                 if (pose) {
                     const minPartConfidence = 0.5;
-
-                    //tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-                    //tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
                 }
             }
         }
