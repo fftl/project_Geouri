@@ -78,6 +78,7 @@ wss.on('connection', function (ws, request) {
           "content": "",
         };
         wss.broadcast(JSON.stringify(data));
+        currentStatus = 4;
       }, 2000);
     }
 

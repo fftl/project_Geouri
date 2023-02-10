@@ -3,7 +3,11 @@ import serial
 import time
 import json
 import face_recog_module
-import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+ARDUINO_PORT = os.getenv('ARDUINO_PORT')
 
 class FacerecogModule:
     def recog(self):
@@ -34,7 +38,7 @@ def main():
     detect_cnt = 0
 
     py_serial = serial.Serial(
-        port='COM5',
+        port=ARDUINO_PORT,
         baudrate=9600,
     )
 
