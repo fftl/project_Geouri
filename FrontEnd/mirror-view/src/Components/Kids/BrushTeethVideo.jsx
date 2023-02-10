@@ -9,14 +9,14 @@ const BrushTeethVideo = (props) => {
   const videoOff = () => {
     setComp("camera");
     setVideo("");
-    webSocket.send('brush_teeth_finish');
+    webSocket.send("brush_teeth_finish");
   };
 
   const [teethver, setTeethver] = useState(false);
 
-  useEffect(() => {
-    setTeethver(Math.random() >= 0.5);
-  }, []);
+  // useEffect(() => {
+  //   setTeethver(Math.random() >= 0.5);
+  // }, []);
 
   return (
     <div className="container">
