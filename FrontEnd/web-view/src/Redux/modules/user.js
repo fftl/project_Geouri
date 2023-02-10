@@ -1,8 +1,5 @@
 import { createAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { handleActions } from "redux-actions";
-
-// import { createAction, handleActions } from "redux-actions";
 
 //Action TYPE
 const LOGIN = "user/LOGIN";
@@ -27,6 +24,9 @@ const initialState = {
 };
 
 //middleware - 비동기 작업
+
+// 여기에서 백이랑 api통신을 해서 데이터를 받아와 -> extraReducer : reducer을 만들어서 state저장해.
+
 export const asyncLogin = createAsyncThunk(
   // type
   "userSlice/asyncLogin",

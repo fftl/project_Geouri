@@ -21,7 +21,6 @@ const ProfileEdit = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState({
     image_file: "",
-    preview_URL= '../../assets/default.jpg'
   })
 
   const handleKidsmodeChange = (event) => {
@@ -45,7 +44,11 @@ const ProfileEdit = (props) => {
     console.log(isEdit);
   };
 
-  const changeNick = (e) => {
+  const changeNick = useCallback(()=>{
+    const 
+  },[canSubmit])
+  
+  (e) => {
     setNickname(e.target.value);
   };
 
@@ -72,6 +75,7 @@ const ProfileEdit = (props) => {
     return nickname !== "";
   },[nickname]);
 
+  
 
 
   return (

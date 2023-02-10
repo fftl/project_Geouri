@@ -7,6 +7,8 @@ import { Routes, Route } from "react-router-dom";
 import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
 import Slideshow from "./Elements/Slideshow";
+import SparkleEffect from "./Elements/SparkleEffect";
+import Rule from "./Components/Kids/Rule";
 
 function App() {
   // 어플리케이션의 최상위에서 websocket 실행
@@ -30,6 +32,7 @@ function App() {
         />
       </Routes>
     </React.Fragment>
+    // <Rule />
   );
 }
 
