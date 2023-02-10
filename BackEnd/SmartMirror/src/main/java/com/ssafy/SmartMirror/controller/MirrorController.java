@@ -79,7 +79,6 @@ public class MirrorController {
     }
 
     /* ***************************** Member ***************************** */
-
     /**
      * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
      * @param requestInfo
@@ -226,7 +225,7 @@ public class MirrorController {
                 // 오늘의 양치기록 세기
                 int count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
                 // 맥스 확인 ( 양치의 경우 3번이 맥스 )
-                if (count < 3) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                if (count <= 3) { // 오늘 한 양치의 횟수가 3번 이상이라면
                     exp += 5; // 경험치 추가
                     success = true;
                 }
@@ -237,9 +236,11 @@ public class MirrorController {
 
                 // 경험치를 제공하기 위해선 오늘 한 손씻기 횟수가 3번 미만이어야 합니다.
                 // 오늘의 양치기록 세기
-                count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
+                count = handWashingService.countAllByMemberAndHandWashingTimeStartingWith(member, visitDay);
                 // 맥스 확인 ( 손씻기의 경우 10번이 맥스 )
-                if (count < 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                System.out.println("visitDay : "+visitDay);
+                System.out.println("오늘 손씻기 : "+count);
+                if (count <= 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
                     exp += 2; // 경험치 추가
                     success = true;
                 }
