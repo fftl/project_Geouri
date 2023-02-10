@@ -109,14 +109,17 @@ public class MirrorController {
         // 캘린더 링크 접속 후 파싱 필요 !!!
 
         // 뉴스
-        List<News> newsList = newsService.findByPress("YTN");
+//        List<News> newsList = newsService.findByPress("YTN");
+        List<News> newsList = newsService.findAll();
         List<ResponseNews> responseNewsList = new ArrayList<>();
-        for (News news : newsList) {
+        for (int i = 0; i < 50; i++) { // 50개만 전송
+            News news = newsList.get(i);
             responseNewsList.add(ResponseNews.builder()
                     .press(news.getPress())
                     .title(news.getTitle())
                     .build());
         }
+        
 
         // 포춘
         String fortune = fortuneService.getFortune(memberKey);
@@ -128,12 +131,16 @@ public class MirrorController {
                 .exp(level.getExp())
                 .build();
 
+
+        // 마지막 방문 날짜와 시각
+        String lastVisit = visitService.getLastVisit(member);
+
+
         // 방문기록 저장
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String visitTime = formatter.format(date);
         visitService.saveVisit(member, visitTime);
-
 
         // responseDto 꾸리기
         ResponseWidget responseWidget = ResponseWidget.builder()
@@ -162,6 +169,7 @@ public class MirrorController {
                 .news(responseNewsList)
                 .fortune(fortune)
                 .level(responseLevel)
+                .lastVisit(lastVisit)
                 .build();
 
         responseDefault = ResponseDefault.builder()
