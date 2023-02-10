@@ -83,7 +83,7 @@ public class WebController {
      * @param userKey
      * @return
      */
-    @GetMapping("/user/memberlist")
+    @PostMapping("/user/memberlist")
     public ResponseEntity getMemberList(@RequestParam String userKey) {
         ResponseDefault responseDefault = null; // response 객체 생성
 
@@ -124,7 +124,7 @@ public class WebController {
         return null;
     }
 
-    @GetMapping("/user/mirror")
+    @PostMapping("/user/mirror")
     public ResponseEntity getMirrorList() { // 거울 리스트 반환
         return null;
     }
