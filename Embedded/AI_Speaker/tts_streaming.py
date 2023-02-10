@@ -38,5 +38,5 @@ def synthesize_text(text):
 
 
 name = "소영아"
-synthesize_text(f"{name} 손을 씻어볼까?!")
+synthesize_text(f"안녕 {name} 잘가")
 playsound("output.mp3")
