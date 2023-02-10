@@ -6,11 +6,12 @@
   width: 80%;
   text-align: center;
 }
-.text-div{
+.text-div {
   height: 10rem;
+  margin: 0 auto;
 }
-.text{
-  font-family: 'binggrae';
+.text {
+  font-family: "binggrae";
   font-size: 8rem;
   font-weight: 400;
 }
