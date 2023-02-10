@@ -124,7 +124,7 @@ public class WebController {
         return null;
     }
 
-    @PostMapping("/user/mirror")
+    @GetMapping("/user/mirror")
     public ResponseEntity getMirrorList() { // 거울 리스트 반환
         return null;
     }

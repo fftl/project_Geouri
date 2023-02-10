@@ -6,6 +6,8 @@ import com.ssafy.SmartMirror.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VisitService {
 
@@ -34,5 +36,11 @@ public class VisitService {
         Visit response = visitRepository.save(visit);
         //reseponse 의 key값을 int로 변환하여 반환!
         return response.getVisitKey().intValue();
+    }
+
+    public String getLastVisit(Member member) {
+        List<Visit> visitList = visitRepository.findByMemberOrderByVisitKeyDesc(member);
+        if(visitList == null) return null;
+        return visitList.get(0).getVisitTime();
     }
 }
