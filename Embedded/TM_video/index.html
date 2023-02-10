@@ -25,7 +25,7 @@
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
-
+            var brushing_on = 0, brushing_off = 0;
             model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
             maxPredictions = model.getTotalClasses(); //클래스 이름 받아오기
 
@@ -35,6 +35,7 @@
             webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
             await webcam.setup(); // 웹캠에 접근하기
             await webcam.play(); // 웹캠 play하기
+
             window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
             // append/get elements to the DOM
@@ -50,49 +51,38 @@
 
         async function loop(timestamp) {
             webcam.update(); // update the webcam frame
-            await predict();
-            window.requestAnimationFrame(loop);
+            predict();
+            window.requestAnimationFrame(loop);  //계속해서 프레임을 송출하기 위함
         }
 
         async function predict() {
             //자세 추정하기
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
+            const date = new Date();
+            const milliseconds = date.getMilliseconds();
 
-            var toothbrush = 1;
+
             for (let i = 0; i < maxPredictions; i++) {
-                //추정한 자세와 정확도 나타내기
+                //추정한 자세와 정확도 나타내기 (소숫점두번째까지)
                 const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-                labelContainer.childNodes[i].innerHTML = classPrediction;
-                // 양치 중이라고 판단
-                if (i == 0) {
-                    if (prediction[i].probability.toFixed(2) >= 0.7)
-                        toothbrush++;
-                }
-                // 양치 중이 아님을 판단하면 toothbrush를 0으로 초기화
-                // 어린이에게 양치중임을 확인(멘트로)
-                else {
-                    if (prediction[i].probability.toFixed(2) >= 0.7)
-                        toothbrush = 0;
-
-                }
+                // 정해진 시간 주기로 값 출력하기
+                if (milliseconds % 100 == 0)
+                    console.log(prediction[i].className + ": " + prediction[i].probability.toFixed(2))
 
             }
 
-
-            //drawPose(pose); //웹캠에 자세 skeleton 그리기
+            //drawPose(pose); //웹캠 보이기
         }
 
-        // 화면에 영상 띄우기
         function drawPose(pose) {
             if (webcam.canvas) {
                 ctx.drawImage(webcam.canvas, 0, 0);
                 // draw the keypoints and skeleton
                 if (pose) {
                     const minPartConfidence = 0.5;
-
-                    //tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-                    //tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
                 }
             }
         }
