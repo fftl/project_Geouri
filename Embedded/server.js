@@ -3,10 +3,11 @@ var wss = new WebSocketServer({ port: 9998 });
 const rq = require('request');
 var PythonShell = require('python-shell');
 
-var pythonPath = "/usr/bin/python3";
+var dotenv = require("dotenv").config();
+// var pythonPath = "/usr/bin/python3";
 
 var prevKey = 0;      // 이전에 보냈던 메세지
-var prevType = 0;     // 현재 상태.
+var currentStatus = 0;     // 현재 상태.
 
 var quizMode = 0; //현재 퀴즈 상태인가?
 var quizString = "";
@@ -68,63 +69,7 @@ wss.on('connection', function (ws, request) {
       // console.log("음성인식 받음 : ", obj.content);
       const voice_input = STT(obj.content);
       console.log("voice command : ", voice_input)
-      // if(!personExist) return;
-      
-      // fe
-      // 비디오 관련하여 정지 재생 응답 
-      if (voice_input === "video"){
-        const data = {
-          "cmd": "voice_input",
-          "content": voice_input,
-        }
-        wss.broadcast(JSON.stringify(data));
-      }
-        
-
-      // db
-      // 어린이의 양치 손씻기에 대한 대답 전송
-      else if (voice_input.includes("answer")) {
-
-        if(quizMode==1){
-          quiz(voice_input);
-        }
-        else{
-          // 긍정 : 1, 부정 : 0
-          // prevType : 6 양치시작, 8 손씻기시작, 9 종료 
-          // prevKey : 전에 받았던 멘트 키
-          var reaction = 1;
-
-          if (voice_input == "answer_positive")
-            reaction = 1;
-          else if (voice_input == "answer_negative")
-            reaction = 0;
-
-          answerAndReply(reaction);   
-        }
-      }
-      
-      // db 
-      // 사진 촬영을 하는 경우
-      // nodejs에서 pythonshell을 통해 파이썬 파일 실행
-      else if (voice_input === "take_picture") {
-        takePicture();
-      }
-
-      else if (voice_input === "quiz") {
-        quiz(""); 
-      }
-
-      else if(voice_input === "test"){
-        easteregg();
-      }
-
-      else{
-        if(quizMode===1){
-          quiz(voice_input);
-        }
-          
-        console.log("voice input leftovers")
-      }
+      currentStatusCheck(voice_input);
     }
 
 
@@ -152,15 +97,15 @@ wss.on('connection', function (ws, request) {
       }, 3000);
     }
 
-    else if(command === "brush_teeth"){
-      prevType = 5;
-      typeCheck();
-    }
+    // else if(command === "brush_teeth"){
+    //   currentStatus = 5;
+    //   updateStatus();
+    // }
 
-    else if(command === "wash_hands"){
-      prevType = 8;
-      typeCheck();
-    }
+    // else if(command === "wash_hands"){
+    //   currentStatus = 8;
+    //   updateStatus();
+    // }
 
     else if (command === "reply") {
       console.log("응답받음")
@@ -178,7 +123,6 @@ wss.on('connection', function (ws, request) {
 
 
 function STT(voice_input){
-
 
   var arr_str = [
     ["수수께끼","문제","퀴즈"],
@@ -226,7 +170,7 @@ function STT(voice_input){
 function TTS(str){
   var options = {
     mode: 'text',
-    pythonPath: pythonPath,
+    pythonPath: process.env.PYTHON_PATH,
     pythonOptions: ['-u'],
     // scriptPath: '',
     args: [str]
@@ -238,89 +182,55 @@ function TTS(str){
   });
 }
 
-// 분기를 담당하는 함수?
-function typeCheck(){
-  var data = {
-    "cmd": "",
-    "content": "",
-  };
-  // if(prevType == 5){ // 능동적 양치
 
-  //   let options = {
-  //     url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-  //     method: 'POST',
-  //     body: {
-  //       "serialNumber": serialNumber,
-  //       "memberKey": current_user,
-  //       "reqKey": 0,
-  //       "type": prevType,
-  //       "reaction": 1
-  //     },
-  //     json: true,
-  //   };
-  
-  //   rq.post(options, function (err, httpResponse, body) {
-  //     if(err){
-  //       console.log("error -> ", err);
-  //     }else{
-  //       data = {
-  //         "cmd": "message",
-  //         "content": body.data.script,
-  //       }
-  
-  //       prevKey = body.data.res_key;
-  //       prevType = body.data.type;
-  
-  //       TTS(body.data.script);
-  //       wss.broadcast(JSON.stringify(data));
-  //     }
-  //   });
-  // }
 
-  if(prevType == 6){ //양치시작
-    data.cmd = "brush_teeth"
-    wss.broadcast(JSON.stringify(data));
+function currentStatusCheck(voice_input){
+  // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
+  if(currentStatus!=4){
+    if (voice_input.includes("answer")) {
+      var reaction = 1;
+
+      if (voice_input == "answer_positive")
+        reaction = 1;
+      else if (voice_input == "answer_negative")
+        reaction = 0;
+
+      answerAndReply(reaction);    
+    }
   }
 
-  else if(prevType == 7){ // 능동적 손씻기
+  else{ //평시
+    //퀴즈모드 분기
+    if (quizMode == 1){
+        quiz(voice_input);
+        return;
+    }
 
-    let options = {
-      url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-      method: 'POST',
-      body: {
-        "serialNumber": serialNumber,
-        "memberKey": current_user,
-        "reqKey": 0,
-        "type": prevType,
-        "reaction": 1
-      },
-      json: true,
-    };
-  
-    rq.post(options, function (err, httpResponse, body) {
-      if(err){
-        console.log("error -> ", err);
-      }else{
-        data = {
-          "cmd": "message",
-          "content": body.data.script,
-        }
-  
-        prevKey = body.data.res_key;
-        prevType = body.data.type;
-  
-        TTS(body.data.script);
-        wss.broadcast(JSON.stringify(data));
+      
+    
+
+
+
+
+    if (voice_input.includes(video)){
+      const data = {
+        "cmd": voice_input,
+        "content": voice_input,
       }
-    });
-  }
+      wss.broadcast(JSON.stringify(data));
+    }
 
+    else if (voice_input === "quiz") {
+      quiz(""); 
+    }
 
-  else if(prevType == 8){ // 손씻기시작
-    data.cmd = "wash_hands"
-    wss.broadcast(JSON.stringify(data));
-  }
+    else if(voice_input === "test"){
+      easteregg();
+    }
+
+  }// end status 4
 }
+
 
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
@@ -364,7 +274,7 @@ function person_appear(){
 //사람이 떠났을 때 상태값들 초기화
 function person_leave(){
   prevKey = 0;
-  prevType = 0;
+  currentStatus = 0;
   
   current_user;
   serialNumber = "8DLL-44yh-x7vB-VuWK"
@@ -392,7 +302,7 @@ function greetings(){
       "serialNumber": serialNumber,
       "memberKey": current_user,
       "reqKey": prevKey,
-      "type": prevType,
+      "type": currentStatus,
       "reaction": 0
     },
     json: true,
@@ -411,7 +321,7 @@ function greetings(){
         "content" : body.data.script,
       }
       prevKey = body.data.res_key;
-      prevType = body.data.type;
+      currentStatus = body.data.type;
 
       TTS(body.data.script);
       wss.broadcast(JSON.stringify(returnData));
@@ -434,7 +344,7 @@ function answerAndReply(reaction){
       "serialNumber": serialNumber,
       "memberKey": current_user,
       "reqKey": prevKey,
-      "type": prevType,
+      "type": currentStatus,
       "reaction": reaction
     },
     json: true,
@@ -454,12 +364,10 @@ function answerAndReply(reaction){
       }
 
       prevKey = body.data.res_key;
-      prevType = body.data.type;
+      currentStatus = body.data.type;
 
       TTS(body.data.script);
       wss.broadcast(JSON.stringify(data));
-
-      typeCheck();
     }
   });
 }
@@ -475,7 +383,7 @@ function takePicture(){
 
   var options = {
     mode: 'text',
-    pythonPath: pythonPath,
+    pythonPath: process.env.PYTHON_PATH,
     pythonOptions: ['-u'],
     // scriptPath: '',
     args: [serialNumber, current_user]
