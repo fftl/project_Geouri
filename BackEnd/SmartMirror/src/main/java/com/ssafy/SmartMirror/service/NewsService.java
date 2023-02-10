@@ -39,6 +39,11 @@ public class NewsService {
         return newsList;
     }
 
+    public List<News> findAll(){
+        List<News> newsList = newsRepository.findAll();
+        return newsList;
+    }
+
     public void truncate() {
         newsRepository.truncateNews();
     }

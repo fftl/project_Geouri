@@ -32,7 +32,7 @@ public class ResponseMember {
 
     private ResponseLevel level; // 레벨 정보
 
-    private String lastTime; // 가장 마지막으로 거울에 왔던 방문시간, 방문한 적 없다면 null
+    private String lastVisit; // 가장 마지막으로 거울에 왔던 방문시간, 방문한 적 없다면 null
 
     private List<ResponseNews> news;
 
