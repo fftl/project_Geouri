@@ -220,7 +220,7 @@ public class MirrorController {
         switch (requestExp.getMission()) {
             case "brushing": // 양치
                 // 일단 양치 기록 추가
-                brushingService.saveBrushing(member, visitTime);
+                brushingService.saveBrushing(member, visitTime, 1);
 
                 // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
                 // 오늘의 양치기록 세기
@@ -348,7 +348,7 @@ public class MirrorController {
         }
 
         // 유저의 정보를 가져옵니다.
-        Member getMember = memberService.findByMemberKey(requestGetScript.getMemberKey());
+        Member member = memberService.findByMemberKey(requestGetScript.getMemberKey());
 
         // 요청이 도착한 현재 시간을 파악해놓습니다.
         LocalDateTime now = LocalDateTime.now();
@@ -360,31 +360,31 @@ public class MirrorController {
         ResponseScript responseScript = null;
 
         // 유저가 어린이 Member 라면!
-        if (getMember.isKidsMode()) {
+        if (member.isKidsMode()) {
             /** 첫 질문이라면(START)라면 */
             if (requestGetScript.getReqKey() == START && requestGetScript.getReaction() == 0 && requestGetScript.getType() == 0) {
-                kidsScript = scriptDetail.getHelloScript(now, getMember, reqkey, reaction);
+                kidsScript = scriptDetail.getHelloScript(now, member, reqkey, reaction);
 
-            /** 첫 질문이 아닐 때 START가 아닐 때! */
+                /** 첫 질문이 아닐 때 START가 아닐 때! */
             } else {
 
                 /** 전 멘트 타입이 인사(1~4) 이고 그에 대한 대답이 긍정이었을 경우, 양치 여부를 판단하여 제안으로 감 */
-                if( requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1 ) {
+                if (requestGetScript.getType() <= 4 && requestGetScript.getReaction() == 1) {
 
                     //현재 어린이의 양치기록들을 모두 가져온 뒤 가장 최근값 즉 마지막 인덱스 기록을 가져옵니다.
-                    List<Brushing> brushingList = brushingService.findAllByMember(requestGetScript.getMemberKey());
-                    kidsScript = scriptDetail.getAskScript(now, getMember, reqkey, reaction, brushingList);
+                    List<Brushing> brushingList = brushingService.findAllByMember(member);
+                    kidsScript = scriptDetail.getAskScript(now, member, reqkey, reaction, brushingList);
 
                     /** 양치 제안에 대한 응답이 아까 양치 했어! 일 경우 */
-                } else if ( requestGetScript.getType() == 5 && requestGetScript.getReaction() == 2){
+                } else if (requestGetScript.getType() == 5 && requestGetScript.getReaction() == 2) {
 
                     kidsScript = scriptDetail.getBasicScript(reqkey, reaction);
 
                     //외부에서 양치를 한 경우에 양치기록을 추가합니다 (type == 1)
-                    brushingService.saveBrushing(getMember, strDate, 1);
+                    brushingService.saveBrushing(member, strDate, 0);
 
                     /** 기본 화면에서 능동적인 양치 시작, 손씻기 시작  */
-                } else if ( (requestGetScript.getReaction() == 1 && requestGetScript.getType() == 5) || (requestGetScript.getReaction() == 1 && requestGetScript.getType() == 7)){
+                } else if ((requestGetScript.getReaction() == 1 && requestGetScript.getType() == 5) || (requestGetScript.getReaction() == 1 && requestGetScript.getType() == 7)) {
 
                     kidsScript = scriptDetail.getStartScript(reqkey, reaction, type);
 
@@ -401,10 +401,10 @@ public class MirrorController {
                     .res_key(kidsScript.getScriptKey())
                     .type(kidsScript.getType())
                     .build();
-
+        }
 
         /** 어른이라면 */
-        if (!getMember.isKidsMode()) {
+        if (!member.isKidsMode()) {
 
             /* responseScript = ResponseScript.builder()
                     .script(adultScript.getScript())
