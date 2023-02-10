@@ -48,7 +48,7 @@ wss.on('connection', function (ws, request) {
 
     const obj = JSON.parse(msg);
     const command = obj.cmd;
-
+    console.log("@@INCOMING COMMAND -> " , command);
 
     if (command == "face_name") {
       console.log("face_name => ", obj.content);
@@ -59,21 +59,19 @@ wss.on('connection', function (ws, request) {
     }
 
     else if (command === "person_leave") {
-      console.log("PERSON_LEAVE");
       person_leave();
     }
 
 
     else if (command === "voice_input") {
-      
-      // console.log("음성인식 받음 : ", obj.content);
       const voice_input = STT(obj.content);
       console.log("voice command : ", voice_input)
+      
       currentStatusCheck(voice_input);
     }
 
 
-    else if ( command === "hand_wash_finish"){
+    else if ( command === "wash_hands_finish"){
       setTimeout(() => {
         var data = {
           "cmd": "default",
@@ -93,6 +91,7 @@ wss.on('connection', function (ws, request) {
             "content": "",
           };
           wss.broadcast(JSON.stringify(data));
+          currentStatus = 4;
         }, 2000);
       }, 3000);
     }
@@ -172,7 +171,6 @@ function TTS(str){
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
     pythonOptions: ['-u'],
-    // scriptPath: '',
     args: [str]
   };
 
@@ -206,19 +204,93 @@ function currentStatusCheck(voice_input){
         return;
     }
 
-      
-    
-
-
-
-
-    if (voice_input.includes(video)){
+    if (voice_input.includes("video")){
       const data = {
         "cmd": voice_input,
         "content": voice_input,
       }
       wss.broadcast(JSON.stringify(data));
     }
+    // 아이가 먼저 양치하자고 하는 경우
+    else if (voice_input === "brush_teeth") {
+      
+      let options = {
+        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+        method: 'POST',
+        body: {
+          "serialNumber": serialNumber,
+          "memberKey": current_user,
+          "reqKey": 0,
+          "type": 5,
+          "reaction": 1
+        },
+        json: true,
+      };
+
+          
+      rq.post(options, function (err, httpResponse, body) {
+        if(err){
+          console.log("error -> ", err);
+        } else{
+          console.log(options)
+          console.log(body)
+
+
+          const returnScript = replaceScript(body.data.script);
+
+          prevKey = body.data.res_key;
+          currentStatus = body.data.type;
+          data = {
+            "cmd": "message",
+            "content": returnScript,
+          }
+
+          TTS(returnScript);
+          wss.broadcast(JSON.stringify(data));
+
+          afterStatusCheck();
+        }
+      });
+    }
+
+    else if (voice_input === "wash_hands") {
+      let options = {
+        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+        method: 'POST',
+        body: {
+          "serialNumber": serialNumber,
+          "memberKey": current_user,
+          "reqKey": 0,
+          "type": 7,
+          "reaction": 1
+        },
+        json: true,
+      };
+
+          
+      rq.post(options, function (err, httpResponse, body) {
+        if(err){
+          console.log("error -> ", err);
+        } else{
+          console.log(options)
+          console.log(body)
+          const returnScript = replaceScript(body.data.script);
+
+          prevKey = body.data.res_key;
+          currentStatus = body.data.type;
+          data = {
+            "cmd": "message",
+            "content": returnScript,
+          }
+
+          TTS(returnScript);
+          wss.broadcast(JSON.stringify(data));
+
+          afterStatusCheck();
+        }
+      });
+    }
+
 
     else if (voice_input === "quiz") {
       quiz(""); 
@@ -231,6 +303,31 @@ function currentStatusCheck(voice_input){
   }// end status 4
 }
 
+// 통신하고 현재 상태가 바뀐 후 프론트쪽으로 보낼 메세지
+function afterStatusCheck(){
+  if(currentStatus == 6){
+    var data = {
+      "cmd": "brush_teeth",
+      "content": "",
+    };
+    // 이제 양치를 시작해보자~ 라고 말할때 잠시 대기
+    setTimeout(() => {
+      wss.broadcast(JSON.stringify(data));
+    }, 5000);
+  }
+
+  else if(currentStatus == 8){
+    var data = {
+      "cmd": "wash_hands",
+      "content": "",
+    };
+    // 이제 양치를 시작해보자~ 라고 말할때 잠시 대기
+    setTimeout(() => {
+      wss.broadcast(JSON.stringify(data));
+    }, 5000);
+  }
+
+}
 
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
@@ -316,15 +413,17 @@ function greetings(){
       console.log(options)
       console.log(body)
 
-      returnData  = {
-        "cmd": "greetings",
-        "content" : body.data.script,
-      }
+      const returnScript = replaceScript(body.data.script);
+
       prevKey = body.data.res_key;
       currentStatus = body.data.type;
+      data = {
+        "cmd": "message",
+        "content": returnScript,
+      }
 
-      TTS(body.data.script);
-      wss.broadcast(JSON.stringify(returnData));
+      TTS(returnScript);
+      wss.broadcast(JSON.stringify(data));
     }
   });
 };  
@@ -358,17 +457,19 @@ function answerAndReply(reaction){
       console.log(options)
       console.log(body)
 
-      data = {
-        "cmd": "message",
-        "content": body.data.script,
-      }
+      const returnScript = replaceScript(body.data.script);
 
       prevKey = body.data.res_key;
       currentStatus = body.data.type;
+      data = {
+        "cmd": "message",
+        "content": returnScript,
+      }
 
-      TTS(body.data.script);
+      TTS(returnScript);
       wss.broadcast(JSON.stringify(data));
     }
+    afterStatusCheck();
   });
 }
 
@@ -385,7 +486,6 @@ function takePicture(){
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
     pythonOptions: ['-u'],
-    // scriptPath: '',
     args: [serialNumber, current_user]
   };
 
@@ -453,6 +553,14 @@ function quiz(voice_input){
       quizString = "";
       quizHint = "";
       quizAnswer = "";
+
+      data = {
+        "cmd": "default",
+        "content": "",
+      }
+
+      wss.broadcast(JSON.stringify(data));
+
     }
     else if(voice_input === "answer_neutral"){ // 모른다고 했을때
       TTS(quizHint);
@@ -480,6 +588,11 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; 
 }
 
+
+function replaceScript(script){
+  var name = callName_ya(user_data.nickname);
+  return script.replace(`{name}`, name);
+}
 
 function callName_ga(name){
 
