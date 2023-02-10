@@ -1,135 +1,191 @@
-# transcribe_streaming_mic.py
-
-import re # 정규표현식 모듈
-import sys
 from websocket import create_connection
-from google.cloud import speech
-import pyaudio  # 파이썬에서 오디오 입력 사용
-import queue
+import sys
+import time
 import json
+from google.cloud import speech
+import pyaudio
+from six.moves import queue
 
 # Audio recording parameters
-RATE = 16000
-CHUNK = int(RATE / 10)  
+STREAMING_LIMIT = 240000  # 4 minutes
+SAMPLE_RATE = 16000
+CHUNK_SIZE = int(SAMPLE_RATE / 10)  # 100ms
 
-# Audio strings
-# arr_str = [["시작", "재생", "진행"],["종료","그만","정지","중지"],["다음","넥스트"], ["이전"],["아니","싫어"],["응","좋아","그래"],["사진"]]
-# arr_voicecmd = ["video_start","video_stop","video_next","video_prev","answer_negative","answer_positive","take_picture"]
+RED = "\033[0;31m"
+GREEN = "\033[0;32m"
+YELLOW = "\033[0;33m"
 
 
+def get_current_time():
+    """Return Current Time in MS."""
+
+    return int(round(time.time() * 1000))
 
 
-class MicrophoneStream(object):
-    def __init__(self, rate, chunk):
+class ResumableMicrophoneStream:
+    """Opens a recording stream as a generator yielding the audio chunks."""
+
+    def __init__(self, rate, chunk_size):
         self._rate = rate
-        self._chunk = chunk
-
-        # Create a thread-safe buffer of audio data
-        self._buff = queue.Queue()  # pyaudio가 전달해주는 데이터를 담을 큐 
+        self.chunk_size = chunk_size
+        self._num_channels = 1
+        self._buff = queue.Queue()
         self.closed = True
-
-    # 파이썬 context manager사용. 여기에서는 실행중 문제가 발생해도 오디오장치를 제대로 닫도록 할 수 있기 위함.
-    def __enter__(self):
-        self._audio_interface = pyaudio.PyAudio()   # 시작할 때 pyaudio 데이터 스트림 열림
-        self._audio_stream = self._audio_interface.open( # pyaudio.open()은 pyaudio.Stream object를 리턴.
-            format=pyaudio.paInt16, # 16bit 다이나믹 레인지
-            channels=1,
+        self.start_time = get_current_time()
+        self.restart_counter = 0
+        self.audio_input = []
+        self.last_audio_input = []
+        self.result_end_time = 0
+        self.is_final_end_time = 0
+        self.final_request_end_time = 0
+        self.bridging_offset = 0
+        self.last_transcript_was_final = False
+        self.new_stream = True
+        self._audio_interface = pyaudio.PyAudio()
+        self._audio_stream = self._audio_interface.open(
+            format=pyaudio.paInt16,
+            channels=self._num_channels,
             rate=self._rate,
-            input=True,     
-            frames_per_buffer=self._chunk,
-            stream_callback=self._fill_buffer,  # pyaudio에서 한 블록의 데이터가 들어올 때 호출되는 콜백
+            input=True,
+            frames_per_buffer=self.chunk_size,
+            # Run the audio stream asynchronously to fill the buffer object.
+            # This is necessary so that the input device's buffer doesn't
+            # overflow while the calling thread makes network requests, etc.
+            stream_callback=self._fill_buffer,
         )
 
-        self.closed = False
+    def __enter__(self):
 
+        self.closed = False
         return self
 
     def __exit__(self, type, value, traceback):
+
         self._audio_stream.stop_stream()
         self._audio_stream.close()
         self.closed = True
+        # Signal the generator to terminate so that the client's
+        # streaming_recognize method will not block the process termination.
         self._buff.put(None)
-        self._audio_interface.terminate()   # 끝날 때 반드시 pyaudio 스트림 닫도록 한다.
+        self._audio_interface.terminate()
 
-    def _fill_buffer(self, in_data, frame_count, time_info, status_flags):  # pyaudio.Stream에서 호출되는 콜백은 4개 매개변수 갖고, 2개값 리턴한다. pyaudio문서 참고.
-        self._buff.put(in_data) # 큐에 데이터 추가
+    def _fill_buffer(self, in_data, *args, **kwargs):
+        """Continuously collect data from the audio stream, into the buffer."""
+
+        self._buff.put(in_data)
         return None, pyaudio.paContinue
 
-    # 한 라운드의 루프마다 현재 버퍼의 내용을 모아서 byte-stream을 yield함.
     def generator(self):
+        """Stream Audio from microphone to API and to local buffer"""
+
         while not self.closed:
+            data = []
+
+            if self.new_stream and self.last_audio_input:
+
+                chunk_time = STREAMING_LIMIT / len(self.last_audio_input)
+
+                if chunk_time != 0:
+
+                    if self.bridging_offset < 0:
+                        self.bridging_offset = 0
+
+                    if self.bridging_offset > self.final_request_end_time:
+                        self.bridging_offset = self.final_request_end_time
+
+                    chunks_from_ms = round(
+                        (self.final_request_end_time - self.bridging_offset)
+                        / chunk_time
+                    )
+
+                    self.bridging_offset = round(
+                        (len(self.last_audio_input) - chunks_from_ms) * chunk_time
+                    )
+
+                    for i in range(chunks_from_ms, len(self.last_audio_input)):
+                        data.append(self.last_audio_input[i])
+
+                self.new_stream = False
+
             # Use a blocking get() to ensure there's at least one chunk of
             # data, and stop iteration if the chunk is None, indicating the
             # end of the audio stream.
             chunk = self._buff.get()
+            self.audio_input.append(chunk)
+
             if chunk is None:
                 return
-            data = [chunk]
-
+            data.append(chunk)
             # Now consume whatever other data's still buffered.
             while True:
                 try:
-                    chunk = self._buff.get(block=False)  # 가장 오래된 데이터부터 순차적으로 data[]에 추가함.
+                    chunk = self._buff.get(block=False)
+
                     if chunk is None:
                         return
                     data.append(chunk)
-                except queue.Empty: # 큐에 더이상 데이터가 없을 때까지
+                    self.audio_input.append(chunk)
+
+                except queue.Empty:
                     break
 
-            yield b''.join(data) # byte-stream
+            yield b"".join(data)
 
 
-def find_command_by_transcript(transcript):
-    for i in range(len(arr_str)):
-        for str in arr_str[i]:
-            if str in transcript:
-                return arr_voicecmd[i]
-    return "none"
+def listen_print_loop(responses, stream):
+    """Iterates through server responses and prints them.
 
+    The responses passed is a generator that will block until a response
+    is provided by the server.
 
-def listen_print_loop(responses):
-    num_chars_printed = 0
+    Each response may contain multiple results, and each result may contain
+    multiple alternatives; for details, see https://goo.gl/tjCPAU.  Here we
+    print only the transcription for the top alternative of the top result.
+
+    In this case, responses are provided for interim results as well. If the
+    response is an interim one, print a line feed at the end of it, to allow
+    the next result to overwrite it, until the response is a final one. For the
+    final one, print a newline to preserve the finalized transcription.
+    """
+
     for response in responses:
+
+        if get_current_time() - stream.start_time > STREAMING_LIMIT:
+            stream.start_time = get_current_time()
+            break
+
         if not response.results:
             continue
 
-        # The `results` list is consecutive. For streaming, we only care about
-        # the first result being considered, since once it's `is_final`, it
-        # moves on to considering the next utterance.
-        # 최종적인 결과값은 언제나 results[0]에 반영되므로 result[0]만 고려.
         result = response.results[0]
+
         if not result.alternatives:
             continue
 
-        # 확실성 가장 높은 alternative의 해석
         transcript = result.alternatives[0].transcript
 
-        # 완성된 문장이 intrim 문장보다 짧다면, 나머지 부분은 ' '으로 overwrite해 가려준다.
-        overwrite_chars = ' ' * (num_chars_printed - len(transcript))   
+        result_seconds = 0
+        result_micros = 0
 
-        if not result.is_final: # 확정된 transcript가 아니라면,
-            sys.stdout.write(transcript + overwrite_chars + '\r')   # '\r'로 줄바꿈은 하지 않고 맨 앞으로 돌아가 이전 문장위에 덧쓰도록 한다.
-            sys.stdout.flush()
+        if result.result_end_time.seconds:
+            result_seconds = result.result_end_time.seconds
 
-            num_chars_printed = len(transcript)
+        if result.result_end_time.microseconds:
+            result_micros = result.result_end_time.microseconds
 
-        else:   # 확정된 transcript라면
-            print(transcript + overwrite_chars)
+        stream.result_end_time = int((result_seconds * 1000) + (result_micros / 1000))
+
+        corrected_time = (
+            stream.result_end_time
+            - stream.bridging_offset
+            + (STREAMING_LIMIT * stream.restart_counter)
+        )
+        # Display interim results, but with a carriage return at the end of the
+        # line, so subsequent lines will overwrite them.
+
+        if result.is_final:
+            print(transcript)
             ws = create_connection("ws://localhost:9998")
-
-            ##=======================================음악관련 => FE===========================================##
-            # 음악 재생
-            # if re.search(r'\b(시작)', transcript, re.I) or re.search(r'\b(재생)', transcript, re.I) or re.search(r'\b(진행)',
-            #                                                                                                  transcript,
-            #                                                                                                  re.I):
-            #     audio_data = {
-            #         "cmd": "voice_input",
-            #         "content": 'startvideo',
-            #     }
-            #     ws.send(json.dumps(audio_data))
-
-
-            # voicecmd = find_command_by_transcript(transcript)
             voicecmd = transcript.strip()
             if voicecmd != "none":
                 audio_data = {
@@ -139,33 +195,67 @@ def listen_print_loop(responses):
                 ws.send(json.dumps(audio_data))
 
             ws.close()
-            num_chars_printed = 0
+
+            stream.is_final_end_time = stream.result_end_time
+            stream.last_transcript_was_final = True
+
+        else:
+            stream.last_transcript_was_final = False
 
 
 def main():
-    # 한국말 사용
-    language_code = 'ko-KR'  # a BCP-47 language tag
+    """start bidirectional streaming from microphone input to speech API"""
 
     client = speech.SpeechClient()
     config = speech.RecognitionConfig(
-        encoding='LINEAR16', # enums.RecognitionConfig.AudioEncoding.LINEAR16
-        sample_rate_hertz=RATE,
-        max_alternatives=1, # 가장 가능성 높은 1개 alternative만 받음.
-        language_code=language_code)
+        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=SAMPLE_RATE,
+        language_code="ko-KR",
+        max_alternatives=1,
+    )
+
     streaming_config = speech.StreamingRecognitionConfig(
-        config=config,
-        interim_results=True) # 해석완료되지 않은(is_final=false) 중도값도 사용.
+        config=config, interim_results=True
+    )
 
-    with MicrophoneStream(RATE, CHUNK) as stream:   # 사운드 스트림 오브젝트 생성. 
-                                                    # pyaudio가 terminate()되는 것을 보장하기 위해 python
-                                                    # context manager  사용.
-        audio_generator = stream.generator()
-        requests = (speech.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator) # generator expression. 요청 생성
+    mic_manager = ResumableMicrophoneStream(SAMPLE_RATE, CHUNK_SIZE)
 
-        responses = client.streaming_recognize(streaming_config, requests)  # 요청 전달 & 응답 가져옴
-        listen_print_loop(responses)    # 결과 출력. requests, responses 모두 iterable object
+    with mic_manager as stream:
+
+        while not stream.closed:
+            # sys.stdout.write(YELLOW)
+            # sys.stdout.write(
+            #     "\n" + str(STREAMING_LIMIT * stream.restart_counter) + ": NEW REQUEST\n"
+            # )
+
+            stream.audio_input = []
+            audio_generator = stream.generator()
+
+            requests = (
+                speech.StreamingRecognizeRequest(audio_content=content)
+                for content in audio_generator
+            )
+
+            responses = client.streaming_recognize(streaming_config, requests)
+
+            # Now, put the transcription responses to use.
+            listen_print_loop(responses, stream)
+
+            if stream.result_end_time > 0:
+                stream.final_request_end_time = stream.is_final_end_time
+            stream.result_end_time = 0
+            stream.last_audio_input = []
+            stream.last_audio_input = stream.audio_input
+            stream.audio_input = []
+            stream.restart_counter = stream.restart_counter + 1
+
+            if not stream.last_transcript_was_final:
+                sys.stdout.write("\n")
+            stream.new_stream = True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     main()
+
+# [END speech_transcribe_infinite_streaming]
