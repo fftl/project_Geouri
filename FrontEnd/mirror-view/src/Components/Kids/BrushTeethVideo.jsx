@@ -16,9 +16,9 @@ const BrushTeethVideo = (props) => {
 
   const [teethver, setTeethver] = useState(false);
 
-  useEffect(() => {
-    setTeethver(Math.random() >= 0.5);
-  }, []);
+  // useEffect(() => {
+  //   setTeethver(Math.random() >= 0.5);
+  // }, []);
 
   return (
     <div className="container">
