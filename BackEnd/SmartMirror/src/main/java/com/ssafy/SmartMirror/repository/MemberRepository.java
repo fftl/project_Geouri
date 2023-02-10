@@ -11,4 +11,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Member m SET m.kidsMode = :value where m.memberKey = :memberKey")
     int updateKidsMode(boolean value, String memberKey);
+
+
 }

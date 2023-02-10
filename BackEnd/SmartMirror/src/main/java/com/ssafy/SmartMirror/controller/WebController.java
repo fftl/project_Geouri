@@ -5,13 +5,14 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,9 @@ public class WebController {
     private VisitService visitService;
     private NewsService newsService;
     private Utils utils;
-    @Autowired
-    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils) {
+    private SnapshotService snapshotService;
+
+    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils, SnapshotService snapshotService) {
         this.userService = userService;
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
@@ -50,6 +52,7 @@ public class WebController {
         this.visitService = visitService;
         this.newsService = newsService;
         this.utils = utils;
+        this.snapshotService = snapshotService;
     }
 
     /* ***************************** User ***************************** */
@@ -311,6 +314,126 @@ public class WebController {
                 .msg("")
                 .data(brushlog)
                 .build();
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    /**
+     * 멤버의 모든 사진을 가져옵니다.
+     * @param memberKey
+     * @return
+     */
+    @GetMapping("/snapShot/all")
+    public ResponseEntity getAllSnapShot(@RequestParam String memberKey){
+        // 반환값을 담을 Response 객체들을 선언
+        ResponseDefault responseDefault = null;
+        List<ResponseSnapShot> responseSnapShotList = null;
+
+        // 해당 멤버 있는지 확인
+        if(!utils.isValidMemberKey(memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
+        }
+
+        // 멤버의 객체를 가져옵니다.
+        Member member = memberService.findByMemberKey(memberKey);
+
+        // 해당 멤버의 사진을 모두 가져옵니다.
+        List<Snapshot> snapshotList = snapshotService.getAllSnapShot(member);
+
+        // 만약 사진이 하나도 존재하지 않는다면 해당 false를 리턴합니다.
+        if(snapshotList.isEmpty()) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("멤버의 사진이 존재하지 않습니다.")
+                    .data(null)
+                    .build();
+
+            // 사진이 하나라도 존재한다면!
+        } else {
+
+            // 사진 정보들을 담을 List를 선언해 놓습니다.
+            responseSnapShotList = new ArrayList<>();
+
+            // for문을 돌며 member 객체를 제외한 실제 정보들만 담아냅니다.
+            for (int i = 0; i < snapshotList.size(); i++) {
+                Snapshot snapshot = snapshotList.get(i);
+                ResponseSnapShot responseSnapShot = ResponseSnapShot.builder()
+                        .imgUrl(snapshot.getImgUrl())
+                        .created(snapshot.getCreated())
+                        .memberKey(snapshot.getMember().getMemberKey())
+                        .build();
+                responseSnapShotList.add(responseSnapShot);
+            }
+
+            // response를 만들어냅니다.
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(responseSnapShotList)
+                    .build();
+        }
+
+        //반환!
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    /**
+     * 멤버의 일주일 내 사진을 10개만 반환합니다.
+     * @param memberKey
+     * @return
+     */
+    @GetMapping("/snapShot/week")
+    public ResponseEntity getWeekSnapShot(@RequestParam String memberKey){
+        // 반환값을 담을 Response 객체들을 선언
+        ResponseDefault responseDefault = null;
+        List<ResponseSnapShot> responseSnapShotList = null;
+
+        // 해당 멤버 있는지 확인
+        if(!utils.isValidMemberKey(memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
+        }
+
+        // 멤버 객체를 가져옴
+        Member member = memberService.findByMemberKey(memberKey);
+
+        // 일주일 내의 사진들을 가져옴
+        List<Snapshot> snapshotList = snapshotService.getWeekSnapShot(member);
+
+        // 일주일 내의 사진이 하나도 없을 경우 false 반환
+        if(snapshotList.isEmpty()) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("멤버의 사진이 존재하지 않습니다.")
+                    .data(null)
+                    .build();
+
+            // 사진이 하나라도 있다면
+        } else {
+
+            // 사진 정보를 담을 List를 선언해주고 사진들의 순서를 섞어줍니다.
+            responseSnapShotList = new ArrayList<>();
+            Collections.shuffle(snapshotList);
+
+            // for문을 통해서 사진 리스트를 돌며 10개만 담아냅니다.
+            for (int i = 0; i < snapshotList.size(); i++) {
+                if(responseSnapShotList.size() == 10) break;
+                Snapshot snapshot = snapshotList.get(i);
+                ResponseSnapShot responseSnapShot = ResponseSnapShot.builder()
+                        .imgUrl(snapshot.getImgUrl())
+                        .created(snapshot.getCreated())
+                        .memberKey(snapshot.getMember().getMemberKey())
+                        .build();
+                responseSnapShotList.add(responseSnapShot);
+            }
+
+            // 반환값 생성
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(responseSnapShotList)
+                    .build();
+        }
+
+        // 반환!
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 }
