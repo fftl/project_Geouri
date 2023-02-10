@@ -13,18 +13,16 @@ import java.util.List;
 
 @Service
 public class BrushingService {
-
     private BrushingRepository brushingRepository;
-    private MemberRepository memberRepository;
+//    private MemberRepository memberRepository;
 
     @Autowired
-    public BrushingService(BrushingRepository brushingRepository, MemberRepository memberRepository) {
+    public BrushingService(BrushingRepository brushingRepository) {
         this.brushingRepository = brushingRepository;
-        this.memberRepository = memberRepository;
     }
 
     /**
-     * brushingTime 과 해당 member 기록
+     * 해당 member의 brushingTime을 기록합니다.
      * @param member
      * @param brushingTime
      * @return
@@ -36,7 +34,6 @@ public class BrushingService {
                 .member(member)
                 .type(type)
                 .build();
-
         // BrushingRepository를 이용해서 DB에 insert한 뒤
         // 저장된 Brushing 객체 반환
         Brushing response = brushingRepository.save(brushing);
@@ -44,17 +41,37 @@ public class BrushingService {
         return response.getBrushingKey().intValue();
     }
 
-    public List<Brushing> findAllByMember(String memberKey){
-        Member member = memberRepository.findById(memberKey).get();
+    /**
+     * 해당 멤버의 모든 양치기록을 반환합니다.
+     * @param member
+     * @return
+     */
+    public List<Brushing> findAllByMember(Member member){
         List<Brushing> brushingList = brushingRepository.findAllByMember(member);
         return brushingList;
     }
 
-    public List<Brushing> findAllByMemberAndBrushingTimeStartingWith(String memberKey, String month){
-        System.out.println("findALl~~~~~ "+month);
-        Member member = memberRepository.findById(memberKey).get();
-        List<Brushing> brushingList = brushingRepository.findAllByMemberAndBrushingTimeStartingWith(member, month);
-        System.out.println("사이즈"+brushingList.size());
+    /**
+     * 해당 멤버의 양치기록 중 양치시간이 date로 시작하는 양치기록을 모두 반환합니다.
+     * @param member
+     * @param date
+     * @return
+     */
+    public List<Brushing> findAllByMemberAndBrushingTimeStartingWith(Member member, String date){
+        List<Brushing> brushingList = brushingRepository.findAllByMemberAndBrushingTimeStartingWith(member, date);
         return brushingList;
+    }
+
+
+    /**
+     * 해당 멤버의 양치기록 중 양치시간이 date로 시작하는 양치기록의 수를 반환합니다.
+     * @param member
+     * @param date
+     * @return
+     */
+    public int countAllByMemberAndBrushingTimeStartingWith(Member member, String date) {
+        List<Brushing> brushingList = brushingRepository.findAllByMemberAndBrushingTimeStartingWith(member, date);
+        if(brushingList == null) return 0;
+        return brushingList.size();
     }
 }
