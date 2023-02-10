@@ -1,22 +1,21 @@
 #levelBar {
-  width: 30%;
-  margin: 10px;
-}
-
-.progress-bar {
-  background-color: pink;
-}
-
-#levcha {
-  width: 30%;
-  padding: 10px;
-  margin-left: 10px;
-  justify-content: center;
+  width: 40%;
   margin: 0 auto;
 }
 
+.progress-bar {
+  background-color: deeppink;
+}
+
+#levcha {
+  width: 40%;
+  padding: 0;
+  margin: 20px auto;
+}
+
 .chaimg {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  width: 40%;
+  position: fixed;
+  right: 0px;
+  bottom: 50px;
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/material": "^5.11.8",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -20,9 +21,11 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
     "react-youtube": "^10.1.0",
     "redux": "^4.2.1",
     "selenium-webdriver": "^4.8.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.0",
     "yarn": "^1.22.19"

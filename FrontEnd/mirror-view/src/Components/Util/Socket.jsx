@@ -20,15 +20,15 @@ const Socket = (props) => {
       // store에 member정보를 dispatch 하여 넣기
       if (msg.content.kidsMode === true) {
         // kids mode on일 때 
-        dispatch(mirrorActions.getMember(msg.content));
+        // dispatch(mirrorActions.getMember(msg.content));
         navigate('/kids');
       } 
       else if (msg.content.kidsMode === false){
         // kids mode off일 때
-        dispatch(mirrorActions.getMember(msg.content));
+        // dispatch(mirrorActions.getMember(msg.content));
         navigate('/general');
       }
-
+      dispatch(mirrorActions.getMember(msg.content));
     }
     else if (msg.cmd === 'person_leave') {
       // 거울 사용 종료시 
@@ -43,8 +43,6 @@ const Socket = (props) => {
     function sendMessage(){
         //웹소켓으로 textMessage객체의 값을 보낸다.
         webSocket.send(text);
-        //textMessage객체의 값 초기화
-        setText("");
     }
 }
 
