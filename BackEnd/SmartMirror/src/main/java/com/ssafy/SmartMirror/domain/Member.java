@@ -23,6 +23,7 @@ public class Member {
     private String birth;
     private String imgUrl;
     private boolean kidsMode;
+
     @ManyToOne
     @JoinColumn(name = "user_key")
     private User user;
