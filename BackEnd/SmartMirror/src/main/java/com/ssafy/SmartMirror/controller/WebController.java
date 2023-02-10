@@ -295,8 +295,9 @@ public class WebController {
         // 해당 멤버의 브러쉬 기록 중 year, month 에 해당하는 양치기록을 가져온다
         int[] brushlog = new int[31];
         String searchMonth = year+"-"+month;
+        Member member = memberService.findByMemberKey(memberKey);
 
-        List<Brushing> brushinglog = brushingService.findAllByMemberAndBrushingTimeStartingWith(memberKey, searchMonth);
+        List<Brushing> brushinglog = brushingService.findAllByMemberAndBrushingTimeStartingWith(member, searchMonth);
         for (Brushing log : brushinglog) {
             String[] date = log.getBrushingTime().split(" ");
             String[] days = date[0].split("-");

@@ -13,4 +13,5 @@ public class ResponseLevel {
     private int lv;
     private int exp;
     private boolean levelUp;
+    private boolean success; // 경험치 부여 성공 여부
 }

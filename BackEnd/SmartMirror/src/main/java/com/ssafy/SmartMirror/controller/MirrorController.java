@@ -43,6 +43,7 @@ public class MirrorController {
     private RegionService regionService;
     private DongCodeService dongCodeService;
     private BrushingService brushingService;
+    private HandWashingService handWashingService;
     private FireBaseService fireBaseService;
     private VisitService visitService;
     private NewsService newsService;
@@ -50,11 +51,10 @@ public class MirrorController {
     private QuizService quizService;
     private FortuneService fortuneService;
     private LevelService levelService;
-
     private Utils utils;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, LevelService levelService, Utils utils) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, HandWashingService handWashingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, LevelService levelService, Utils utils) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -65,6 +65,7 @@ public class MirrorController {
         this.regionService = regionService;
         this.dongCodeService = dongCodeService;
         this.brushingService = brushingService;
+        this.handWashingService = handWashingService;
         this.fireBaseService = fireBaseService;
         this.visitService = visitService;
         this.newsService = newsService;
@@ -74,7 +75,6 @@ public class MirrorController {
         this.levelService = levelService;
         this.utils = utils;
     }
-
 
     /* ***************************** Member ***************************** */
 
@@ -176,7 +176,8 @@ public class MirrorController {
     /* ***************************** Level ***************************** */
 
     /**
-     * 유저의
+     * 아이가 수행한 양치/손씻기에 대한 경험치를 제공합니다.
+     * 또한 아이의 양치/손씻기 기록을 저장합니다.
      * @param requestExp
      * @return
      */
@@ -185,29 +186,70 @@ public class MirrorController {
         // response 객체 생성
         ResponseDefault responseDefault = null;
 
+        // 거울 시리얼넘버와 멤버키 유효성을 검사합니다.
         String serialNumber = requestExp.getSerialNumber();
         String memberKey = requestExp.getMemberKey();
         if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
         }
 
-        Level level = levelService.findByMemberKey(memberKey);
+
+        // 해당 멤버 객체, 해당 멤버의 레벨, 경험치 정보를 가져옵니다.
+        Member member = memberService.findByMemberKey(memberKey); // 멤버 객체
+        Level level = levelService.findByMemberKey(memberKey); // 멤버의 레벨과 경험치
         int exp = level.getExp();
         int lv = level.getLv();
-        boolean levelUp = false;
 
+        // 레벨업 유무 체크
+        boolean levelUp = false;
+        boolean success = false;
+
+
+        // 양치/손씻기 시간을 기록하기 위해 현재 시간 정보를 불러옵니다.
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String visitTime = formatter.format(date);
+        // 오늘 날짜를 불러옵니다.
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+        String visitDay = formatter2.format(date);
+
+
+        // 양치/손씻기 기록을 추가합니다.
         switch (requestExp.getMission()) {
-            case "brushing": //
-                exp += 10;
+            case "brushing": // 양치
+                // 일단 양치 기록 추가
+                brushingService.saveBrushing(member, visitTime);
+
+                // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
+                // 오늘의 양치기록 세기
+                int count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
+                // 맥스 확인 ( 양치의 경우 3번이 맥스 )
+                if (count < 3) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                    exp += 5; // 경험치 추가
+                    success = true;
+                }
                 break;
-            case "CMD2": //
-                exp += 10;
+            case "hand_washing": // 손씻기
+                // 일단 손씻기 기록 추가
+                handWashingService.saveHandWashing(member, visitTime);
+
+                // 경험치를 제공하기 위해선 오늘 한 손씻기 횟수가 3번 미만이어야 합니다.
+                // 오늘의 양치기록 세기
+                count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
+                // 맥스 확인 ( 손씻기의 경우 10번이 맥스 )
+                if (count < 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                    exp += 2; // 경험치 추가
+                    success = true;
+                }
                 break;
+
             case "CMD3": //
                 exp += 10;
                 break;
         }
 
+
+        // 레벨업 확인
         if(exp >= 100) {
             exp -= 100;
             lv += 1;
@@ -221,6 +263,7 @@ public class MirrorController {
                 .exp(exp)
                 .lv(lv)
                 .levelUp(levelUp)
+                .success(success)
                 .build();
 
         responseDefault = ResponseDefault.builder()
@@ -299,11 +342,11 @@ public class MirrorController {
         }
 
         /** 1. 일단 우선적으로 오자마자 멤버의 정보를 가지고와 어린이인지 어른인지 확인합니다. */
-        Member getMember = memberService.findByMemberKey(requestGetScript.getMemberKey());
-        if (getMember == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
+        Member member = memberService.findByMemberKey(requestGetScript.getMemberKey());
+        if (member == null) return new ResponseEntity("유저가 존재하지 않음!", HttpStatus.OK);
 
         /** 어린이라면 !! */
-        if (getMember.isKidsMode()) {
+        if (member.isKidsMode()) {
 
             /** 1. 첫 질문일 때 if ( req_key == START(0) ) : 시간에 맞는 인사말을 리턴합니다. */
             if (requestGetScript.getReqKey() == START) {
@@ -343,7 +386,7 @@ public class MirrorController {
                     int day = now.getDayOfMonth();
 
                     //현재 어린이의 양치기록들을 모두 가져온 뒤 가장 최근값 즉 마지막 인덱스 기록을 가져옵니다.
-                    List<Brushing> brushingList = brushingService.findAllByMember(requestGetScript.getMemberKey());
+                    List<Brushing> brushingList = brushingService.findAllByMember(member);
                     Brushing brushing = brushingList.get(brushingList.size()-1);
                     String[] date = brushing.getBrushingTime().split(" ");
                     String[] days = date[0].split("-");
@@ -480,7 +523,7 @@ public class MirrorController {
         } // 어린이
 
         /* 어른이라면 */
-        if (!getMember.isKidsMode()) {
+        if (!member.isKidsMode()) {
             return new ResponseEntity("어른 서비스는 아직 만들지 못했어요..", HttpStatus.OK);
         } // 어른
 

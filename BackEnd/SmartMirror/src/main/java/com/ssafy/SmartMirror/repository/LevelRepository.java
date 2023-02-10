@@ -16,4 +16,8 @@ public interface LevelRepository extends JpaRepository<Level, String> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Level l SET l.lv = :lv where l.memberKey = :memberKey")
     int updateLv(int lv, String memberKey);
+
+
+
+
 }
