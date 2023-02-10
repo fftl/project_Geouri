@@ -6,10 +6,12 @@ import "./BrushTeethVideo.css";
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
+  const msg = { cmd: "brush_teeth_finish", content: "" };
+  const jsonMsg = JSON.stringify(msg);
   const videoOff = () => {
     setComp("camera");
     setVideo("");
-    webSocket.send('brush_teeth_finish');
+    webSocket.send(jsonMsg);
   };
 
   const [teethver, setTeethver] = useState(false);
