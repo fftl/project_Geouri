@@ -9,33 +9,33 @@ const KidsLevel = () => {
   const [point, setPoint] = useState(0);
   const [prevLevel, setPrevLevel] = useState(0);
 
-  useEffect(() => {
-    axios
-      .get("주소")
-      .then((response) => {
-        setLevel(response.data);
-        setPoint(response.data);
-        setPrevLevel(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("주소")
+  //     .then((response) => {
+  //       setLevel(response.data);
+  //       setPoint(response.data);
+  //       setPrevLevel(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    if (JSON.stringify(level) !== JSON.stringify(prevLevel)) {
-      console.log("레벨업");
-      setPrevLevel(level);
+  // useEffect(() => {
+  //   if (JSON.stringify(level) !== JSON.stringify(prevLevel)) {
+  //     console.log("레벨업");
+  //     setPrevLevel(level);
 
-      const script = document.createElement("script");
-      script.src =
-        "https://tistory4.daumcdn.net/tistory/3134841/skin/images/confetti_v2.js";
-      script.async = true;
-      document.body.appendChild(script);
+  //     const script = document.createElement("script");
+  //     script.src =
+  //       "https://tistory4.daumcdn.net/tistory/3134841/skin/images/confetti_v2.js";
+  //     script.async = true;
+  //     document.body.appendChild(script);
 
-      return <div className="canvas"></div>;
-    }
-  }, [level]);
+  //     return <div className="canvas"></div>;
+  //   }
+  // }, [level]);
 
   // 멤버의 경험치, 레벨 데이터 수신받음
   // const pointNow = {member.point}
