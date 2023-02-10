@@ -27,11 +27,12 @@ public class BrushingService {
      * @param brushingTime
      * @return
      */
-    public int saveBrushing(Member member, String brushingTime) {
+    public int saveBrushing(Member member, String brushingTime, int type) {
         // 저장할 Brushing 객체 새로 생성
         Brushing brushing = Brushing.builder()
                 .brushingTime(brushingTime)
                 .member(member)
+                .type(type)
                 .build();
         // BrushingRepository를 이용해서 DB에 insert한 뒤
         // 저장된 Brushing 객체 반환

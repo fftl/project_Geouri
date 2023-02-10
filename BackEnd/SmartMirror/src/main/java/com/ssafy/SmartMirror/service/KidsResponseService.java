@@ -28,4 +28,10 @@ public class KidsResponseService {
         List<KidsResponse> kidsResponseList = kidsResponseRepository.findAllByReqKeyAndReactionAndResType(reqKey, reaction, type);
         return kidsResponseList;
     }
+
+    //능동적인 양치 시작, 손씻기 시작을 위한 조회입니다.
+    public List<KidsResponse> getKidsStart(int reaction, int type){
+        List<KidsResponse> kidsResponseList = kidsResponseRepository.findAllByReactionAndResType(reaction, type+1);
+        return kidsResponseList;
+    }
 }
