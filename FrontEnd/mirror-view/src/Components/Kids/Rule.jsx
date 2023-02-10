@@ -33,7 +33,7 @@ const Rule = () => {
           />
         </div>
       </div>
-      {/* <SparkleEffect /> */}
+      <SparkleEffect />
     </>
   );
 };

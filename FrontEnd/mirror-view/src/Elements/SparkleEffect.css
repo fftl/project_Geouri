@@ -6,6 +6,7 @@
   height: 100%;
   z-index: 1;
   overflow: hidden;
+  background-color: transparent;
 }
 
 .shine {
@@ -20,6 +21,7 @@
   overflow: hidden;
   z-index: 2;
   color: tansparent;
+  background-color: transparent;
   -moz-opacity: 0;
   opacity: 0;
   animation: glitter 6s linear 0s infinite normal;
@@ -46,6 +48,24 @@
 
 /*CSS3 keyframes for glittering effect*/
 @-webkit-keyframes glitter {
+  0% {
+    -webkit-transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+  50% {
+    -webkit-transform: scale(0.3) rotate(720deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+}
+@keyframes glitter {
   0% {
     -webkit-transform: scale(0.3) rotate(0deg);
     opacity: 0;

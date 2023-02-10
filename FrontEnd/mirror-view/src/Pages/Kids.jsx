@@ -21,8 +21,8 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
 
-  const [comp, setComp] = useState("kidsDefault"); // component 설정
-  const [video, setVideo] = useState(""); // 비디오 url
+  const [comp, setComp] = useState("video"); // component 설정
+  const [video, setVideo] = useState("brush_teeth"); // 비디오 url
 
   useEffect(() => {
     if (mirror_action === "greetings") {
