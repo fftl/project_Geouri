@@ -20,3 +20,19 @@ Sentiment magnitude: 0.30000001192092896
 Text: 응
 Sentiment score: -0.30000001192092896
 Sentiment magnitude: 0.30000001192092896
+
+Text: 맛없었어
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 아니 맛없었어
+Sentiment score: -0.6000000238418579
+Sentiment magnitude: 0.6000000238418579
+
+Text: 배불러
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 맛있었고 배불러
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
