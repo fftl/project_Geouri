@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/web")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin("*")
 public class WebController {
 
     private UserService userService;
