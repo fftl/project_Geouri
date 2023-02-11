@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/web")
-@CrossOrigin("*")
 public class WebController {
 
     private UserService userService;
