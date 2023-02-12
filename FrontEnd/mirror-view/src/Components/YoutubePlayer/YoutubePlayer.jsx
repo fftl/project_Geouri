@@ -3,7 +3,9 @@ import "./YoutubePlayer.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function YoutubePlayer() {
+function YoutubePlayer( props ) {
+  const { no_calendar } = props; // calendar 없으면 youtube_iframe은 위로 옮겨줄 것 -> css 다르게 적용
+
   const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
   // const playlistId = useState((state) => state?.mirror?.member?.playlist);
   const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&enablejsapi=1&controls=0`;
@@ -19,12 +21,13 @@ function YoutubePlayer() {
   }, [action]);
 
   return (
-    <div className="youtube-box">
+    <div className={no_calendar ? 'youtube-box' : 'no-calendar-youtube-box'}>
       {play && playlistId ? (
         <iframe
           title="ytplayer"
           id="ytplayer"
           className="ytplayer"
+          name="ytplayer"
           type="text/html"
           enablejsapi="1"
           width="640"

@@ -14,12 +14,12 @@ function Schedule () {
       {
         'content': '네일아트',
         'date': '2023-02-12',
-        'time': '18:00',
+        'time': '22:00',
       },
       {
         'content': '본앤브레드',
         'date': '2023-02-12',
-        'time': '22:00',
+        'time': '23:00',
       },
     ]
     
@@ -40,7 +40,7 @@ function Schedule () {
       }
       return false;
     }
-    const new_schedule = schedule.filter(filterByTime).slice(0,3);
+    const new_schedule = schedule.filter(filterByTime).slice(0,2);
 
     return (
       <div className="schedule-box">
