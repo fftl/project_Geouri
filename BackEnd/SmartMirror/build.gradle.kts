@@ -19,16 +19,24 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	//springboot
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.google.firebase:firebase-admin:9.1.1")
-	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation ("org.jsoup:jsoup:1.15.3")
+
+	//database
+	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+	//lombok
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+
+	//other
+	implementation("com.google.firebase:firebase-admin:9.1.1") //파이어베이스 storage 사용, 사진 저장
+	implementation ("org.jsoup:jsoup:1.15.3")				   //크롤링, 네이버 랭킹뉴스 가져오기,
+	implementation("org.mnode.ical4j:ical4j:4.0.0-beta2")	   //ical파일 읽기, 일정 리스트 가져오기
 }
 
 tasks.withType<Test> {
