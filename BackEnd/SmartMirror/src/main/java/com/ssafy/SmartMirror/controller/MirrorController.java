@@ -6,6 +6,7 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
+import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -473,6 +474,37 @@ public class MirrorController {
                     .data(responseQuiz)
                     .build();
         }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    /**
+     * 멤버가 등록해놓은 ical 주소를 통해서 아직 시간이 지나지 않은 오늘의 일정을 가져옵니다.
+     * @param requestInfo
+     * @return
+     */
+    @PostMapping("/getCalendar")
+    public ResponseEntity getCalendar(@RequestBody RequestInfo requestInfo) throws ParserException, IOException {
+        ResponseDefault responseDefault = null;
+
+        //멤버의 유효성 검사
+        String serialNumber = requestInfo.getSerialNumber();
+        String memberKey = requestInfo.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        }
+
+        //멤버키를 통해서 ical url을 가져옵니다.
+        String url = calendarService.findByMemberKey(memberKey);
+
+        //utils에 만들어놓은 getCalendars(url)을 통해서 일정목록을 가져옵니다.
+        List<ResponseCalendar> responseCalendars = utils.getCalendars(url);
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg(null)
+                .data(responseCalendars)
+                .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
