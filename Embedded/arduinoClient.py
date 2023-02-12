@@ -3,33 +3,15 @@ import serial
 import time
 import json
 import face_recog_module
-import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+ARDUINO_PORT = os.getenv('ARDUINO_PORT')
 
 class FacerecogModule:
     def recog(self):
         output = face_recog_module.detected_face()
-        # datas = {'name': output}
-        # url = "http://i8a201.p.ssafy.io:8080/test"
-        #
-        # output = ""
-        # try:
-        #     response = requests.post(url, data=datas)
-        #     output = response.text
-        #     print(output)
-        #
-        # except requests.exceptions.Timeout as errd:
-        #     print("Timeout Error : ", errd)
-        #
-        # except requests.exceptions.ConnectionError as errc:
-        #     print("Error Connecting : ", errc)
-        #
-        # except requests.exceptions.HTTPError as errb:
-        #     print("Http Error : ", errb)
-        #
-        # # Any Error except upper exception
-        # except requests.exceptions.RequestException as erra:
-        #     print("AnyException : ", erra)
-
         return output
 
 
@@ -46,49 +28,54 @@ def sendInfo(msg):
     ws.close()
 
 
-if __name__ == '__main__':
+def main():
 
-    host = 'localhost'
-    user = 'arduino'
-    port = 9998
+    TIME_UNTIL_RECOG = 3    # 초음파 센서에 사람이 일정 거리 이내 들어왔을때 작동하는 시간
+    TIME_UNTIL_RESET = 10   # 초음파 센서에 사람이 인식되지 않을 때 절전까지 대기하는 시간
+    RECOG_DIST = 20         # 초음파 센서에 사람이 인식되는 거리
 
     person_detected = False
     detect_cnt = 0
 
     py_serial = serial.Serial(
-        port='COM5',
+        port=ARDUINO_PORT,
         baudrate=9600,
     )
 
     while True:
         if py_serial.readable():
-            # 들어온 값이 있으면 값을 한 줄 읽음 (BYTE 단위로 받은 상태)
-            # BYTE 단위로 받은 response 모습 : b'\xec\x97\x86\xec\x9d\x8c\r\n'
             response = py_serial.readline()
-
-            # 디코딩 후, 출력 (가장 끝의 \n을 없애주기위해 슬라이싱 사용)
             distance = float(response[:len(response) - 1].decode())
 
             print(distance, detect_cnt, person_detected)
-            if person_detected is False: #newperson
-                if distance < 20:
+            if person_detected is False:  # newperson
+                if distance < RECOG_DIST:
                     detect_cnt = detect_cnt + 1
 
-                if detect_cnt > 3:
-                    facemodule = FacerecogModule()
-                    face_name = facemodule.recog()
-                    sendInfo(face_name)
-                    person_detected = not person_detected
+                    if detect_cnt > TIME_UNTIL_RECOG:
+                        # 얼굴 인식 후 전송
+                        facemodule = FacerecogModule()
+                        face_name = facemodule.recog()
+                        sendInfo(face_name)
+
+                        person_detected = not person_detected
+                        detect_cnt = 0
+                else:   # 사람이 인식되어 카운트 되는 도중에 다시 사람이 나갔을 때, 카운트 초기화
                     detect_cnt = 0
             else:
                 if distance > 20:
                     detect_cnt = detect_cnt + 1
 
-                if detect_cnt > 10:
-                    message = "leave"
-                    sendInfo(message)
-                    person_detected = not person_detected
+                    if detect_cnt > TIME_UNTIL_RESET:
+                        message = "leave"
+                        sendInfo(message)
+                        person_detected = not person_detected
+                        detect_cnt = 0
+                else :
                     detect_cnt = 0
 
-
         time.sleep(0.5)
+
+
+if __name__ == '__main__':
+    main()
