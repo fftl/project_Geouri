@@ -1,10 +1,10 @@
 import React from "react";
-import PhotoItem from "../Components/Photo/PhotoItem";
+import Photolist from "../Components/Photo/Photolist";
 
 const Photobook = () => {
   return (
     <div>
-      <PhotoItem />
+      <Photolist />
     </div>
   );
 };

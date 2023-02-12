@@ -20,9 +20,6 @@ function App() {
         <Route path="/member/:id" element={<MemberPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
-      {/* <ProfileEdit /> */}
-      {/* <Cal /> */}
-      {/* <Photobook /> */}
     </div>
   );
 }

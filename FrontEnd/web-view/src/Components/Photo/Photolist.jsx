@@ -1,47 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { Gallery } from "react-grid-gallery";
-import axios from "axios";
+import instance from "../../Redux/modules/instance";
+import "./Photolist.css";
+import Lightbox from "yet-another-react-lightbox";
+
+const photoApi = {
+  getPhoto: (memberKey) =>
+    instance.get(`web/snapShot/all?memberKey=${memberKey}`),
+};
 
 const Photolist = () => {
   const [url, setUrl] = useState(null);
-  const [userKey, setUserKey] = useState("some_user_key");
+  const [memberKey, setMemberKey] = useState("nh3b-494F");
+  const [list, setList] = useState([]);
+  const [imageList, setImageList] = useState([]);
+  const [index, setIndex] = useState(-1);
+  const handleClick = (index, item) => setIndex(index);
+  const slides = list.map((image) => ({
+    src: image.imgUrl,
+  }));
 
   useEffect(() => {
+    console.log(imageList);
     const fetchData = async () => {
       try {
-        const response = await axios.get("your_api_endpoint", {
-          params: {
-            userKey: userKey,
-          },
+        await photoApi.getPhoto(memberKey).then((response) => {
+          const data = response.data.data;
+          setList((prev) => [...prev, ...data]);
+          setImageList(
+            list.map((image) => {
+              return {
+                src: image.imgUrl,
+              };
+            })
+          );
         });
-
-        const data = response.data;
-        setUrl(data.url);
       } catch (error) {
         console.error(error);
         setUrl(null);
       }
     };
-
     fetchData();
-  }, [userKey]);
-
-  const imageList = JSON.stringify(url);
-
-  // const imageData = [{}];
-
-  const images = imageList.map((image) => {
-    return {
-      src: image.src,
-      thumbnail: image.thumbnail,
-      thumbnailWidth: image.thumbnailWidth,
-      thumbnailHeight: image.thumbnailHeight,
-    };
-  });
+    // console.log(list);
+  }, []);
 
   return (
-    <div>
-      <Gallery images={imageList} />
+    <div className="gal">
+      <Gallery images={imageList} onClick={handleClick} />
+      <Lightbox
+        slides={slides}
+        open={index >= 0}
+        index={index}
+        close={() => setIndex(-1)}
+      />
     </div>
   );
 };
