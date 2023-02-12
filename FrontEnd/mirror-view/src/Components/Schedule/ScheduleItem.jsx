@@ -2,13 +2,13 @@ import React from "react";
 
 const ScheduleItem = ({ item, index }) => {
   const content = item?.content;
-  const hour = item?.time.slice(0, 2);
-  const minute = item?.time.slice(3);
+  const hour = Number(item?.time.slice(0, 2));
+  const minute = Number(item?.time.slice(3));
   const amOrPm = (h) => {
-    if (h == 24) {
+    if (h === 24) {
       return `오전 0`;
     }
-    if (h == 12) {
+    if (h === 12) {
       return `오후 ${h}`;
     }
     if (h > 12) {

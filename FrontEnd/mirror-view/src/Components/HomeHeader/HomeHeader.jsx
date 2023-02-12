@@ -62,7 +62,6 @@ function HomeHeader() {
       };
       // 위치정보는 mock data
       const member = useSelector((state) => state?.mirror?.member);
-      console.log(member)
       const lat = Math.round(member?.region?.lng * 100)/100;
       const lon = Math.round(member?.region?.lat * 100)/100;
     
