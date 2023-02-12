@@ -7,7 +7,6 @@ import editimg from "../../assets/edit.png";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-
 const ProfileEdit = (props) => {
   const token = useSelector((state) => state.Auth.token);
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const ProfileEdit = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState({
     image_file: "",
-  })
+  });
 
   const handleKidsmodeChange = (event) => {
     setKidsmode(event.target.checked);
@@ -44,13 +43,13 @@ const ProfileEdit = (props) => {
     console.log(isEdit);
   };
 
-  const changeNick = useCallback(()=>{
-    const 
-  },[canSubmit])
-  
-  (e) => {
-    setNickname(e.target.value);
-  };
+  // const changeNick = useCallback(()=>{
+  //   const
+  // },[canSubmit])
+
+  // (e) => {
+  //   setNickname(e.target.value);
+  // };
 
   const inputNick = (e) => {
     console.log(e.target.value);
@@ -67,16 +66,13 @@ const ProfileEdit = (props) => {
     };
     getNickname().then((result) => {
       setNickname(result.nick);
-      setImage({...image, preview_URL:''})
+      setImage({ ...image, preview_URL: "" });
     });
   }, []);
 
-  const canSubmit = useCallback(()=>{
+  const canSubmit = useCallback(() => {
     return nickname !== "";
-  },[nickname]);
-
-  
-
+  }, [nickname]);
 
   return (
     <div>
@@ -85,16 +81,14 @@ const ProfileEdit = (props) => {
       <img src={editimg} alt="edit" onClick={toggleIsEdit} />
       <div className="nick">
         {isEdit ? (
-          <>
-            <input value={nickname} onChange={changeNick} />
-          </>
+          <>{/* <input value={nickname} onChange={changeNick} /> */}</>
         ) : (
           <>{nickname}</>
         )}
 
         {isEdit ? (
           <>
-            <button onClick={changeNick}>수정</button>
+            {/* <button onClick={changeNick}>수정</button> */}
             <button onClick={toggleIsEdit}>수정 취소</button>
           </>
         ) : null}

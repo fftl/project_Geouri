@@ -86,7 +86,7 @@ export const userSlice = createSlice({
       console.log(action.payload);
       state.signupDone = true;
     });
-    builder.addCase(signup.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(signup.rejected, (state, action) => {
       state.signupError = action.payload;
     });
   },
@@ -96,7 +96,7 @@ export const userSlice = createSlice({
 
 export const signup = createAsyncThunk(
   "userSlice/signup",
-  async (data: User, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post("/signup", data);
       return response.data;
