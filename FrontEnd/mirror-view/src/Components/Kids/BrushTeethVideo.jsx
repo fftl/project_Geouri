@@ -16,9 +16,9 @@ const BrushTeethVideo = (props) => {
 
   const [teethver, setTeethver] = useState(false);
 
-  useEffect(() => {
-    setTeethver(Math.random() >= 0.5);
-  }, []);
+  // useEffect(() => {
+  //   setTeethver(Math.random() >= 0.5);
+  // }, []);
 
   return (
     <div className="container">
@@ -28,8 +28,9 @@ const BrushTeethVideo = (props) => {
           width="1000px"
           height="700px"
           playing={true}
+          muted={true}
           controls={true}
-          loop={true}
+          loop={false}
           id="player"
           onEnded={videoOff}
         />

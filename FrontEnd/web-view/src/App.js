@@ -8,6 +8,7 @@ import ProfileEdit from "./Components/Home/ProfileEdit";
 import Cal from "./Elements/Cal";
 import { Provider } from "react-redux";
 import Photobook from "./Pages/Photobook";
+import Photolist from "./Components/Photo/Photolist";
 function App() {
   return (
     <div className="App">
@@ -20,9 +21,6 @@ function App() {
         <Route path="/member/:id" element={<MemberPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
-      {/* <ProfileEdit /> */}
-      {/* <Cal /> */}
-      {/* <Photobook /> */}
     </div>
   );
 }

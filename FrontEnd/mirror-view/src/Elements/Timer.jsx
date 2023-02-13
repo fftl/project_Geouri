@@ -27,8 +27,8 @@ function Timer(props) {
 
   useEffect(() => {
     const countdown = setInterval(() => {
-      setComp("ending");
-    }, 4100);
+      setComp("none");
+    }, 3200);
     return () => clearInterval(countdown);
   }, [shoot]);
 
