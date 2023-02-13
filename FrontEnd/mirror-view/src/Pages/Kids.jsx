@@ -28,35 +28,25 @@ function Kids(props) {
   const [comp, setComp] = useState("image"); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
 
-  const alert = setTimeout(() => {
-     setComp("alertMsg");
-  }, 3000)
-
-  // useEffect(() => {
-  //   if (mirror_action === "greetings") {
-  //     setComp("greeting");
-  //   }
-  //   if (mirror_action === "wash_hands") {
-  //     setComp("");
-      // dispatch(mirrorActions.delMessage());
-  //     setVideo("wash_hands");
-  //   }
-  //   if (mirror_action === "brush_teeth") {
-  //     setComp("");
-      // dispatch(mirrorActions.delMessage());
-  //     setVideo("brush_teeth");
-  //   }
-  //   if (mirror_action === "message") {
-  //     setComp("message");
-  //   }
-  //   if (mirror_action === "default") {
-  //     setComp("kidsDefault");
-  //   }
-  //   if (alertMsg){ 
-  //     alert();
-  //   }
-    // return (() => clearTimeout());
-  // }, [mirror_action, alertMsg]);
+  useEffect(() => {
+    if (mirror_action === "greetings") {
+      setComp("greeting");
+    }
+    if (mirror_action === "wash_hands") {
+      setComp("video");
+      setVideo("wash_hands");
+    }
+    if (mirror_action === "brush_teeth") {
+      setComp("video");
+      setVideo("brush_teeth");
+    }
+    if (mirror_action === "message") {
+      setComp("message");
+    }
+    if (mirror_action === "default") {
+      setComp("kidsDefault");
+    }
+  }, [mirror_action]);
 
   // 한글이름에 따라 'ㅇㅇ아' or 'ㅇㅇ야' 체크
   const checkKorean = (name) => {
