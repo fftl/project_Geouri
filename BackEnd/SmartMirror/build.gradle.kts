@@ -37,6 +37,7 @@ dependencies {
 	implementation("com.google.firebase:firebase-admin:9.1.1") //파이어베이스 storage 사용, 사진 저장
 	implementation ("org.jsoup:jsoup:1.15.3")				   //크롤링, 네이버 랭킹뉴스 가져오기,
 	implementation("org.mnode.ical4j:ical4j:4.0.0-beta2")	   //ical파일 읽기, 일정 리스트 가져오기
+//	implementation("org.json:json:20210407") //카카오톡 API 호출 시 json 파싱
 }
 
 tasks.withType<Test> {
