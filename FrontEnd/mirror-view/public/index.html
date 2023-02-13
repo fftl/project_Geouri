@@ -39,11 +39,11 @@
 
         const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
+        var brushing_on = 0, brushing_off = -5;
 
         async function init() {
             const modelURL = url + "model.json";
             const metadataURL = url + "metadata.json";
-
             model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
             maxPredictions = model.getTotalClasses(); //클래스 이름 받아오기
 
@@ -51,9 +51,12 @@
             const size = 200;
             const flip = true; // whether to flip the webcam
             webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+
             await webcam.setup(); // 웹캠에 접근하기
             await webcam.play(); // 웹캠 play하기
+
             window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
+
 
             // append/get elements to the DOM
             const canvas = document.getElementById("canvas");
@@ -64,26 +67,52 @@
             for (let i = 0; i < maxPredictions; i++) {
                 labelContainer.appendChild(document.createElement("div"));
             }
+
+
         }
 
         async function loop(timestamp) {
             webcam.update(); // update the webcam frame
-            await predict();
-            window.requestAnimationFrame(loop);
+            predict();
+            window.requestAnimationFrame(loop);  //계속해서 프레임을 송출하기 위함
         }
 
         async function predict() {
             //자세 추정하기
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
+            const date = new Date();
+            const milliseconds = date.getMilliseconds();
+
 
             for (let i = 0; i < maxPredictions; i++) {
-                //추정한 자세와 정확도 나타내기
-                const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-                labelContainer.childNodes[i].innerHTML = classPrediction;
+                // 추정한 자세와 정확도 나타내기 (소숫점두번째까지)
+                const cost = prediction[i].probability.toFixed(2);
+                const classPrediction = prediction[i].className + ": " + cost;
+                // 정해진 시간 주기 간격으로 값 출력하기
+                if (milliseconds % 100 == 0) {    //
+                    // console.log(classPrediction)
+                    if (i == 0 && cost >= 0.6) // 양치 중임의 기준을 좀 더 올리는게 나은가?
+                    {
+                        brushing_on++;
+                    }
+                    else if (i == 1 && cost > 0.7) // 양치 안함
+                    {
+                        brushing_off++;
+                    }
+    
+                    console.log("양치함:",brushing_on)
+                }
+
+                if (brushing_off == brushing_on)
+                    // {name} 양치 잘 하고 있지?? 깨끗하게 양치하니 좋지?!라고 독려하기
+                    ;
+
+                // 화면 출력
+                // labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
             }
 
-            drawPose(pose); //웹캠에 자세 skeleton 그리기
+            // drawPose(pose); //웹캠 보이기
         }
 
         function drawPose(pose) {
@@ -98,8 +127,8 @@
             }
         }
 
-        function turnOffCamera(){
-          
+        function stopWebCam(){
+          webcam.stop();
         }
     </script>
     <!--
