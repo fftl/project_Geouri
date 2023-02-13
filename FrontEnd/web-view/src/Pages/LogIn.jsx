@@ -13,11 +13,11 @@ function Login(){
   }, []);
 
   return (
-      <>
+      <div className="container">
         <LoginHeader />
         <LoginBody />
         <LoginFooter/>
-      </>
+      </div>
   )
 }
 
