@@ -15,7 +15,24 @@ const mirrorSlice = createSlice({
                 "calender": true
             },
             "playlist": "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy",
-            "calender": "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics",
+            "calender": [{            "title": "테스트1",
+                         "start": "2023-02-12",
+                         "end": "2023-02-13",
+                        "location": null,
+                        "allDay": true
+            },
+            {            "title": "ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ",            
+                          "start": "2023-02-12 17:00",            
+                          "end": "2023-02-12 18:00",            
+                          "location": null,            
+                          "allDay": false
+            },       
+            {            "title": "저녁모먹지",
+                        "start": "2023-02-12 18:00",
+                        "end": "2023-02-12 22:00",
+                        "location": null,
+                        "allDay": false
+            }],
             "region": {
                 "sidoName": "인천광역시",
                 "gugunName": "부평구",

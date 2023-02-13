@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import { Login, FindUser, NotFound404, MemberPage, AddMember } from "./Pages";
 import SignUp from "./Pages/SignUp";
 import "./App.css";
