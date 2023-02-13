@@ -86,7 +86,7 @@ public class MirrorController {
      * @return
      */
     @PostMapping("/member")
-    public ResponseEntity getMember(@RequestBody RequestInfo requestInfo) throws IOException {
+    public ResponseEntity getMember(@RequestBody RequestInfo requestInfo) throws IOException, ParserException {
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 거울 시리얼 넘버와 멤버키 유효성 확인
@@ -106,7 +106,8 @@ public class MirrorController {
         Region region = regionService.findByDongCode(dongCode);
 
         // 캘린더
-        String calendar = calendarService.findByMemberKey(memberKey);
+        String calUrl = calendarService.findByMemberKey(memberKey);
+        List<ResponseCalendar> responseCalendars = utils.getCalendars(calUrl);
         // 캘린더 링크 접속 후 파싱 필요 !!!
 
         // 뉴스
@@ -165,7 +166,8 @@ public class MirrorController {
                 .kidsMode(member.isKidsMode())
                 .widget(responseWidget)
                 .playlist(playlist)
-                .calender(calendar)
+                .calendarUrl(calUrl)
+                .calender(responseCalendars)
                 .region(responseRegion)
                 .news(responseNewsList)
                 .fortune(fortune)
@@ -479,12 +481,8 @@ public class MirrorController {
     }
 
     /**
-     * 멤버가 등록해놓은 ical 주소를 통해서 아직 시간이 지나지 않은 오늘의 일정을 가져옵니다.
-     * @param requestInfo
-     * @return
-     */
     @PostMapping("/getCalendar")
-    public ResponseEntity getCalendar(@RequestBody RequestInfo requestInfo) throws ParserException, IOException {
+    public ResponseEntity getCalendar(@RequestBody RequestInfo requestInfo) throws ParserException, IOException {-
         ResponseDefault responseDefault = null;
 
         //멤버의 유효성 검사
@@ -507,5 +505,5 @@ public class MirrorController {
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
-    }
+    } **/
 }

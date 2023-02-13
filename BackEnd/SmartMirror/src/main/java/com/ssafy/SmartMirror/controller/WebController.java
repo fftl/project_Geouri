@@ -5,6 +5,7 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
+import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -279,7 +280,7 @@ public class WebController {
      * @return
      */
     @GetMapping("/member")
-    public ResponseEntity getWidget(@RequestParam String memberKey) {
+    public ResponseEntity getWidget(@RequestParam String memberKey) throws ParserException, IOException {
         ResponseDefault responseDefault = null;
 
         // 해당 멤버 있는지 확인
@@ -298,7 +299,8 @@ public class WebController {
         Region region = regionService.findByDongCode(dongCode);
 
         // 캘린더
-        String calendar = calendarService.findByMemberKey(memberKey);
+        String calUrl = calendarService.findByMemberKey(memberKey);
+        List<ResponseCalendar> responseCalendars = utils.getCalendars(calUrl);
         // 캘린더 링크 접속 후 파싱 필요 !!!
 
 
@@ -323,7 +325,8 @@ public class WebController {
                 .nickname(member.getNickname())
                 .imgUrl(member.getImgUrl())
                 .playlist(playlist)
-                .calender(calendar)
+                .calendarUrl(calUrl)
+                .calender(responseCalendars)
                 .kidsMode(member.isKidsMode())
                 .widget(responseWidget)
                 .region(responseRegion)
@@ -498,6 +501,7 @@ public class WebController {
      */
     @GetMapping("/snapShot/week")
     public ResponseEntity getWeekSnapShot(@RequestParam String memberKey){
+
         // 반환값을 담을 Response 객체들을 선언
         ResponseDefault responseDefault = null;
         List<ResponseSnapShot> responseSnapShotList = null;
