@@ -1,6 +1,8 @@
 package com.ssafy.SmartMirror.service;
 
 import com.ssafy.SmartMirror.domain.Calendar;
+import com.ssafy.SmartMirror.domain.Playlist;
+import com.ssafy.SmartMirror.dto.RequestMember;
 import com.ssafy.SmartMirror.repository.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,16 @@ public class CalendarService {
     public int updateLink(String link, String memberKey) {
         int result = calendarRepository.updateLink(link, memberKey);
         return result;
+    }
+
+    public Calendar saveCalendar(RequestMember requestMember, String memberKey) {
+        Calendar calendar = Calendar.builder()
+                .memberKey(memberKey)
+                .link(requestMember.getCalendarLink())
+                .build();
+
+        Calendar newCalendar = calendarRepository.save(calendar);
+        return newCalendar;
+
     }
 }
