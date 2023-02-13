@@ -4,26 +4,37 @@ const rq = require('request');
 var PythonShell = require('python-shell');
 
 var dotenv = require("dotenv").config();
-// var pythonPath = "/usr/bin/python3";
 
-var prevKey = 0;      // 이전에 보냈던 메세지
-var currentStatus = 0;     // 현재 상태.
+// Imports the Google Cloud client library
+const language = require('@google-cloud/language');
+// Instantiates a client
+const client = new language.LanguageServiceClient();
 
+
+
+// 퀴즈 관련
 var quizMode = 0; //현재 퀴즈 상태인가?
 var quizString = "";
 var quizHint = "";
 var quizAnswer = "";
 
-var current_user = "";     // 유저 코드
-var serialNumber = "8DLL-44yh-x7vB-VuWK"
+
+//상태 정보
+var prevKey = 0;      // 이전에 보냈던 메세지
+var currentStatus = 0;     // 현재 상태.
+var kidsMode = false;
+var personFrontOfMirror = false;
+
+
+
 
 // 유저 정보
+var current_user = "";     // 유저 코드
+var serialNumber = "8DLL-44yh-x7vB-VuWK"
 var user_data = {
   "data" : {
   },
 };  
-var kidsMode = false;
-var personExist = false;
 
 
 
@@ -95,20 +106,9 @@ wss.on('connection', function (ws, request) {
       }, 3000);
     }
 
-    // else if(command === "brush_teeth"){
-    //   currentStatus = 5;
-    //   updateStatus();
-    // }
-
-    // else if(command === "wash_hands"){
-    //   currentStatus = 8;
-    //   updateStatus();
-    // }
-
     else if (command === "reply") {
       console.log("응답받음")
     }
-
 
   });
 
@@ -118,11 +118,117 @@ wss.on('connection', function (ws, request) {
   });
 });
 
+// // 아이 대답을 받아서 감정 분석하기(긍/부정)
+// async function nlp(text) {
+
+
+
+//   const document = {
+//       content: text,
+//       type: 'PLAIN_TEXT',
+//   };
+
+//   // Detects the sentiment of the text
+//   const [result] = await client.analyzeSentiment({ document: document });
+//   const sentiment = result.documentSentiment;
+
+//   // 긍정:1 ,부정/중립:0
+//   if (sentiment.score >= 0.29)
+//       return 1;
+//   else
+//       return 0;
+
+//   // console.log(`Text: ${text}`);
+//   // console.log(`Sentiment score: ${sentiment.score}`);
+//   // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+// }
+
+// // 문장 내에서 명사 찾기
+// async function find_entities(text) {
+//   // Creates a client
+  
+//   const client = new language.LanguageServiceClient();
+
+//   // Prepares a document, representing the provided text
+//   const document = {
+//       content: text,
+//       type: 'PLAIN_TEXT',
+//   };
+
+//   // Detects entities in the document
+//   const [result] = await client.analyzeEntities({ document });
+//   const entities = result.entities;
+//   console.log("find entity : " , entities);
+//   // 밥 관련 멘트인 경우는 긍/부정을 판별해야하니까 0으로 return
+//   entities.forEach(entity => {
+//       if (entity.name.includes("밥") || entity.name.includes("맛"))
+//           return '0';
+      
+//   });
+
+//   return text;
+// }
+
+// function STT(voice_input) {
+
+//   var arr_str = [
+//       ["수수께끼", "문제", "퀴즈"],
+//       ["세상에서 누가"],
+//       ["시작", "재생", "진행"],
+//       ["종료", "그만", "정지", "중지"],
+//       ["다음", "넥스트"],
+//       ["이전"],
+//       ["아니", "싫어", "맛없", "별로"],
+//       ["응", "좋아", "그래", "알겠어"],
+//       ["몰라", "모르겠어", "글쎄", "힌트", "알려줘"],
+//       ["사진", "촬영", "찰칵"],
+//       ["양치", "치카", "칫솔질"],
+//       ["손 씻기", "손 씻을래", "손 닦"]
+//   ]
+
+//   var arr_voicecmd = [
+//       "quiz",
+//       "test",
+//       "video_start",
+//       "video_stop",
+//       "video_next",
+//       "video_prev",
+//       "answer_negative",
+//       "answer_positive",
+//       "answer_neutral",
+//       "take_picture",
+//       "brush_teeth",
+//       "wash_hands"
+//   ];
+
+//   for (var i = 0; i < arr_str.length; i++) {
+
+//       for (var j = 0; j < arr_str[i].length; j++) {
+//           if (voice_input.includes(arr_str[i][j]))
+//               return arr_voicecmd[i];
+//       }
+//   }
+
+//   // 퀴즈의 답을 받는 경우
+//   const entity = find_entities(voice_input);
+
+//   // 퀴즈에서 판단되지 않고, if문에 해당되지 않는 대답은 nlp로
+//   if (entity == 0) {
+//       const value = nlp(voice_input);
+//       if (value == 0) //부정
+//           return "answer_negative";
+//       else if (value == 1) // 긍정
+//           return "answer_positive"
+//   }
+
+//   return voice_input;
+// }
 
 
 function STT(voice_input){
 
-  var arr_str = [
+  const arr_str = [
+    ["거울아"],
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
     ["시작", "재생", "진행"],
@@ -135,11 +241,12 @@ function STT(voice_input){
     ["사진","촬영"],
     ["양치","치카","칫솔질"],
     ["손 씻기","손 씻을래", "손 닦"]
-  ]
+  ];
 
-  var arr_voicecmd = [
+  const arr_voicecmd = [
+    "mirrorcall",
     "quiz",
-    "test",
+    "easteregg",
     "video_start",
     "video_stop",
     "video_next",
@@ -156,7 +263,7 @@ function STT(voice_input){
   for(var i = 0 ; i < arr_str.length; i++){
     for(var j = 0 ; j < arr_str[i].length; j++){
       if(voice_input.includes(arr_str[i][j]))
-      return arr_voicecmd[i]
+      return arr_voicecmd[i];
     }
   }
 
@@ -295,7 +402,7 @@ function currentStatusCheck(voice_input){
       quiz(""); 
     }
 
-    else if(voice_input === "test"){
+    else if(voice_input === "easteregg"){
       easteregg();
     }
 
@@ -348,10 +455,12 @@ function person_appear(){
     if(err){
       console.log("error -> ", err);
     } else{
-      if(body.data.kidsMode == true){
+      user_data = body.data;
+      if(user_data.kidsMode == true){
         kidsMode = true;
       }
-      user_data = body.data;
+      
+      console.log(user_data);
       data = {
         "cmd": "person_appear",
         "content": body.data,
@@ -361,6 +470,12 @@ function person_appear(){
 
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
+
+      if(user_data.firstVisit === null){
+        firstAppear();
+        setTimeout(() => {
+        }, 15000);
+      }
       greetings();
     }
   });
@@ -373,9 +488,8 @@ function person_leave(){
   currentStatus = 0;
   
   current_user;
-  serialNumber = "8DLL-44yh-x7vB-VuWK"
   kidsMode = false;
-  personExist = false;
+  personFrontOfMirror = false;
 
   const data = {
     "cmd": "person_leave",
@@ -384,8 +498,13 @@ function person_leave(){
   wss.broadcast(JSON.stringify(data));
 }
 
+
+
+
+
+
 function greetings(){
-  var returnData  = {
+  var data  = {
       "cmd": "greetings",
       "content" : ""
     };
@@ -426,6 +545,21 @@ function greetings(){
     }
   });
 };  
+
+
+function firstAppear(){
+  var data = {
+    "cmd": "first_appear",
+    "content": returnScript,
+  }
+
+  var str = "반가워" + callName_ya(user_data.nickname) + ". 양치를 하고 손을 깨끗이 씻으면서 나만의 캐릭터를 키워보자!"
+  TTS(str);
+  wss.broadcast(JSON.stringify(data));
+}
+
+
+
 
 function answerAndReply(reaction){
 
