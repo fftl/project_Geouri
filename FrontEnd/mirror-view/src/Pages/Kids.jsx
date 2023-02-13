@@ -10,6 +10,7 @@ import Character from "../Components/Kids/Character";
 import { mirrorActions } from "../Redux/modules/mirror";
 import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
+import Rule from "../Components/Kids/Rule";
 
 function Kids(props) {
   const { webSocket } = props;
@@ -23,6 +24,9 @@ function Kids(props) {
   const [video, setVideo] = useState(""); // 비디오 url
 
   useEffect(() => {
+    if (mirror_action === "first_appear") {
+      setComp("first_appear");
+    }
     if (mirror_action === "greetings") {
       setComp("greeting");
     }
@@ -57,6 +61,11 @@ function Kids(props) {
       <div className="main-box">
         {
           {
+            first_appear: (
+              <>
+                <Rule setComp={setComp} />
+              </>
+            ),
             greeting: (
               <>
                 <div className="text-div">

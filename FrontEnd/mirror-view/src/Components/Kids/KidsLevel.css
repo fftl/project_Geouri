@@ -36,3 +36,8 @@
   width: 100px;
   height: 30%;
 }
+
+.leveldiv {
+  width: 100vw;
+  justify-content: center;
+}

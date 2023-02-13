@@ -1,58 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.css";
 import "./KidsLevel.css";
 import axios from "axios";
+import instance from "../../Redux/modules/instance";
+import $ from "jquery";
+import Confetti from "./Confetti";
+
+const levelApi = {
+  getLevel: (requestBody) => instance.put("mirror/member/level", requestBody),
+};
 
 const KidsLevel = () => {
-  const [level, setLevel] = useState("lv0");
+  const [level, setLevel] = useState(0);
   const [point, setPoint] = useState(0);
-  const [prevLevel, setPrevLevel] = useState(0);
+  const [levelUp, setLevelUp] = useState(true);
+  const member_info = useSelector((state) => state?.mirror?.member);
+  const memberKey = member_info?.memberKey;
+  const serialNumber = "8DLL-44yh-x7vB-VuWK";
+  const mission = "brushing";
+  const requestBody = {
+    serialNumber: serialNumber,
+    memberKey: memberKey,
+    mission: mission,
+  };
 
   // useEffect(() => {
-  //   axios
-  //     .get("주소")
-  //     .then((response) => {
-  //       setLevel(response.data);
-  //       setPoint(response.data);
-  //       setPrevLevel(response.data);
+  //   levelApi
+  //     .getLevel(requestBody)
+  //     .then((res) => {
+  //       setLevel(res.data.data.lv);
+  //       setPoint(res.data.data.exp);
+  //       setLevelUp(res.data.data.levelUp);
   //     })
-  //     .catch((error) => {
-  //       console.log(error);
+  //     .catch((err) => {
+  //       console.log(err);
   //     });
   // }, []);
 
   // useEffect(() => {
-  //   if (JSON.stringify(level) !== JSON.stringify(prevLevel)) {
+  //   if (levelUp) {
   //     console.log("레벨업");
-  //     setPrevLevel(level);
 
-  //     const script = document.createElement("script");
-  //     script.src =
-  //       "https://tistory4.daumcdn.net/tistory/3134841/skin/images/confetti_v2.js";
-  //     script.async = true;
-  //     document.body.appendChild(script);
+  // const script = document.createElement("script");
+  // script.src =
+  //   "https://tistory4.daumcdn.net/tistory/3134841/skin/images/confetti_v2.js";
+  // script.async = true;
+  // scriptEnd.current = script;
+  // document.body.appendChild(script);
 
-  //     return <div className="canvas"></div>;
+  // return () => {
+  //   document.body.removeChild(scriptEnd.current);
+  // };
   //   }
-  // }, [level]);
-
-  // 멤버의 경험치, 레벨 데이터 수신받음
-  // const pointNow = {member.point}
-  // const levelNow = {member.level}
-
-  //   useEffect(() => {
-  // setLevel(pointNow);
-  // setPoint(levelNow);
-  //   }, []);
-  const pointNow = 30;
-  const memlevel = "lv1";
+  // }, []);
 
   return (
-    <div>
+    <div className="leveldiv">
+      {levelUp && <Confetti />}
       <div className="chaimg">
         <img
-          src={process.env.PUBLIC_URL + `/images/lv/${level}.png`}
+          src={process.env.PUBLIC_URL + `/images/lv/lv${level}.png`}
           alt="캐릭터"
           id="levcha"
         />
