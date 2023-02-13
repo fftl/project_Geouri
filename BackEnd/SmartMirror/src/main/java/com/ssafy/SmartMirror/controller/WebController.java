@@ -8,6 +8,7 @@ import com.ssafy.SmartMirror.service.*;
 import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
@@ -261,16 +262,125 @@ public class WebController {
 
     /* ***************************** Member ***************************** */
 
+
     /**
      * 멤버 추가
-     * @param info
+     * @param requestMember
      * @return
-     * @throws IOException
      */
     @PostMapping("/member")
-    public ResponseEntity addMember(@RequestBody RequestInfo info) {
-        //        // implememt here
-        return null;
+    public ResponseEntity addMember(@RequestBody RequestMember requestMember) {
+        ResponseDefault responseDefault = null;
+
+        // 유저 불러오기
+        User user = userService.findByUserKey(requestMember.getUserKey());
+
+        if(user == null) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("등록된 유저가 없습니다.")
+                    .data(null)
+                    .build();
+            return new ResponseEntity(responseDefault, HttpStatus.OK);
+        }
+
+        // 멤버키 생성
+        String newMemberKey = utils.createRandomKey(8);
+        while(memberService.findByMemberKey(newMemberKey) != null) {
+            newMemberKey = utils.createRandomKey(8);
+        }
+
+
+        Member newMember = memberService.saveMember(requestMember, user, newMemberKey);
+        if(newMember==null) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("멤버 생성 중 에러가 발생하였습니다.")
+                    .data(null)
+                    .build();
+
+            return new ResponseEntity(responseDefault, HttpStatus.OK);
+        }
+
+
+        // 위젯 등록
+        Widget newWidget = widgetService.saveWidget(requestMember, newMemberKey);
+        if(newWidget==null) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("위젯 생성 중 에러가 발생하였습니다.")
+                    .data(null)
+                    .build();
+
+            return new ResponseEntity(responseDefault, HttpStatus.OK);
+        }
+
+        // 플레이리스트 등록
+        if(requestMember.getPlaylistLink() != null) {
+            Playlist newPlaylist = playlistService.savePlaylist(requestMember, newMemberKey);
+        }
+
+        // 캘린더 등록
+        if(requestMember.getCalendarLink() != null) {
+            Calendar newCalendar = calendarService.saveCalendar(requestMember, newMemberKey);
+        }
+
+        // 지역 등록
+        if(requestMember.getDongCode() != null) {
+            DongCode dongCode = dongCodeService.saveDongCode(requestMember, newMemberKey);
+        }
+
+        // 등록완료
+        // 멤버 정보 가져오기
+        Member member = memberService.findByMemberKey(newMemberKey); // 멤버
+        Widget widget = widgetService.findByMemberKey(newMemberKey); // 위젯
+        String playlist = playlistService.findByMemberKey(newMemberKey); // 플레이리스트
+
+        // 지역 정보
+        String dongCode = dongCodeService.findByMemberKey(newMemberKey);
+        Region region = regionService.findByDongCode(dongCode);
+
+        // 캘린더
+        String calendar = calendarService.findByMemberKey(newMemberKey);
+        // 캘린더 링크 접속 후 파싱 필요 !!!
+
+
+        // responseDto 꾸리기
+        ResponseWidget responseWidget = ResponseWidget.builder()
+                .news(widget.isNews())
+                .calender(widget.isCalender())
+                .playlist(widget.isPlaylist())
+                .build();
+
+        ResponseRegion responseRegion = ResponseRegion.builder()
+                .sidoName(region.getSidoName())
+                .gugunName(region.getGugunName())
+                .dongName(region.getDongName())
+                .lat(region.getLat())
+                .lng(region.getLng())
+                .build();
+
+
+        ResponseMember responseMember = ResponseMember.builder()
+                .memberKey(member.getMemberKey())
+                .nickname(member.getNickname())
+                .imgUrl(member.getImgUrl())
+                .playlist(playlist)
+                .calendarUrl(calendar)
+                .kidsMode(member.isKidsMode())
+                .widget(responseWidget)
+                .region(responseRegion)
+                .build();
+
+
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg("")
+                .data(responseMember)
+                .build();
+
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
 

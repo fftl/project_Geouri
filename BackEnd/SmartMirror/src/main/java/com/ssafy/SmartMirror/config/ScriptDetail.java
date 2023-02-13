@@ -78,8 +78,9 @@ public class ScriptDetail {
 
             // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
             KidsResponse kidsResponse = kidsResponseList.get(0);
+            System.out.println("jkejkjk "+kidsResponse);
             KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
+            System.out.println("dfksdkfsdk: "+kidsScript);
             return kidsScript;
 
 
@@ -114,8 +115,9 @@ public class ScriptDetail {
 
                     // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
                     KidsResponse kidsResponse = kidsResponseList.get(0);
+                    System.out.println("jkejkjk "+kidsResponse);
                     KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
+                    System.out.println("dfksdkfsdk: "+kidsScript);
                     return kidsScript;
 
                     //이번 시간에 양치를 하지 않았습니다. 양치를 제안합니다.
@@ -144,8 +146,9 @@ public class ScriptDetail {
 
                         // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
                         KidsResponse kidsResponse = kidsResponseList.get(0);
+                        System.out.println("jkejkjk "+kidsResponse);
                         KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
-
+                        System.out.println("dfksdkfsdk: "+kidsScript);
                         return kidsScript;
                     }
 
@@ -159,7 +162,10 @@ public class ScriptDetail {
 
                     // 섞어낸 응답이므로 첫번째 것을 그냥 가져옵니다.
                     KidsResponse kidsResponse = kidsResponseList.get(0);
+                    System.out.println("jkejkjk "+kidsResponse);
+
                     KidsScript kidsScript = kidsScriptService.getKidsScript(kidsResponse.getResKey());
+                    System.out.println("dfksdkfsdk: "+kidsScript);
 
                     return kidsScript;
                 }

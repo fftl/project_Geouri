@@ -92,23 +92,42 @@ public class MirrorController {
         // 거울 시리얼 넘버와 멤버키 유효성 확인
         String serialNumber = requestInfo.getSerialNumber();
         String memberKey = requestInfo.getMemberKey();
-        if(!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        if (!utils.isValidAccess(serialNumber, memberKey)) {
+            return errorResponse("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)");
         }
 
         // 멤버 정보 가져오기
         Member member = memberService.findByMemberKey(memberKey); // 멤버
         Widget widget = widgetService.findByMemberKey(memberKey); // 위젯
+        ResponseWidget responseWidget = null;
+        if (widget != null) {
+            responseWidget = ResponseWidget.builder()
+                    .news(widget.isNews())
+                    .calender(widget.isCalender())
+                    .playlist(widget.isPlaylist())
+                    .build();
+        }
+
+
         String playlist = playlistService.findByMemberKey(memberKey); // 플레이리스트
+        String calendar = calendarService.findByMemberKey(memberKey); // 캘린더
+        String dongCode = dongCodeService.findByMemberKey(memberKey); // 지역
+        String fortune = fortuneService.getFortune(memberKey); // 포춘
+        List<ResponseCalendar> responseCalendars = utils.getCalendars(calendar);
 
-        // 지역 정보
-        String dongCode = dongCodeService.findByMemberKey(memberKey);
-        Region region = regionService.findByDongCode(dongCode);
 
-        // 캘린더
-        String calUrl = calendarService.findByMemberKey(memberKey);
-        List<ResponseCalendar> responseCalendars = utils.getCalendars(calUrl);
-        // 캘린더 링크 접속 후 파싱 필요 !!!
+        // 만약 아이라면 - 레벨
+        ResponseLevel responseLevel = null;
+        if (member.isKidsMode()) {
+            Level level = levelService.findByMemberKey(memberKey);
+            if (level != null) {
+                responseLevel = ResponseLevel.builder()
+                        .lv(level.getLv())
+                        .exp(level.getExp())
+                        .build();
+            }
+        }
+
 
         // 뉴스
 //        List<News> newsList = newsService.findByPress("YTN");
@@ -121,22 +140,9 @@ public class MirrorController {
                     .title(news.getTitle())
                     .build());
         }
-        
-
-        // 포춘
-        String fortune = fortuneService.getFortune(memberKey);
-
-        // 레벨
-        Level level = levelService.findByMemberKey(memberKey);
-        ResponseLevel responseLevel = ResponseLevel.builder()
-                .lv(level.getLv())
-                .exp(level.getExp())
-                .build();
-
 
         // 마지막 방문 날짜와 시각
         String lastVisit = visitService.getLastVisit(member);
-
 
         // 방문기록 저장
         Date date = new Date();
@@ -144,20 +150,19 @@ public class MirrorController {
         String visitTime = formatter.format(date);
         visitService.saveVisit(member, visitTime);
 
-        // responseDto 꾸리기
-        ResponseWidget responseWidget = ResponseWidget.builder()
-                .news(widget.isNews())
-                .calender(widget.isCalender())
-                .playlist(widget.isPlaylist())
-                .build();
 
-        ResponseRegion responseRegion = ResponseRegion.builder()
-                .sidoName(region.getSidoName())
-                .gugunName(region.getGugunName())
-                .dongName(region.getDongName())
-                .lat(region.getLat())
-                .lng(region.getLng())
-                .build();
+        // 멤버 동코드에 해당하는 지역 경도, 위도 정보
+        ResponseRegion responseRegion = null;
+        Region region = regionService.findByDongCode(dongCode);
+        if (region != null) {
+            responseRegion = ResponseRegion.builder()
+                    .sidoName(region.getSidoName())
+                    .gugunName(region.getGugunName())
+                    .dongName(region.getDongName())
+                    .lat(region.getLat())
+                    .lng(region.getLng())
+                    .build();
+        }
 
         ResponseMember responseMember = ResponseMember.builder()
                 .memberKey(member.getMemberKey())
@@ -166,7 +171,7 @@ public class MirrorController {
                 .kidsMode(member.isKidsMode())
                 .widget(responseWidget)
                 .playlist(playlist)
-                .calendarUrl(calUrl)
+                .calendarUrl(calendar)
                 .calender(responseCalendars)
                 .region(responseRegion)
                 .news(responseNewsList)
@@ -201,14 +206,21 @@ public class MirrorController {
         // 거울 시리얼넘버와 멤버키 유효성을 검사합니다.
         String serialNumber = requestExp.getSerialNumber();
         String memberKey = requestExp.getMemberKey();
-        if(!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        if (!utils.isValidAccess(serialNumber, memberKey)) {
+            return errorResponse("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)");
         }
 
 
         // 해당 멤버 객체, 해당 멤버의 레벨, 경험치 정보를 가져옵니다.
         Member member = memberService.findByMemberKey(memberKey); // 멤버 객체
+        if (!member.isKidsMode()) {
+            return errorResponse("해당 멤버는 키즈모드를 지원하지 않습니다.");
+        }
         Level level = levelService.findByMemberKey(memberKey); // 멤버의 레벨과 경험치
+        if (level == null) {
+            return errorResponse("해당 멤버의 레벨 정보가 존재하지 않습니다.");
+        }
+
         int exp = level.getExp();
         int lv = level.getLv();
 
@@ -481,8 +493,12 @@ public class MirrorController {
     }
 
     /**
+     * 멤버가 등록해놓은 ical 주소를 통해서 아직 시간이 지나지 않은 오늘의 일정을 가져옵니다.
+     * @param requestInfo
+     * @return
+     */
     @PostMapping("/getCalendar")
-    public ResponseEntity getCalendar(@RequestBody RequestInfo requestInfo) throws ParserException, IOException {-
+    public ResponseEntity getCalendar(@RequestBody RequestInfo requestInfo) throws ParserException, IOException {
         ResponseDefault responseDefault = null;
 
         //멤버의 유효성 검사
@@ -505,5 +521,24 @@ public class MirrorController {
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
-    } **/
+    }
+
+
+    public ResponseEntity errorResponse(String msg) {
+        ResponseDefault responseDefault = ResponseDefault.builder()
+                .success(false)
+                .msg(msg)
+                .data(null)
+                .build();
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    public ResponseEntity successResponse(Object data) {
+        ResponseDefault responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg(null)
+                .data(data)
+                .build();
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
 }

@@ -1,6 +1,8 @@
 package com.ssafy.SmartMirror.service;
 
+import com.ssafy.SmartMirror.domain.Calendar;
 import com.ssafy.SmartMirror.domain.DongCode;
+import com.ssafy.SmartMirror.dto.RequestMember;
 import com.ssafy.SmartMirror.repository.DongCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +25,15 @@ public class DongCodeService {
     public int updateDongCode(String value, String memberKey) {
         int result = dongCodeRepository.updateDongCode(value, memberKey);
         return result;
+    }
+
+    public DongCode saveDongCode(RequestMember requestMember, String memberKey) {
+        DongCode dongCode = DongCode.builder()
+                .memberKey(memberKey)
+                .dongCode(requestMember.getDongCode())
+                .build();
+
+        DongCode newDongCode = dongCodeRepository.save(dongCode);
+        return newDongCode;
     }
 }
