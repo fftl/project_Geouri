@@ -6,7 +6,7 @@ function Home() {
   }
   return (
     <React.Fragment>
-      <button onClick={webcam}>d</button>
+      <button onClick={webcam}>으아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</button>
     </React.Fragment>
   );
 }
