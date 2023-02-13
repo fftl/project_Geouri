@@ -80,15 +80,13 @@ public class MirrorController {
     }
 
     /* ***************************** Member ***************************** */
-
     /**
-     * 거울에 등장한 멤버의 정보를 리턴합니다.
-     *
+     * 거울에 등장한 멤버의 정보를 리턴합니다(멤버 기본정보, 위젯 설정)
      * @param requestInfo
-     * @return responseMember
+     * @return
      */
     @PostMapping("/member")
-    public ResponseEntity getMember(@RequestBody RequestInfo requestInfo) throws IOException {
+    public ResponseEntity getMember(@RequestBody RequestInfo requestInfo) throws IOException, ParserException {
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 거울 시리얼 넘버와 멤버키 유효성 확인
@@ -115,6 +113,8 @@ public class MirrorController {
         String calendar = calendarService.findByMemberKey(memberKey); // 캘린더
         String dongCode = dongCodeService.findByMemberKey(memberKey); // 지역
         String fortune = fortuneService.getFortune(memberKey); // 포춘
+        List<ResponseCalendar> responseCalendars = utils.getCalendars(calendar);
+
 
         // 만약 아이라면 - 레벨
         ResponseLevel responseLevel = null;
@@ -128,16 +128,9 @@ public class MirrorController {
             }
         }
 
-        // 마지막 방문 날짜와 시각
-        String lastVisit = visitService.getLastVisit(member);
-
-        // 방문기록 저장
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String visitTime = formatter.format(date);
-        visitService.saveVisit(member, visitTime);
 
         // 뉴스
+//        List<News> newsList = newsService.findByPress("YTN");
         List<News> newsList = newsService.findAll();
         List<ResponseNews> responseNewsList = new ArrayList<>();
         for (int i = 0; i < 50; i++) { // 50개만 전송
@@ -147,6 +140,16 @@ public class MirrorController {
                     .title(news.getTitle())
                     .build());
         }
+
+        // 마지막 방문 날짜와 시각
+        String lastVisit = visitService.getLastVisit(member);
+
+        // 방문기록 저장
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String visitTime = formatter.format(date);
+        visitService.saveVisit(member, visitTime);
+
 
         // 멤버 동코드에 해당하는 지역 경도, 위도 정보
         ResponseRegion responseRegion = null;
@@ -161,7 +164,6 @@ public class MirrorController {
                     .build();
         }
 
-
         ResponseMember responseMember = ResponseMember.builder()
                 .memberKey(member.getMemberKey())
                 .nickname(member.getNickname())
@@ -169,7 +171,8 @@ public class MirrorController {
                 .kidsMode(member.isKidsMode())
                 .widget(responseWidget)
                 .playlist(playlist)
-                .calender(calendar)
+                .calendarUrl(calendar)
+                .calender(responseCalendars)
                 .region(responseRegion)
                 .news(responseNewsList)
                 .fortune(fortune)
@@ -192,7 +195,6 @@ public class MirrorController {
     /**
      * 아이가 수행한 양치/손씻기에 대한 경험치를 제공합니다.
      * 또한 아이의 양치/손씻기 기록을 저장합니다.
-     *
      * @param requestExp
      * @return
      */
@@ -259,16 +261,22 @@ public class MirrorController {
                 // 오늘의 양치기록 세기
                 count = handWashingService.countAllByMemberAndHandWashingTimeStartingWith(member, visitDay);
                 // 맥스 확인 ( 손씻기의 경우 10번이 맥스 )
+                System.out.println("visitDay : "+visitDay);
+                System.out.println("오늘 손씻기 : "+count);
                 if (count <= 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
                     exp += 2; // 경험치 추가
                     success = true;
                 }
                 break;
+
+            case "CMD3": //
+                exp += 10;
+                break;
         }
 
 
         // 레벨업 확인
-        if (exp >= 100) {
+        if(exp >= 100) {
             exp -= 100;
             lv += 1;
             levelService.updateLv(lv, memberKey);
@@ -308,7 +316,7 @@ public class MirrorController {
         ResponseDefault responseDefault = null;
         String serialNumber = requestInsertSnapShot.getSerialNumber();
         String memberKey = requestInsertSnapShot.getMemberKey();
-        if (!utils.isValidAccess(serialNumber, memberKey)) {
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
         }
 
@@ -345,7 +353,6 @@ public class MirrorController {
 
     /**
      * 거울 앞의 사람과 상호작용하는 멘트를 리턴합니다.
-     *
      * @param requestGetScript
      * @return
      */
@@ -360,8 +367,8 @@ public class MirrorController {
         int reaction = requestGetScript.getReaction();
         int type = requestGetScript.getType();
 
-        if (!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
         // 유저의 정보를 가져옵니다.
@@ -456,13 +463,13 @@ public class MirrorController {
 
         String serialNumber = requestInfo.getSerialNumber();
         String memberKey = requestInfo.getMemberKey();
-        if (!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
         Quiz quiz = quizService.getOneQuiz();
 
-        if (quiz == null) {
+        if(quiz == null){
             responseDefault = ResponseDefault.builder()
                     .success(false)
                     .msg("quiz 데이터가 존재하지 않습니다.")
@@ -487,7 +494,6 @@ public class MirrorController {
 
     /**
      * 멤버가 등록해놓은 ical 주소를 통해서 아직 시간이 지나지 않은 오늘의 일정을 가져옵니다.
-     *
      * @param requestInfo
      * @return
      */
@@ -498,8 +504,8 @@ public class MirrorController {
         //멤버의 유효성 검사
         String serialNumber = requestInfo.getSerialNumber();
         String memberKey = requestInfo.getMemberKey();
-        if (!utils.isValidAccess(serialNumber, memberKey)) {
-            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)", HttpStatus.OK);
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
         }
 
         //멤버키를 통해서 ical url을 가져옵니다.

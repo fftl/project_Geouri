@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="deff6354-a829-47d8-85a1-f6cf55f58511" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/SmartMirror/src/main/java/com/ssafy/SmartMirror/controller/MirrorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/SmartMirror/src/main/java/com/ssafy/SmartMirror/controller/MirrorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackEnd/SmartMirror/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/SmartMirror/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +27,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/lee/my/S08P12A201",
+    "last_opened_file_path": "C:/lee/my/S08P12A201/BackEnd/SmartMirror",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
