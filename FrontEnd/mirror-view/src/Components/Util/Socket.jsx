@@ -14,8 +14,8 @@ const Socket = (props) => {
 
   // 소켓을 통해 메시지가 전달된 경우, 실행되는 함수
   webSocket.onmessage = function (message) {
-    const msg = JSON.parse(message.data)
-    console.log(msg);
+    const msg = JSON.parse(message.data);
+
     if ( msg.cmd === 'person_appear' ){
       // store에 member정보를 dispatch 하여 넣기
       if (msg.content.kidsMode === true) {
@@ -34,6 +34,10 @@ const Socket = (props) => {
       // 거울 사용 종료시 
       dispatch(mirrorActions.leaveMirror());
       navigate('/');
+    }
+    else if (msg.cmd === 'message') {
+      // 거울 사용 종료시 
+      dispatch(mirrorActions.getMessage(msg));
     }
     else {
       dispatch(mirrorActions.getAction(msg))

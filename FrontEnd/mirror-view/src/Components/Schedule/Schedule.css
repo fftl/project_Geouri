@@ -1,9 +1,10 @@
 .schedule-box {
+    font-family: 'Pretendard';    
     position: absolute;
     left: 0;
     top: 0;
     width: 40%;
-    height: 14rem;
+    /* height: 14rem; */
 }
 .schedule-grid-box {
     display: grid;
