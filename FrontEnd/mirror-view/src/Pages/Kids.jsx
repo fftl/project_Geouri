@@ -7,7 +7,6 @@ import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from "../Components/Kids/Effect";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
-import { mirrorActions } from "../Redux/modules/mirror";
 import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
 import Image from "../Elements/Image";

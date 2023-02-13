@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 function GeneralView(props) {
     const { webSocket } = props;
     const member_info_widget = useSelector((state) => state?.mirror?.member?.widget);
-    // const no_calendar = member_info_widget?.calender;
-    const no_calendar = false;
+    const no_calendar = member_info_widget?.calender;
+    
     return (
         <div className="general-view-box">
             { member_info_widget?.calender && <Schedule /> }
