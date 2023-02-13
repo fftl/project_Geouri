@@ -10,9 +10,9 @@ function NewsPlayer (props) {
     return (
         <div className={no_calendar ? "news-wrapper" : "no-calendar-news-wrapper"}>
             <div className="news-player">
-            {newsData?.map((news) => {
+            {newsData?.map((news, idx) => {
                 return (
-                    <News news={news} key={news.id}/>        
+                    <News news={news} key={idx}/>        
                     // {/* // 추후에 index 말고 id 값으로 줘야함 */}
                 )
             })}
