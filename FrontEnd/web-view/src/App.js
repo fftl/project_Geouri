@@ -3,7 +3,11 @@ import SignUp from "./Pages/SignUp";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
-
+import ProfileEdit from "./Components/Home/ProfileEdit";
+import Cal from "./Elements/Cal";
+import { Provider } from "react-redux";
+import Photobook from "./Pages/Photobook";
+import Photolist from "./Components/Photo/Photolist";
 function App() {
   return (
     <div className="App">
