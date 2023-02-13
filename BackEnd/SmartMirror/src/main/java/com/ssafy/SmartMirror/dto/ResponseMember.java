@@ -24,7 +24,8 @@ public class ResponseMember {
 
     // 위젯 정보
     private String playlist; // 링크
-    private String calender; // 일정
+    private String calendarUrl; // 일정링크
+    private List<ResponseCalendar> calender; // 일정
     private ResponseWidget widget; // 위젯 (boolean 뉴스, 플레이리스트, 사진찍기, 일정)
     private ResponseRegion region; // 지역 (Double 경도, 위도)
 

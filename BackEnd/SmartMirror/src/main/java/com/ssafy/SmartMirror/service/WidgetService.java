@@ -1,11 +1,9 @@
 package com.ssafy.SmartMirror.service;
 
 import com.ssafy.SmartMirror.domain.Widget;
+import com.ssafy.SmartMirror.dto.RequestMember;
 import com.ssafy.SmartMirror.repository.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,4 +36,15 @@ public class WidgetService {
     }
 
 
+    public Widget saveWidget(RequestMember requestMember, String memberKey) {
+        Widget widget = Widget.builder()
+                .memberKey(memberKey)
+                .news(requestMember.isNews())
+                .playlist(requestMember.isPlaylist())
+                .calender(requestMember.isCalendar())
+                .build();
+
+        Widget newWidget = widgetRepository.save(widget);
+        return newWidget;
+    }
 }

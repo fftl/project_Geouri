@@ -1,6 +1,8 @@
 package com.ssafy.SmartMirror.service;
 
 import com.ssafy.SmartMirror.domain.Playlist;
+import com.ssafy.SmartMirror.domain.Widget;
+import com.ssafy.SmartMirror.dto.RequestMember;
 import com.ssafy.SmartMirror.repository.PlaylistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,18 @@ public class PlaylistService {
     public int updateLink(String link, String memberKey) {
         int result = playlistRepository.updateLink(link, memberKey);
         return result;
+    }
+
+    public Playlist savePlaylist(RequestMember requestMember, String memberKey) {
+
+
+        Playlist playlist = Playlist.builder()
+                .memberKey(memberKey)
+                .link(requestMember.getPlaylistLink())
+                .build();
+
+        Playlist newPlaylist = playlistRepository.save(playlist);
+        return newPlaylist;
+
     }
 }

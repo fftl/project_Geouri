@@ -37,7 +37,7 @@ public class FortuneService {
         long length = fortuneRepository.count();
         System.out.println("포춘 len : "+length);
         key %= length;
-
+        if(key==0) key += 1; // key==0 인 경우 보정
         Fortune fortune = fortuneRepository.findById(key).orElse(null);
 
         return fortune.getSentence();

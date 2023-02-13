@@ -1,11 +1,11 @@
 package com.ssafy.SmartMirror.service;
 
 import com.ssafy.SmartMirror.domain.Member;
+import com.ssafy.SmartMirror.domain.User;
+import com.ssafy.SmartMirror.dto.RequestMember;
 import com.ssafy.SmartMirror.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -28,4 +28,18 @@ public class MemberService {
         return result;
     }
 
+    public Member saveMember(RequestMember requestMember, User user, String memberKey) {
+
+        // 멤버 등록
+        Member member = Member.builder()
+                .memberKey(memberKey)
+                .nickname(requestMember.getNickname())
+                .birth(requestMember.getBirth())
+                .imgUrl(requestMember.getImgUrl())
+                .kidsMode(requestMember.isKidsMode())
+                .user(user)
+                .build();
+        Member newMember = memberRepository.save(member);
+        return newMember;
+    }
 }
