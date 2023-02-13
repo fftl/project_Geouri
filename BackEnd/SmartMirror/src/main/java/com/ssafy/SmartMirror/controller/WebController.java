@@ -5,13 +5,13 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,8 +35,10 @@ public class WebController {
     private NewsService newsService;
     private Utils utils;
     private SnapshotService snapshotService;
+    private EmailCheckService emailCheckService;
 
-    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils, SnapshotService snapshotService) {
+    @Autowired
+    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils, SnapshotService snapshotService, EmailCheckService emailCheckService) {
         this.userService = userService;
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
@@ -53,30 +55,143 @@ public class WebController {
         this.newsService = newsService;
         this.utils = utils;
         this.snapshotService = snapshotService;
+        this.emailCheckService = emailCheckService;
     }
 
     /* ***************************** User ***************************** */
 
-//    @PostMapping("/signup")
-//    public ResponseEntity registUser() { // 유저 등록
-//        // implememt here
-//        return null;
-//    }
-//
-//    @GetMapping("/user")
-//    public ResponseEntity addUser() { // 유저 읽기
-//        // implememt here
-//        return null;
-//    }
-//
-//    @PutMapping("/user")
-//    public ResponseEntity addUser() { // 유저 수정
-//        // implememt here
-//        return null;
-//    }
-//
+
+
+    //회원가입 시에 이메일을 입력하여 임시 이메일과 토큰을 DB에 저장합니다.
+    @PostMapping("/addEmailCheck")
+    public ResponseEntity addEmailCheck(@RequestParam String email) { // 이메일 등록
+        ResponseDefault responseDefault = null;
+        Long emailKey = emailCheckService.saveEmailCheck(email);
+
+        if(emailKey != null){
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(emailKey)
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("임시 이메일, 인증키 생성 실패")
+                    .data(null)
+                    .build();
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    //DB에 저장되어 있는 토큰과 유저가 입력한 토큰이 동일한지 확인합니다.
+    @PostMapping("/confirmEmailCheck")
+    public ResponseEntity comfirmEmailCheck(@RequestBody RequestConfirmEmail requestConfirmEmail) {
+        ResponseDefault responseDefault = null;
+        EmailCheck emailCheck = emailCheckService.confirmEmailCheck(requestConfirmEmail.getEmail());
+
+        if(emailCheck == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("올바르지 않은 Email 정보가 입력되었습니다.")
+                    .data(null)
+                    .build();
+        } else if(!emailCheck.getToken().equals(requestConfirmEmail.getToken())){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("인증번호 인증에 실패하였습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(true)
+                    .build();
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity addUser(@RequestBody RequestUser requestUser) { // 유저 등록
+        ResponseDefault responseDefault = null;
+
+        User saveUser = userService.saveUser(requestUser);
+
+        if(saveUser == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("유저 생성과정에서 문제가 발생하였습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(saveUser.getUserKey())
+                    .build();
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity addUser(@RequestParam String userKey) { // 유저 읽기
+        ResponseDefault responseDefault = null;
+        User user = userService.findByUserKey(userKey);
+
+        if(user == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("유저 키에 해당하는 유저를 찾을 수 없습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            ResponseUser responseUser = ResponseUser.builder()
+                    .userKey(user.getUserKey())
+                    .email(user.getEmail())
+                    .tel(user.getTel())
+                    .birth(user.getBirth())
+                    .build();
+
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(responseUser)
+                    .build();
+        }
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity updateUser(@RequestBody RequestUser requestUser) { // 유저 수정
+        ResponseDefault responseDefault = null;
+        User updateUser = userService.saveUser(requestUser);
+
+        if(updateUser == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("유저 키를 통해 찾을 수 있는 유저 정보가 존재하지 않습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(updateUser)
+                    .build();
+        }
+
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
 //    @DeleteMapping("/user")
-//    public ResponseEntity addUser() { // 유저 삭제
+//    public ResponseEntity deleteUser(@RequestParam String userKey) { // 유저 삭제
+//        ResponseDefault responseDefault = null;
+//        User getUser = userService.findByUserKey(userKey);
+//
 //        // implememt here
 //        return null;
 //    }
