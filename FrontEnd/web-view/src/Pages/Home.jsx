@@ -6,9 +6,9 @@ import { HomeHeader, Profiles } from "../Components/index";
 function Home() {
   return (
     <>
-      {/* <HomeHeader />
-      <Profiles /> */}
-      <ProfileEdit />
+      <HomeHeader />
+      {/* <Profiles /> */}
+      {/* <ProfileEdit /> */}
     </>
   );
 }

@@ -37,7 +37,7 @@ const ScheduleItem = ({ item }) => {
               <p>하루종일</p>
               :
               <p>
-                {amOrPm(start_hour)}시 {start_min}분 ~ {amOrPm(end_hour)}시 {`${end_min}분`}
+                {amOrPm(start_hour)}시 {start_min}분 ~ {amOrPm(end_hour)}시 {end_min}분
               </p>
 
             }
