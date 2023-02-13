@@ -19,13 +19,13 @@
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
-        const URL = ""; //모델이 들어있는 파일 이름
+        const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
         var brushing_on = 0, brushing_off = -5;
 
         async function init() {
-            const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
+            const modelURL = url + "model.json";
+            const metadataURL = url + "metadata.json";
             model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
             maxPredictions = model.getTotalClasses(); //클래스 이름 받아오기
 
@@ -64,16 +64,16 @@
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
             const date = new Date();
-            const milliseconds = date.getMilliseconds();
-
 
             for (let i = 0; i < maxPredictions; i++) {
                 // 추정한 자세와 정확도 나타내기 (소숫점두번째까지)
                 const cost = prediction[i].probability.toFixed(2);
                 const classPrediction = prediction[i].className + ": " + cost;
+                const milliseconds = date.getMilliseconds();
                 // 정해진 시간 주기 간격으로 값 출력하기
-                if (milliseconds % 50 == 0) {    //
-                    console.log(classPrediction)
+
+                if (milliseconds >= 900) {    //
+                    // console.log(classPrediction)
                     if (i == 0 && cost >= 0.6) // 양치 중임의 기준을 좀 더 올리는게 나은가?
                     {
                         brushing_on++;
@@ -82,6 +82,9 @@
                     {
                         brushing_off++;
                     }
+
+                    console.log("양치함:", brushing_on)
+                    console.log("양치안함:", brushing_off)
                 }
 
                 if (brushing_off == brushing_on)
@@ -89,11 +92,10 @@
                     ;
 
                 // 화면 출력
-                labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
-
+                // labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
             }
 
-            drawPose(pose); //웹캠 보이기
+            // drawPose(pose); //웹캠 보이기
         }
 
         function drawPose(pose) {
@@ -106,6 +108,10 @@
                     tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
                 }
             }
+        }
+
+        function stopWebCam() {
+            webcam.stop();
         }
     </script>
 </body>
