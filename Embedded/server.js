@@ -14,13 +14,12 @@ var quizString = "";
 var quizHint = "";
 var quizAnswer = "";
 
-var current_user = "fSBS-lCHb";     // 유저 코드
+var current_user = "";     // 유저 코드
 var serialNumber = "8DLL-44yh-x7vB-VuWK"
 
 // 유저 정보
 var user_data = {
   "data" : {
-    "nickname" : "영현",
   },
 };  
 var kidsMode = false;
@@ -53,8 +52,7 @@ wss.on('connection', function (ws, request) {
     if (command == "face_name") {
       console.log("face_name => ", obj.content);
       const face_name = obj.content;
-      //current_user = face_name
-      current_user = "nh3b-494F";
+      current_user = face_name
       person_appear();
     }
 
