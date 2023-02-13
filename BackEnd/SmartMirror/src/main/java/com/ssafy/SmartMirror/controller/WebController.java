@@ -67,6 +67,17 @@ public class WebController {
     @PostMapping("/addEmailCheck")
     public ResponseEntity addEmailCheck(@RequestParam String email) { // 이메일 등록
         ResponseDefault responseDefault = null;
+        User findUser = userService.findByEmail(email);
+
+        if(findUser != null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("이미 존재하는 이메일입니다.")
+                    .data(null)
+                    .build();
+
+            return new ResponseEntity(responseDefault, HttpStatus.OK);
+        }
         Long emailKey = emailCheckService.saveEmailCheck(email);
 
         if(emailKey != null){
@@ -118,8 +129,15 @@ public class WebController {
     @PostMapping("/signup")
     public ResponseEntity addUser(@RequestBody RequestUser requestUser) { // 유저 등록
         ResponseDefault responseDefault = null;
+        String newKey = utils.createRandomKey(8);
+        User getUser = userService.findByUserKey(newKey);
 
-        User saveUser = userService.saveUser(requestUser);
+        while(getUser != null){
+            newKey = utils.createRandomKey(8);
+            getUser = userService.findByUserKey(newKey);
+        }
+
+        User saveUser = userService.saveUser(requestUser, newKey);
 
         if(saveUser == null){
             responseDefault = ResponseDefault.builder()
@@ -139,7 +157,7 @@ public class WebController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity addUser(@RequestParam String userKey) { // 유저 읽기
+    public ResponseEntity getUser(@RequestParam String userKey) { // 유저 읽기
         ResponseDefault responseDefault = null;
         User user = userService.findByUserKey(userKey);
 
@@ -169,7 +187,7 @@ public class WebController {
     @PutMapping("/user")
     public ResponseEntity updateUser(@RequestBody RequestUser requestUser) { // 유저 수정
         ResponseDefault responseDefault = null;
-        User updateUser = userService.saveUser(requestUser);
+        User updateUser = userService.saveUser(requestUser, requestUser.getUserKey());
 
         if(updateUser == null){
             responseDefault = ResponseDefault.builder()
@@ -188,14 +206,29 @@ public class WebController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
-//    @DeleteMapping("/user")
-//    public ResponseEntity deleteUser(@RequestParam String userKey) { // 유저 삭제
-//        ResponseDefault responseDefault = null;
-//        User getUser = userService.findByUserKey(userKey);
-//
-//        // implememt here
-//        return null;
-//    }
+    @DeleteMapping("/user")
+    public ResponseEntity deleteUser(@RequestParam String userKey) { // 유저 삭제
+        ResponseDefault responseDefault = null;
+        User getUser = userService.findByUserKey(userKey);
+
+        if(getUser == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("유저 키를 통해 찾을 수 있는 유저 정보가 존재하지 않습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            userService.deleteUser(getUser);
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(null)
+                    .build();
+        }
+
+        // implememt here
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
 
     /**
      * 해당 유저가 가지고 있는 멤버 리스트 반환

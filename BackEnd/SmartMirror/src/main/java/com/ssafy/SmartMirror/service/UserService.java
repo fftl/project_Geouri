@@ -21,7 +21,27 @@ public class UserService {
         return user;
     }
 
-    public User saveUser(RequestUser requestUser){
-        return null;
+    //email을 이용해 유저의 정보를 조회합니다.
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
+
+    public User saveUser(RequestUser requestUser, String userKey){
+        User insertUser = User.builder()
+                .userKey(userKey)
+                .email(requestUser.getEmail())
+                .password(requestUser.getPassword())
+                .tel(requestUser.getTel())
+                .birth(requestUser.getBirth())
+                .build();
+
+        User saveUser = userRepository.save(insertUser);
+
+        return saveUser;
+    }
+
+    public void deleteUser(User user){
+        userRepository.delete(user);
     }
 }

@@ -19,18 +19,31 @@ public class EmailCheckService {
 
     //이메일과 난수를 통해 만들어낸 6자리의 인증키를 만들어냅니다.
     public Long saveEmailCheck(String email){
+
+        //인증을 여러번 받을 경우를 대비하여 이미 EmailCheck 테이블에 이메일이 존재할 경우
+        //해당 이메일에 덮어씌우는 방식을 사용했습니다.
+        EmailCheck insertEmailCheck = null;
+        EmailCheck getEmail = emailCheckRepository.findByEmail(email);
+
         String token = "";
         for (int i = 0; i < 6; i++) {
-            token += (int) Math.random() * 10;
+            token += (int)(Math.random()*10);
         }
 
-        EmailCheck emailCheck = EmailCheck.builder()
-                .email(email)
-                .token(token)
-                .build();
+        if(getEmail != null){
+            insertEmailCheck = EmailCheck.builder()
+                    .emailCheckKey(getEmail.getEmailCheckKey())
+                    .email(email)
+                    .token(token)
+                    .build();
+        } else {
+            insertEmailCheck = EmailCheck.builder()
+                    .email(email)
+                    .token(token)
+                    .build();
+        }
 
-        EmailCheck saveEmailCheck = emailCheckRepository.save(emailCheck);
-
+        EmailCheck saveEmailCheck = emailCheckRepository.save(insertEmailCheck);
         return saveEmailCheck.getEmailCheckKey();
     }
 
