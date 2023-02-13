@@ -1,54 +1,74 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import "./Schedule.css";
 import ScheduleItem from "./ScheduleItem";
 
 function Schedule () {
-    // const schedule = useState((state) => state?.mirror?.member?.calendar);
+    // 일일 일정 리스트
+    const schedule = useSelector((state) => state?.mirror?.member?.calender);
 
-    const schedule = [
-      {
-        'content': '미용실',
-        'date': '2023-02-12',
-        'time': '17:59',
-      },
-      {
-        'content': '네일아트',
-        'date': '2023-02-12',
-        'time': '18:00',
-      },
-      {
-        'content': '본앤브레드',
-        'date': '2023-02-12',
-        'time': '22:00',
-      },
-    ]
-    
+    // 현재 시간
     const date = new Date()
     const current_hour = date.getHours();
     const current_minute = date.getMinutes();
 
-    function is_urgent(hr, min) {
-      return (hr > current_hour || hr == current_hour && min >= current_minute)
-    }
+    // all-day, non-all-day 구분하기
+    const allDay = schedule.filter((x) => x.allDay === true); 
+    const nonAllDay = schedule.filter((x) => x.allDay === false); 
+    
+      // 현재 진행중일 경우 ( end_time 이 지금 이후일 경우 , 직전시작 그전까지 출력 )
+      
+      // if(is_urgent(hour, minute)){
+      //   return true;
+      // }
+      // return false;
+    
+    const new_schedule = (list) => {
+      const arr = [];
+      for (let i = 0; i < list.length; i++) {
+        if ( !list[i].allDay ) {
+          const start_hour = list[i].start.slice(11,13);
+          const start_min = list[i].start.slice(14);
+          // 미래의 업무
+          if (start_hour > current_hour || (start_hour === current_hour && start_min > current_minute)){
+            arr.push(list[i]);
+          }
+        }
+        if (arr.length > 1) {
+          return arr;
+        }
 
-    function filterByTime(item) {
-      const hour = item.time.slice(0,2);
-      const minute = item.time.slice(3);
-
-      if(is_urgent(hour, minute)){
-        return true;
       }
-      return false;
+      for (let i = 0; i < list.length; i++) {
+        // 현재 진행중인 업무 
+        const end_hour = list[i].end.slice(11,13);
+        const end_min = list[i].end.slice(14);
+        if (end_hour > current_hour || (end_hour === current_hour && end_min > current_minute)) {
+          arr.unshift(list[i]);
+        }
+        if (arr.length > 1) {
+          return arr;
+        }
+      }
+      list.map((x) => {
+        if(x.allDay === true){
+          arr.unshift(x);
+        }
+        if (arr.length > 1) {
+          return arr;
+        }
+      })
     }
-    const new_schedule = schedule.filter(filterByTime).slice(0,3);
+
+    const new_result = new_schedule(schedule)
 
     return (
       <div className="schedule-box">
         {
-          new_schedule? 
-            new_schedule.map((item) => {
+          new_result? 
+            new_result.map((item, idx) => {
               return (
-                <ScheduleItem item={item}/>
+                <ScheduleItem item={item} key={idx}/>
               )
             })
           :

@@ -1,0 +1,38 @@
+확실히 긍정적*	"score": 0.8, "magnitude": 3.0
+확실히 부정적*	"score": -0.6, "magnitude": 4.0
+중립적	"score": 0.1, "magnitude": 0.0
+혼합	"score": 0.0, "magnitude": 4.0
+
+Text: 알겠어
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+PS C:\Users\SSAFY\Desktop\TM_video> node nlp.js
+
+Text: 할게
+Sentiment score: 0.4000000059604645
+Sentiment magnitude: 0.4000000059604645
+PS C:\Users\SSAFY\Desktop\TM_video> node nlp.js
+
+Text: 응 할래
+Sentiment score: -0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 응
+Sentiment score: -0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 맛없었어
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 아니 맛없었어
+Sentiment score: -0.6000000238418579
+Sentiment magnitude: 0.6000000238418579
+
+Text: 배불러
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896
+
+Text: 맛있었고 배불러
+Sentiment score: 0.30000001192092896
+Sentiment magnitude: 0.30000001192092896

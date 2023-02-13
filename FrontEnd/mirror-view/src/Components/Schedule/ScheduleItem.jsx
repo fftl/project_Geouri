@@ -1,14 +1,24 @@
 import React from "react";
 
-const ScheduleItem = ({ item, index }) => {
-  const content = item?.content;
-  const hour = item?.time.slice(0, 2);
-  const minute = item?.time.slice(3);
+const ScheduleItem = ({ item }) => {
+  const content = item?.title;
+  const allDay = item?.allDay;
+  let start_hour;
+  let start_min;
+  let end_hour;
+  let end_min;
+  if ( !allDay ){
+    start_hour = item?.start.slice(11,13);
+    start_min = item?.start.slice(14);
+    end_hour = item?.end.slice(11,13);
+    end_min = item?.end.slice(14);
+  }
+        
   const amOrPm = (h) => {
-    if (h == 24) {
+    if (h === 24) {
       return `오전 0`;
     }
-    if (h == 12) {
+    if (h === 12) {
       return `오후 ${h}`;
     }
     if (h > 12) {
@@ -19,19 +29,18 @@ const ScheduleItem = ({ item, index }) => {
 
   return (
     <>
-      <div
-        className={
-          index === 0
-            ? "schedule-active schedule-grid-box"
-            : "schedule-grid-box"
-        }
-      >
+      <div className="schedule-grid-box">
         <div className="bar"></div>
         <div className="schedule-grid">
           <div className="schedule-time">
-            <p>
-              {amOrPm(hour)}시 {minute === "00" ? null : `${minute}분`}
-            </p>
+            { allDay?
+              <p>하루종일</p>
+              :
+              <p>
+                {amOrPm(start_hour)}시 {start_min}분 ~ {amOrPm(end_hour)}시 {end_min}분
+              </p>
+
+            }
           </div>
           <div className="schedule-content">
             <p>{content}</p>

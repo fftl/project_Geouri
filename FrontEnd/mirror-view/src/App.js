@@ -6,10 +6,13 @@ import Home from "./Pages/Home";
 import { Routes, Route } from "react-router-dom";
 import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
+<<<<<<< HEAD
 import Slideshow from "./Elements/Slideshow";
 import SparkleEffect from "./Elements/SparkleEffect";
 import Rule from "./Components/Kids/Rule";
 import KidsLevel from "./Components/Kids/KidsLevel";
+=======
+>>>>>>> 9157006f1d7abf2d3d92bfc32373b0c4a5d4b207
 
 function App() {
   // 어플리케이션의 최상위에서 websocket 실행
@@ -33,6 +36,10 @@ function App() {
         />
       </Routes>
     </React.Fragment>
+<<<<<<< HEAD
+=======
+    // <Rule />
+>>>>>>> 9157006f1d7abf2d3d92bfc32373b0c4a5d4b207
   );
 }
 

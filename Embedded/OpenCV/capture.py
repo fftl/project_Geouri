@@ -29,7 +29,7 @@ while True:
         sock.send(str(len(stringData)).ljust(16))
         sock.send(stringData)
         sock.close()
-
+        print(stringData)
         # 다시 이미지로 디코딩해서 
         decimg = cv2.imdecode(data, 1) # imdecode(buf, flags) : buf는 이미지 데이터, flags는 이미지를 읽어야하는 방식을 지정
         break

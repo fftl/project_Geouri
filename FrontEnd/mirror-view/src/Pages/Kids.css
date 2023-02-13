@@ -12,6 +12,15 @@
 }
 .text {
   font-family: "binggrae";
-  font-size: 8rem;
+  font-size: 5rem;
   font-weight: 400;
+}
+.alertMsg{
+  font-family: 'binggrae';
+  font-size: 5rem;
+  font-weight: 400;
+}
+.alert{
+  border-radius: 10%;
+  border: 1px dashed red;
 }
