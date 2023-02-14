@@ -24,8 +24,8 @@ function Kids(props) {
 
   const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
 
-  const [comp, setComp] = useState("video"); // component 설정
-  const [video, setVideo] = useState("wash_hands"); // 비디오 url
+  const [comp, setComp] = useState(""); // component 설정
+  const [video, setVideo] = useState(""); // 비디오 url
 
   useEffect(() => {
     if (mirror_action === "first_appear") {
