@@ -29,7 +29,6 @@ function App() {
         />
       </Routes>
     </React.Fragment>
-    // <Rule />
   );
 }
 
