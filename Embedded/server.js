@@ -61,11 +61,9 @@ wss.on('connection', function (ws, request) {
     const command = obj.cmd;
     console.log("@@INCOMING COMMAND -> " , command);
 
-    if (command == "face_name") {
-      console.log("face_name => ", obj.content);
-      const face_name = obj.content;
-      current_user = face_name
-      person_appear();
+    if (command == "sensor_activate") {
+      if(personFrontOfMirror == true) return;
+      sensor_activate();
     }
 
     else if (command === "person_leave") {
@@ -249,7 +247,7 @@ function currentStatusCheck(voicedata){
   const voice_input = voicedata.cmd;
 
   // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
-  if(currentStatus!=4){
+  if(currentStatus!=4 && kidsMode == true){
     if (voice_input.includes("answer")) {
       var reaction = 1;
 
@@ -272,21 +270,28 @@ function currentStatusCheck(voicedata){
         return;
     }
 
+
+
+    
+    if(voice_input == "mirrorcall"){
+      mirrorCall();
+      return;
+    }
+
     if (waitingOrders == 1){
       if(voice_input == "whattime"){
         whatTime();
       }
+      else if (voice_input === "quiz" && kidsMode == true) {
+        quiz(""); 
+      }
+      else if(voice_input === "easteregg" && kidsMode == true){
+        easteregg();
+      }
       return;
-    } 
-
-
-
-    if(voice_input == "mirrorcall"){
-      mirrorCall();
     }
 
-
-    else if (voice_input.includes("video")){
+     if (voice_input.includes("video")){
       const data = {
         "cmd": voice_input,
         "content": voice_input,
@@ -314,7 +319,7 @@ function currentStatusCheck(voicedata){
         if(err){
           console.log("error -> ", err);
         } else{
-          console.log(options)
+          // console.log(options)
           console.log(body)
 
 
@@ -373,15 +378,6 @@ function currentStatusCheck(voicedata){
       });
     }
 
-
-    else if (voice_input === "quiz") {
-      quiz(""); 
-    }
-
-    else if(voice_input === "easteregg"){
-      easteregg();
-    }
-
   }// end status 4
 }
 
@@ -410,6 +406,45 @@ function afterStatusCheck(){
   }
 
 }
+
+
+// 초음파 센서가 움직임을 감지 했을때
+function sensor_activate(){
+  personFrontOfMirror = true;
+}
+
+
+function mirrorCall(){
+  console.log("EVENT : mirror called");
+
+  // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
+  if(personFrontOfMirror == true){
+
+    var options = {
+      mode: 'text',
+      pythonPath: process.env.PYTHON_PATH,
+      pythonOptions: ['-u']
+    };
+  
+    PythonShell.PythonShell.run('face_recog_module.py', options, function (err, results) {
+      if (err) throw err;
+      // console.log('results: %j', results);
+  
+      console.log("face_name => ", results);
+      const face_name = results[0];
+      current_user = face_name
+      personFrontOfMirror = true;
+      person_appear();
+    });
+  }
+  else{ // 테스트
+    TTS("네 말씀하세요?");
+    waitingOrders = 1;
+  }
+}
+
+
+
 
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
@@ -449,7 +484,7 @@ function person_appear(){
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
 
-      if(user_data.firstVisit === null){
+      if(user_data.lastVisit === null){
         firstAppear();
         setTimeout(() => {
         }, 15000);
@@ -465,7 +500,12 @@ function person_leave(){
   prevKey = 0;
   currentStatus = 0;
   
-  current_user;
+  current_user = "";
+  user_data = {
+    "data" : {
+    },
+  };  
+
   kidsMode = false;
   personFrontOfMirror = false;
 
@@ -690,15 +730,6 @@ function easteregg(){
   TTS(str);
 
 }
-
-
-function mirrorCall(){
-  console.log("EVENT : mirror called");
-  TTS("네 말씀하세요?");
-  waitingOrders = 1;
-}
-
-
 
 function whatTime(){
   var today = new Date();

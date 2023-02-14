@@ -1,3 +1,12 @@
+'''
+    (py3) $ pip install opencv-python
+    (py3) $ pip install opencv-contrib-python
+    (py3) $ pip install cmake (dlib설치 오류 해결)
+    (py3) $ pip install dlib
+    (py3) $ pip install face_recognition
+    (py3) $ pip install flask
+'''
+
 import face_recognition
 import cv2
 import os
@@ -71,7 +80,7 @@ class FaceRecog():
         return frame
 
 
-if __name__ == '__main__':
+def detected_face():
     face_recog = FaceRecog()
     while not face_recog.found_face:
         face_recog.get_frame()
@@ -79,4 +88,4 @@ if __name__ == '__main__':
 
     face_recog.destroycamera()
     cv2.destroyAllWindows()
-    print(face_recog.face_name)
+    return face_recog.face_name

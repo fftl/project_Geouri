@@ -2,6 +2,18 @@ from websocket import create_connection
 import serial
 import time
 import json
+import face_recog_module
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+ARDUINO_PORT = os.getenv('ARDUINO_PORT')
+
+class FacerecogModule:
+    def recog(self):
+        output = face_recog_module.detected_face()
+        return output
+
 
 def sendInfo(msg):
 
@@ -26,7 +38,7 @@ def main():
     detect_cnt = 0
 
     py_serial = serial.Serial(
-        port='COM5',
+        port=ARDUINO_PORT,
         baudrate=9600,
     )
 
@@ -42,7 +54,9 @@ def main():
 
                     if detect_cnt > TIME_UNTIL_RECOG:
                         # 얼굴 인식 후 전송
-                        sendInfo("4")
+                        facemodule = FacerecogModule()
+                        face_name = facemodule.recog()
+                        sendInfo(face_name)
 
                         person_detected = not person_detected
                         detect_cnt = 0
