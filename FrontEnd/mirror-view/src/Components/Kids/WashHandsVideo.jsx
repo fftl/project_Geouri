@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ReactPlayer from "react-player";
 import "./WashHandsVideo.css";
 

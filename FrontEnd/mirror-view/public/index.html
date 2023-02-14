@@ -103,7 +103,10 @@
               // console.log("양치함:", brushing_on)
               // console.log("양치안함:", brushing_off)
               if (brushing_off >= 5) {
-                console.log('이 잘 닦고 있니? ');
+                const msg = { cmd: "alert", content: "" };
+                const jsonMsg = JSON.stringify(msg);
+                ws.send(jsonMsg);
+                
                 brushing_off = 0;
                 brushing_on = 0;
               }

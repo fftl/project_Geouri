@@ -1,0 +1,1 @@
+{"tfjsVersion":"1.3.1","tmVersion":"0.8.6","packageVersion":"0.8.6","packageName":"@teachablemachine/pose","timeStamp":"2023-02-09T01:53:45.735Z","userMetadata":{},"modelName":"my-pose-model","labels":["양치중","양치안함"],"modelSettings":{"posenet":{"architecture":"MobileNetV1","outputStride":16,"inputResolution":257,"multiplier":0.75}}}
