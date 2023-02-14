@@ -255,10 +255,9 @@ public class MirrorController {
                     exp += 5; // 경험치 추가
                     success = true;
                 }
-//                if(count >= 3) { // 양치 3번 달성
-//                    System.out.println("문자 발송!!!!!!!!");
-//                    utils.sendSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
-//                }
+                if(count == 3) { // 양치 3번 달성
+                    utils.sendSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                }
                 break;
             case "hand_washing": // 손씻기
                 // 일단 손씻기 기록 추가
