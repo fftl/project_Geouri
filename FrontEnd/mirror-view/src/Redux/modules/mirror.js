@@ -5,8 +5,13 @@ const mirrorSlice = createSlice({
   initialState: {
     member: {
       memberKey: "fSBS-lCHb",
+<<<<<<< HEAD
       nickname: "쏘영이",
       birth: "1998-09-11",
+=======
+      nickname: "짱윤이",
+      birth: "1997-09-11",
+>>>>>>> 3bf003754c8cd0a3c6309b6241af60b93c83696f
       kidsMode: true,
       widget: {
         news: true,
@@ -40,8 +45,11 @@ const mirrorSlice = createSlice({
     content: "",
     action: "",
     alertMsg: "",
+<<<<<<< HEAD
     level: "",
     point: "",
+=======
+>>>>>>> 3bf003754c8cd0a3c6309b6241af60b93c83696f
   },
 
   reducers: {
@@ -77,10 +85,13 @@ const mirrorSlice = createSlice({
       state.action = "";
       state.image = "";
     },
+<<<<<<< HEAD
     getLev(state, action) {
       state.level = action.payload.lv;
       state.point = action.payload.exp;
     },
+=======
+>>>>>>> 3bf003754c8cd0a3c6309b6241af60b93c83696f
   },
 });
 
