@@ -1,12 +1,13 @@
 import React from "react";
 import "./Login.css";
+import logo from '../../assets/logo.png';
 
 // 로고가 들어갈 부분
 function LoginHeader(){
     return (
-        <>
-          <h1>해피해피하조</h1>
-        </>
+        <div className="login-header">
+          <img id="logo" src={logo}></img>
+        </div>
     )
 }
 

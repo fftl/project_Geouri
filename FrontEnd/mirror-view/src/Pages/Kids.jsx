@@ -9,26 +9,20 @@ import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
 import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
-<<<<<<< HEAD
 import Rule from "../Components/Kids/Rule";
-=======
 import Image from "../Elements/Image";
->>>>>>> 9157006f1d7abf2d3d92bfc32373b0c4a5d4b207
 
 function Kids(props) {
   const { webSocket } = props;
-  const dispatch = useDispatch();
 
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
-  const image = useSelector((state) => state?.mirror?.image);
-  // const image = 'https://firebasestorage.googleapis.com/v0/b/ddok-mirror.appspot.com/o/20230209173343_nh3b-494F.jpg?alt=media&token=0a02964e-458b-417b-89ba-606744a47661';
-
   const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
+  const image = useSelector((state) => state?.mirror?.image);
 
-  const [comp, setComp] = useState("image"); // component 설정
+  const [comp, setComp] = useState(""); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
 
   useEffect(() => {
@@ -39,15 +33,19 @@ function Kids(props) {
       setComp("greeting");
     }
     if (mirror_action === "wash_hands") {
-      setComp("video");
       setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
-      setComp("video");
       setVideo("brush_teeth");
     }
     if (mirror_action === "message") {
       setComp("message");
+    }
+    if (mirror_action === "alert") {
+      setComp("alert");
+    }
+    if (mirror_action === "photo") {
+      setComp("photo");
     }
     if (mirror_action === "default") {
       setComp("kidsDefault");
@@ -69,24 +67,20 @@ function Kids(props) {
       <div className="main-box">
         {
           {
-<<<<<<< HEAD
             first_appear: (
               <>
                 <Rule setComp={setComp} />
               </>
             ),
-=======
-            // 시계만 있는 ('/')과 같은 페이지 
+            // 시계만 있는 ('/')과 같은 페이지
             none: (
               <>
                 <div className="text-div">
-                  <p className="text">
-                  </p>
+                  <p className="text"></p>
                 </div>
               </>
             ),
-            // 메시지 창에서 인사말을 보여줌 
->>>>>>> 9157006f1d7abf2d3d92bfc32373b0c4a5d4b207
+            // 메시지 창에서 인사말을 보여줌
             greeting: (
               <>
                 <div className="text-div">
@@ -101,12 +95,15 @@ function Kids(props) {
             alertMsg: (
               <>
                 <div className="text-div alert">
-                  <p className="alertMsg">{message}</p>
+                  <p className="alertMsg">
+                    {checkKorean(name)}, {alertMsg}
+                  </p>
+                  <div className="highlight"></div>
                 </div>
               </>
             ),
 
-            // 메시지 창에서 메시지를 보여줌 
+            // 메시지 창에서 메시지를 보여줌
             message: (
               <>
                 <div className="text-div">
@@ -115,13 +112,13 @@ function Kids(props) {
                 <Character />
               </>
             ),
-            // 카메라 촬영 모드 
+            // 카메라 촬영 모드
             camera: (
               <>
                 <Timer setComp={setComp} />
               </>
             ),
-            // 기본 화면 
+            // 기본 화면
             kidsDefault: (
               <>
                 <KidsDefault />
@@ -131,7 +128,7 @@ function Kids(props) {
         }
       </div>
       {/* 비디오 값이 있으면 비디오 재생 */}
-      { video === "brush_teeth" && (
+      {video === "brush_teeth" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
@@ -142,7 +139,7 @@ function Kids(props) {
           />
         </div>
       )}
-      { video === "wash_hands" && (
+      {video === "wash_hands" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
@@ -154,9 +151,9 @@ function Kids(props) {
         </div>
       )}
       {/* 컴포넌트 이미지이고, 이미지 값있으면 이미지 출력 */}
-      { comp === 'image' && image && (
+      {comp === "image" && image && (
         <div className="image-box">
-          <Image setComp={setComp} src={image}/>
+          <Image setComp={setComp} src={image} />
         </div>
       )}
     </>

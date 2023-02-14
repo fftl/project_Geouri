@@ -37,12 +37,15 @@
     <script type="text/javascript">
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
+        const ws = new WebSocket("ws://localhost:9998");
 
         const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
-        var brushing_on = 0, brushing_off = -5;
-
+        let brushing_on = 0;
+        let brushing_off = -5;
+        
         async function init() {
+
           const modelURL = url + "model.json";
           const metadataURL = url + "metadata.json";
           model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
@@ -58,6 +61,10 @@
 
           window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
+          const timer = setTimeout(() => {
+            cameraOff(webcam);
+            ws.close();
+          }, 15000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -90,7 +97,6 @@
             // 정해진 시간 주기 간격으로 값 출력하기
 
             if (milliseconds >= 900) {    //
-              // console.log(classPrediction)
               if (i == 0 && cost >= 0.6) // 양치 중임의 기준을 좀 더 올리는게 나은가?
               {
                 brushing_on++;
@@ -99,42 +105,31 @@
               {
                 brushing_off++;
               }
-
-              // console.log("양치함:", brushing_on)
-              // console.log("양치안함:", brushing_off)
-              if (brushing_off >= 5) {
-                console.log('이 잘 닦고 있니? ');
-                brushing_off = 0;
-                brushing_on = 0;
-              }
-
             }
-            
-            // if (brushing_off == brushing_on)
-              // {name} 양치 잘 하고 있지?? 깨끗하게 양치하니 좋지?!라고 독려하기
-              // ;
-
-            // 화면 출력
-            // labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
           }
-
+          if (brushing_off >= 10) {
+            const msg = { cmd: "alert", content: "" };
+            const jsonMsg = JSON.stringify(msg);
+            ws.send(jsonMsg);
+            brushing_off = 0;
+            brushing_on = 0;
+          }
           // drawPose(pose); //웹캠 보이기
         }
 
-        function drawPose(pose) {
-          if (webcam.canvas) {
-            ctx.drawImage(webcam.canvas, 0, 0);
-            // draw the keypoints and skeleton
-            if (pose) {
-              const minPartConfidence = 0.5;
-              tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-              tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
-            }
-          }
-        }
-
-        function stopWebCam(){
-          webcam.stop();
+        // function drawPose(pose) {
+        //   if (webcam.canvas) {
+        //     ctx.drawImage(webcam.canvas, 0, 0);
+        //     // draw the keypoints and skeleton
+        //     if (pose) {
+        //       const minPartConfidence = 0.5;
+        //       tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+        //       tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+        //     }
+        //   }
+        // }
+        function cameraOff(wc){
+          wc.stop();
         }
     </script>
     <!--

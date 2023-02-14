@@ -6,7 +6,7 @@ import Home from "./Pages/Home";
 import { Routes, Route } from "react-router-dom";
 import Kids from "./Pages/Kids";
 import GeneralView from "./Pages/GeneralView";
-
+import { useSelector } from "react-redux";
 function App() {
   // 어플리케이션의 최상위에서 websocket 실행
   const webSocket = new WebSocket("ws://localhost:9998");
