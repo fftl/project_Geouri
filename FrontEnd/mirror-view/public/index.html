@@ -38,14 +38,13 @@
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
-        const ws = new WebSocket("ws://localhost:9998");
-
-
         const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
         var brushing_on = 0, brushing_off = -5;
-
+        
         async function init() {
+          const ws = new WebSocket("ws://localhost:9998");
+
           const modelURL = url + "model.json";
           const metadataURL = url + "metadata.json";
           model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
@@ -61,6 +60,9 @@
 
           window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
+          const timer = setInterval(() => {
+            cameraOff(webcam);
+          }, 10000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -103,24 +105,14 @@
                 brushing_off++;
               }
 
-              // console.log("양치함:", brushing_on)
-              // console.log("양치안함:", brushing_off)
-              if (brushing_off >= 5) {
+              if (brushing_off >= 10) {
                 const msg = { cmd: "alert", content: "" };
                 const jsonMsg = JSON.stringify(msg);
                 ws.send(jsonMsg);
                 brushing_off = 0;
                 brushing_on = 0;
               }
-
             }
-            
-            // if (brushing_off == brushing_on)
-              // {name} 양치 잘 하고 있지?? 깨끗하게 양치하니 좋지?!라고 독려하기
-              // ;
-
-            // 화면 출력
-            // labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
           }
 
           // drawPose(pose); //웹캠 보이기
@@ -137,9 +129,8 @@
             }
           }
         }
-
-        function stopWebCam(){
-          webcam.stop();
+        function cameraOff(wc){
+          wc.stop();
         }
     </script>
     <!--
