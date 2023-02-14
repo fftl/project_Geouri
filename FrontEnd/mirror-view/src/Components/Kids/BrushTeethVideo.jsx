@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import Slideshow from "../../Elements/Slideshow";
 import "./BrushTeethVideo.css";
-import { levelApi } from "../../Redux/modules/api";
 
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
@@ -22,17 +21,7 @@ const BrushTeethVideo = (props) => {
   const videoOff = () => {
     setComp("camera");
     setVideo("");
-    window.stopWebCam();
     webSocket.send(jsonMsg);
-    const serialNumber = "8DLL-44yh-x7vB-VuWK";
-    const memberKey = "fSBS-lCHb";
-    const mission = "brushing";
-    const requestBody = {
-      serialNumber: serialNumber,
-      memberKey: memberKey,
-      mission: mission,
-    };
-    levelApi.getLevel(requestBody).then((res) => console.log(res));
   };
 
   const [teethver, setTeethver] = useState(false);
@@ -48,10 +37,8 @@ const BrushTeethVideo = (props) => {
           url={process.env.PUBLIC_URL + "/videos/brushteeth.mp4"}
           width="1000px"
           height="700px"
+          autoPlay={true}
           playing={true}
-          muted={true}
-          controls={true}
-          loop={false}
           id="player"
           onEnded={videoOff}
         />
