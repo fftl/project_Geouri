@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import Slideshow from "../../Elements/Slideshow";
 import "./BrushTeethVideo.css";
@@ -10,18 +11,27 @@ const BrushTeethVideo = (props) => {
     const timer = setTimeout(() => {
       window.init();
     }, 15000);
-    return (() => {
-      clearInterval(timer); 
-    });
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   const msg = { cmd: "brush_teeth_finish", content: "" };
   const jsonMsg = JSON.stringify(msg);
-
+  const member_info = useSelector((state) => state?.mirror?.member);
   const videoOff = () => {
     setComp("camera");
     setVideo("");
     webSocket.send(jsonMsg);
+    const serialNumber = "8DLL-44yh-x7vB-VuWK";
+    const memberKey = member_info?.memberKey;
+    const mission = "brushing";
+    const requestBody = {
+      serialNumber: serialNumber,
+      memberKey: memberKey,
+      mission: mission,
+    };
+    levelApi.getLevel(requestBody).then((res) => console.log(res));
   };
 
   const [teethver, setTeethver] = useState(false);
