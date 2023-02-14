@@ -37,6 +37,7 @@
     <script type="text/javascript">
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
+        const ws = new WebSocket("ws://localhost:9998");
 
         const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
@@ -44,7 +45,6 @@
         let brushing_off = -5;
         
         async function init() {
-          const ws = new WebSocket("ws://localhost:9998");
 
           const modelURL = url + "model.json";
           const metadataURL = url + "metadata.json";
