@@ -20,12 +20,10 @@ const Socket = (props) => {
       // store에 member정보를 dispatch 하여 넣기
       if (msg.content.kidsMode === true) {
         // kids mode on일 때 
-        // dispatch(mirrorActions.getMember(msg.content));
         navigate('/kids');
       } 
       else if (msg.content.kidsMode === false){
         // kids mode off일 때
-        // dispatch(mirrorActions.getMember(msg.content));
         navigate('/general');
       }
       dispatch(mirrorActions.getMember(msg.content));
@@ -36,6 +34,7 @@ const Socket = (props) => {
       navigate('/');
     }
     else if (msg.cmd === 'message') {
+      console.log(msg);
       // 거울 사용 종료시 
       dispatch(mirrorActions.getMessage(msg));
     }
