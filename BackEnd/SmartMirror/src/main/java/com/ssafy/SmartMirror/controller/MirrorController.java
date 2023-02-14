@@ -6,8 +6,10 @@ import com.ssafy.SmartMirror.config.Utils;
 import com.ssafy.SmartMirror.domain.*;
 import com.ssafy.SmartMirror.dto.*;
 import com.ssafy.SmartMirror.service.*;
+import com.ssafy.SmartMirror.talk.BaseController;
 import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -252,6 +254,12 @@ public class MirrorController {
                     exp += 5; // 경험치 추가
                     success = true;
                 }
+                if(count >= 3) {
+                    utils.sendTalk();
+                }
+
+
+
                 break;
             case "hand_washing": // 손씻기
                 // 일단 손씻기 기록 추가
@@ -300,6 +308,7 @@ public class MirrorController {
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
+
 
 
     /* ***************************** SnapShot ***************************** */

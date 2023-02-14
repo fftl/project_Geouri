@@ -14,8 +14,9 @@ public class BaseController {
     @Autowired
     CustomMessageService customMessageService;
 
-    @GetMapping("/")
+    @GetMapping("/talk")
     public String serviceStart(String code) throws JSONException {
+        System.out.println("여기여기");
         if(authService.getKakaoAuthToken(code)) {
             customMessageService.sendMyMessage();
             return "메시지 전송 성공";

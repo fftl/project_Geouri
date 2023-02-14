@@ -7,6 +7,7 @@ import com.ssafy.SmartMirror.dto.ResponseCalendar;
 import com.ssafy.SmartMirror.service.MemberService;
 import com.ssafy.SmartMirror.service.MirrorService;
 import com.ssafy.SmartMirror.service.UserService;
+import com.ssafy.SmartMirror.talk.HttpCallService;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -17,6 +18,8 @@ import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Summary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -44,6 +47,7 @@ public class Utils {
     private MemberService memberService;
     private MirrorService mirrorService;
     private UserService userService;
+    private HttpCallService httpCallService = new HttpCallService();
 
     @Autowired
     public Utils(MemberService memberService, MirrorService mirrorService, UserService userService) {
@@ -237,5 +241,12 @@ public class Utils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime res = LocalDateTime.parse(datetime, formatter);
         return res;
+    }
+
+    public void sendTalk() {
+        final String MSG_SEND_SERVICE_URL = "https://kauth.kakao.com/oauth/authorize?client_id=3c68530b7dfd1a4e91757d222401993f&redirect_uri=http://localhost:8080/talk&response_type=code&scope=talk_message";
+        System.out.println("dkdsksdksdk");
+        ResponseEntity<String> response = httpCallService.httpRequest(MSG_SEND_SERVICE_URL, HttpMethod.GET, null);
+
     }
 }

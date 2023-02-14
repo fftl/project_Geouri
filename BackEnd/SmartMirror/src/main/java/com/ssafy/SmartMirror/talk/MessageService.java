@@ -72,8 +72,6 @@ public class MessageService extends HttpCallService{
     }
 
     public boolean sendMessage(String accessToken, DefaultMessageDto msgDto) throws JSONException {
-
-
         JSONObject templateObj = new JSONObject();
         templateObj.put("object_type", msgDto.getObjType());
 
@@ -84,11 +82,9 @@ public class MessageService extends HttpCallService{
         linkObj.put("mobile_web_url", msgDto.getMobileUrl());
         templateObj.put("link", linkObj);
 
-//        templateObj.put("button_title", msgDto.getBtnTitle());
-
         JSONArray buttons = new JSONArray();
         JSONObject button = new JSONObject();
-        button.put("title","사진첩!!보기");
+        button.put("title","사진첩 보기");
         JSONObject link = new JSONObject();
         link.put("web_url","http://www.daum.net");
         link.put("mobile_web_url","http://www.daum.net");
