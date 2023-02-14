@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
-import Slideshow from "../../Elements/Slideshow";
 import "./BrushTeethVideo.css";
 import { levelApi } from "../../Redux/modules/api";
 
@@ -54,7 +53,15 @@ const BrushTeethVideo = (props) => {
           onEnded={videoOff}
         />
       ) : (
-        <Slideshow slideShowOff={videoOff} />
+        <ReactPlayer
+          url={process.env.PUBLIC_URL + "/videos/brushguide.mp4"}
+          width="1000px"
+          height="700px"
+          autoPlay={true}
+          playing={true}
+          id="player"
+          onEnded={videoOff}
+        />
       )}
     </div>
   );
