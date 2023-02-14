@@ -83,13 +83,15 @@
                         brushing_off++;
                     }
 
+                    if (brushing_off >= brushing_on) {   // {name} 양치 잘 하고 있지?? 깨끗하게 양치하니 좋지?!라고 독려하기
+                        console.log("양치 잘 하고 있지?");
+                        brushing_off = 0; brushing_on = 0;
+                    }
+                    console.log("양치 잘 하고 있지?");
                     console.log("양치함:", brushing_on)
                     console.log("양치안함:", brushing_off)
                 }
 
-                if (brushing_off == brushing_on)
-                    // {name} 양치 잘 하고 있지?? 깨끗하게 양치하니 좋지?!라고 독려하기
-                    ;
 
                 // 화면 출력
                 // labelContainer.childNodes[i].innerHTML = brushing_on + ", " + brushing_off;
