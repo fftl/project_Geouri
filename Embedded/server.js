@@ -51,7 +51,7 @@ wss.on('connection', function (ws, request) {
   console.log("connected", request.socket.remoteAddress);
 
   //소켓 접속이 된 클라이언트한테 메세지를 수신했을때 실행됩니다
-  ws.on('message', function (msg) {
+  ws.on('message', async function (msg) {
     // console.log(`수신함 : ${msg}` );
 
     // 받아온 메세지 파싱 후, 그거에 맞는 로직 실행
@@ -73,8 +73,11 @@ wss.on('connection', function (ws, request) {
 
 
     else if (command === "voice_input") {
-      const voice_input = STT(obj.content);
+      const voice_input = await STT(obj.content);
+
       console.log("voice command : ", voice_input)
+      
+
       
       currentStatusCheck(voice_input);
     }
@@ -118,114 +121,62 @@ wss.on('connection', function (ws, request) {
   });
 });
 
-// // 아이 대답을 받아서 감정 분석하기(긍/부정)
-// async function nlp(text) {
+// 아이 대답을 받아서 감정 분석하기(긍/부정)
+async function nlp(text) {
+
+  /**
+   * TODO(developer): Uncomment the following line to run this code.
+   */
+  // const text = 'Your text to analyze, e.g. Hello, world!';
+
+  // Prepares a document, representing the provided text
+  const document = {
+    content: text,
+    type: 'PLAIN_TEXT',
+  };
+
+  // Detects the sentiment of the document
+  const [result] = await client.analyzeSentiment({document});
+
+  const sentiment = result.documentSentiment;
+  // console.log('Document sentiment:');
+  // console.log(`  Score: ${sentiment.score}`);
+  // console.log(`  Magnitude: ${sentiment.magnitude}`);
+
+  const sentences = result.sentences;
+  // sentences.forEach(sentence => {
+  //   console.log(`Sentence: ${sentence.text.content}`);
+  //   console.log(`  Score: ${sentence.sentiment.score}`);
+  //   console.log(`  Magnitude: ${sentence.sentiment.magnitude}`);
 
 
 
-//   const document = {
-//       content: text,
-//       type: 'PLAIN_TEXT',
-//   };
 
-//   // Detects the sentiment of the text
-//   const [result] = await client.analyzeSentiment({ document: document });
-//   const sentiment = result.documentSentiment;
-
-//   // 긍정:1 ,부정/중립:0
-//   if (sentiment.score >= 0.29)
-//       return 1;
-//   else
-//       return 0;
-
-//   // console.log(`Text: ${text}`);
-//   // console.log(`Sentiment score: ${sentiment.score}`);
-//   // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-// }
-
-// // 문장 내에서 명사 찾기
-// async function find_entities(text) {
-//   // Creates a client
-  
-//   const client = new language.LanguageServiceClient();
-
-//   // Prepares a document, representing the provided text
-//   const document = {
-//       content: text,
-//       type: 'PLAIN_TEXT',
-//   };
-
-//   // Detects entities in the document
-//   const [result] = await client.analyzeEntities({ document });
-//   const entities = result.entities;
-//   console.log("find entity : " , entities);
-//   // 밥 관련 멘트인 경우는 긍/부정을 판별해야하니까 0으로 return
-//   entities.forEach(entity => {
-//       if (entity.name.includes("밥") || entity.name.includes("맛"))
-//           return '0';
-      
-//   });
-
-//   return text;
-// }
-
-// function STT(voice_input) {
-
-//   var arr_str = [
-//       ["수수께끼", "문제", "퀴즈"],
-//       ["세상에서 누가"],
-//       ["시작", "재생", "진행"],
-//       ["종료", "그만", "정지", "중지"],
-//       ["다음", "넥스트"],
-//       ["이전"],
-//       ["아니", "싫어", "맛없", "별로"],
-//       ["응", "좋아", "그래", "알겠어"],
-//       ["몰라", "모르겠어", "글쎄", "힌트", "알려줘"],
-//       ["사진", "촬영", "찰칵"],
-//       ["양치", "치카", "칫솔질"],
-//       ["손 씻기", "손 씻을래", "손 닦"]
-//   ]
-
-//   var arr_voicecmd = [
-//       "quiz",
-//       "test",
-//       "video_start",
-//       "video_stop",
-//       "video_next",
-//       "video_prev",
-//       "answer_negative",
-//       "answer_positive",
-//       "answer_neutral",
-//       "take_picture",
-//       "brush_teeth",
-//       "wash_hands"
-//   ];
-
-//   for (var i = 0; i < arr_str.length; i++) {
-
-//       for (var j = 0; j < arr_str[i].length; j++) {
-//           if (voice_input.includes(arr_str[i][j]))
-//               return arr_voicecmd[i];
-//       }
-//   }
-
-//   // 퀴즈의 답을 받는 경우
-//   const entity = find_entities(voice_input);
-
-//   // 퀴즈에서 판단되지 않고, if문에 해당되지 않는 대답은 nlp로
-//   if (entity == 0) {
-//       const value = nlp(voice_input);
-//       if (value == 0) //부정
-//           return "answer_negative";
-//       else if (value == 1) // 긍정
-//           return "answer_positive"
-//   }
-
-//   return voice_input;
-// }
+    
+  //   // 긍정:1 ,부정/중립:0
+  //   if (sentiment.score >= 0.29)
+  //       return "answer_positive";
+  //   else if( sentiment.score <= -0.1)
+  //       return "answer_negative";
+  //   else return 0;
+  // });
+  if (sentiment.score >= 0.29)
+    return "answer_positive";
+  else if( sentiment.score <= -0.1)
+    return "answer_negative";
+  else return 0;
+}
 
 
-function STT(voice_input){
+
+
+async function STT(voice_input){
+
+  var voicedata = {
+    "cmd" : null,
+    "text" : voice_input,
+  }
+
 
   const arr_str = [
     ["거울아"],
@@ -236,7 +187,7 @@ function STT(voice_input){
     ["다음","넥스트"], 
     ["이전"],
     ["아니","싫어"],
-    ["응","좋아","그래"],
+    ["응","좋아","그래", "네"],
     ["몰라","모르겠어","글쎄","힌트"],
     ["사진","촬영"],
     ["양치","치카","칫솔질"],
@@ -262,12 +213,16 @@ function STT(voice_input){
 
   for(var i = 0 ; i < arr_str.length; i++){
     for(var j = 0 ; j < arr_str[i].length; j++){
-      if(voice_input.includes(arr_str[i][j]))
-      return arr_voicecmd[i];
+      if(voice_input.includes(arr_str[i][j])){
+        voicedata.cmd = arr_voicecmd[i];
+        return voicedata;
+      }
+      
     }
   }
-
-  return voice_input;
+  var output = await nlp(voice_input);
+  voicedata.cmd = output;
+  return voicedata;
 }
 
 
@@ -296,8 +251,9 @@ function currentStatusCheck(voice_input){
 
       if (voice_input == "answer_positive")
         reaction = 1;
-      else if (voice_input == "answer_negative")
+      else if (voice_input == "answer_negative" || voice_input == "answer_neutral")
         reaction = 0;
+      
 
       answerAndReply(reaction);    
     }
@@ -456,6 +412,7 @@ function person_appear(){
       console.log("error -> ", err);
     } else{
       user_data = body.data;
+      console.log("userdata: " , user_data);
       if(user_data.kidsMode == true){
         kidsMode = true;
       }
