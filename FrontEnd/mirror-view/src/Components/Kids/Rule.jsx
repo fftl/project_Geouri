@@ -4,20 +4,15 @@ import Character from "./Character";
 import KidsLevel from "./KidsLevel";
 import "./Rule.css";
 
-const Rule = () => {
-  // const [count, setCount] = useState();
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     if (count > 0) {
-  //       setCount((prev) => prev - 1);
-  //     }
-  //   }, 1000);
-  //   if (count === 0) {
-  //   }
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [count]);
+const Rule = (props) => {
+  const { setComp, comp } = props;
+  const [count, setCount] = useState(15);
+
+  useEffect(() => {
+    const changeComp = setTimeout(() => {
+      setComp("greeting");
+    }, 15000);
+  }, []);
 
   return (
     <>

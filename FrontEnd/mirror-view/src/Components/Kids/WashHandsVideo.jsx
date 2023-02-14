@@ -1,4 +1,5 @@
 import ReactPlayer from "react-player";
+import { levelApi } from "../../Redux/modules/api";
 import "./WashHandsVideo.css";
 
 const WashHandsVideo = (props) => {
@@ -8,9 +9,18 @@ const WashHandsVideo = (props) => {
   const jsonMsg = JSON.stringify(msg);
 
   const videoOff = () => {
-    setComp("default");
+    setComp("kidsDefault");
     setVideo("");
     webSocket.send(jsonMsg);
+    const serialNumber = "8DLL-44yh-x7vB-VuWK";
+    const memberKey = "fSBS-lCHb";
+    const mission = "hand_washing";
+    const requestBody = {
+      serialNumber: serialNumber,
+      memberKey: memberKey,
+      mission: mission,
+    };
+    levelApi.getLevel(requestBody).then((res) => console.log(res));
   };
 
   return (
@@ -23,6 +33,7 @@ const WashHandsVideo = (props) => {
         autoPlay={true}
         id="player"
         onEnded={videoOff}
+        muted={true}
       />
     </div>
   );

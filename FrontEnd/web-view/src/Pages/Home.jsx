@@ -5,6 +5,15 @@ import ProfileEdit from "../Components/Home/ProfileEdit";
 import { HomeHeader, Profiles } from "../Components/index";
 
 function Home() {
+<<<<<<< HEAD
+  return (
+    <>
+      <HomeHeader />
+      {/* <Profiles /> */}
+      {/* <ProfileEdit /> */}
+    </>
+  );
+=======
   const navigate = useNavigate();
   const is_login = sessionStorage.getItem('jwt');
   useEffect(() => {
@@ -21,6 +30,7 @@ function Home() {
       navigate('/login');
     }
   }, []);
+>>>>>>> fad33b6fd1de86325b6615f1fb6175ad596727b8
 }
 
 export default Home;
