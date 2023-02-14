@@ -23,7 +23,7 @@ function Kids(props) {
   const image = useSelector((state) => state?.mirror?.image);
 
   const [comp, setComp] = useState(""); // component 설정
-  const [video, setVideo] = useState("brush_teeth"); // 비디오 url
+  const [video, setVideo] = useState(""); // 비디오 url
 
   useEffect(() => {
     if (mirror_action === "first_appear") {
@@ -44,7 +44,7 @@ function Kids(props) {
     if (mirror_action === "alert") {
       setComp("alert");
     }
-    if(mirror_action === "photo") {
+    if (mirror_action === "photo") {
       setComp("photo");
     }
     if (mirror_action === "default") {
@@ -84,7 +84,9 @@ function Kids(props) {
             greeting: (
               <>
                 <div className="text-div">
-                  <p className="text">{message}, {checkKorean(name)}</p>
+                  <p className="text">
+                    {message}, {checkKorean(name)}
+                  </p>
                 </div>
                 <Character />
               </>
@@ -93,7 +95,9 @@ function Kids(props) {
             alertMsg: (
               <>
                 <div className="text-div alert">
-                  <p className="alertMsg">{checkKorean(name)}, {alertMsg}</p>
+                  <p className="alertMsg">
+                    {checkKorean(name)}, {alertMsg}
+                  </p>
                   <div className="highlight"></div>
                 </div>
               </>

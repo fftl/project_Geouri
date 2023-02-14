@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import ReactPlayer from "react-player";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { levelApi } from "../../Redux/modules/api";
 import "./WashHandsVideo.css";
 
 const WashHandsVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
+  const dispatch = useDispatch();
   const msg = { cmd: "wash_hands_finish", content: "" };
   const jsonMsg = JSON.stringify(msg);
   const member_info = useSelector((state) => state?.mirror?.member);
@@ -23,7 +24,7 @@ const WashHandsVideo = (props) => {
       memberKey: memberKey,
       mission: mission,
     };
-    levelApi.getLevel(requestBody).then((res) => console.log(res));
+    levelApi.getLevel(requestBody).then((res) => dispatch(res.data.data.lv));
   };
 
   return (
@@ -34,6 +35,7 @@ const WashHandsVideo = (props) => {
         height="700px"
         playing={true}
         autoPlay={true}
+        muted={true}
         id="player"
         onEnded={videoOff}
       />

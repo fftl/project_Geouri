@@ -22,25 +22,25 @@ const KidsLevel = () => {
   }
   // const memberKey = "fSBS-lCHb";
   // const mission = "hand_washing";
-  const requestBody = {
-    serialNumber: serialNumber,
-    memberKey: memberKey,
-    mission: mission,
-  };
+  // const requestBody = {
+  //   serialNumber: serialNumber,
+  //   memberKey: memberKey,
+  //   mission: mission,
+  // };
 
-  useEffect(() => {
-    levelApi
-      .getLevel(requestBody)
-      .then((res) => {
-        setLevel(res.data.data.lv);
-        setPoint(res.data.data.exp);
-        setLevelUp(res.data.data.levelUp);
-        console.log(level);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   levelApi
+  //     .getLevel(requestBody)
+  //     .then((res) => {
+  //       setLevel(res.data.data.lv);
+  //       setPoint(res.data.data.exp);
+  //       setLevelUp(res.data.data.levelUp);
+  //       console.log(level);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   // useEffect(() => {
   //   if (levelUp) {
