@@ -34,9 +34,13 @@ const Socket = (props) => {
       navigate('/');
     }
     else if (msg.cmd === 'message') {
-      console.log(msg);
-      // 거울 사용 종료시 
       dispatch(mirrorActions.getMessage(msg));
+    }
+    else if (msg.cmd === 'alert') {
+      dispatch(mirrorActions.getAlertMsg(msg));
+      setTimeout(() => {
+        dispatch(mirrorActions.delMessage());
+      }, 3000);
     }
     else {
       dispatch(mirrorActions.getAction(msg))

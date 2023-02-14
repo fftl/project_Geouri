@@ -1,0 +1,9 @@
+.fortune-teller {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    position: fixed;
+    bottom: 0;
+}

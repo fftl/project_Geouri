@@ -37,6 +37,7 @@
     <script type="text/javascript">
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
+        const ws = new WebSocket("ws://localhost:9998");
 
         const url = ""; //모델이 들어있는 파일 이름
         let model, webcam, ctx, labelContainer, maxPredictions;
@@ -44,7 +45,6 @@
         let brushing_off = -5;
         
         async function init() {
-          const ws = new WebSocket("ws://localhost:9998");
 
           const modelURL = url + "model.json";
           const metadataURL = url + "metadata.json";
@@ -61,10 +61,10 @@
 
           window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
-          const timer = setInterval(() => {
+          const timer = setTimeout(() => {
             cameraOff(webcam);
             ws.close();
-          }, 200000);
+          }, 15000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -108,13 +108,12 @@
             }
           }
           if (brushing_off >= 10) {
-            const msg = { cmd: "alert", content: "", brushing_off, brushing_on };
+            const msg = { cmd: "alert", content: "" };
             const jsonMsg = JSON.stringify(msg);
             ws.send(jsonMsg);
             brushing_off = 0;
             brushing_on = 0;
           }
-
           // drawPose(pose); //웹캠 보이기
         }
 

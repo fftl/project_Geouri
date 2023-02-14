@@ -19,8 +19,5 @@
   font-family: 'binggrae';
   font-size: 5rem;
   font-weight: 400;
-}
-.alert{
-  border-radius: 10%;
-  border: 1px dashed red;
+  color: lemonchiffon;
 }
