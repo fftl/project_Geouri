@@ -21,7 +21,6 @@ function Kids(props) {
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
   const image = useSelector((state) => state?.mirror?.image);
-  // const image = 'https://firebasestorage.googleapis.com/v0/b/ddok-mirror.appspot.com/o/20230209173343_nh3b-494F.jpg?alt=media&token=0a02964e-458b-417b-89ba-606744a47661';
 
   const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
 

@@ -8,12 +8,22 @@ import { levelApi } from "../../Redux/modules/api";
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.init();
+    }, 15000);
+    return (() => {
+      clearInterval(timer); 
+    });
+  }, []);
+
   const msg = { cmd: "brush_teeth_finish", content: "" };
   const jsonMsg = JSON.stringify(msg);
   const member_info = useSelector((state) => state?.mirror?.member);
   const videoOff = () => {
     setComp("camera");
     setVideo("");
+    window.stopWebCam();
     webSocket.send(jsonMsg);
     const serialNumber = "8DLL-44yh-x7vB-VuWK";
     const memberKey = member_info?.memberKey;

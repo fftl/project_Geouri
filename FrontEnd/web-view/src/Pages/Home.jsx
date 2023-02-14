@@ -15,15 +15,17 @@ function Home() {
   );
 =======
   const navigate = useNavigate();
-  const is_login = sessionStorage.getItem('jwt');
+  const is_login = sessionStorage.getItem('jwt')? true : false;
+
   useEffect(() => {
+
     if (is_login) {
       return (
         <div className="container">
-          <HomeHeader />
-          <Profiles />
-          {/* <ProfileEdit /> */}
-        </div>
+        <HomeHeader />
+        <Profiles />
+        {/* <ProfileEdit /> */}
+      </div>
       )
     }
     else {
