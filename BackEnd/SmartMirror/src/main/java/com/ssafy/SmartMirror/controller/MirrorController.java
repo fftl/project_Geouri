@@ -257,7 +257,7 @@ public class MirrorController {
                     success = true;
                 }
                 if(count == 3) { // 양치 3번 달성
-//                    utils.sendSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                    utils.sendSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
                 }
                 break;
             case "hand_washing": // 손씻기
