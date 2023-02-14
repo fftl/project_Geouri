@@ -56,13 +56,15 @@ const mirrorSlice = createSlice({
             state.content = action.payload.content;
         }, 
 
-        getAlertMsg(state){
-            state.alertMsg = '';
+        getAlertMsg(state, action){
+            state.action = action.payload.cmd;
+            state.alertMsg = action.payload.content;
         },
 
         delMessage(state) {
             state.action = '';
             state.message = '';
+            state.alertMsg = '';
         },
 
         leaveMirror(state) {
@@ -70,6 +72,7 @@ const mirrorSlice = createSlice({
             state.message = '';
             state.content = '';
             state.action = '';
+            state.image = '';
         }
     }
 })

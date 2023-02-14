@@ -14,18 +14,16 @@ import Image from "../Elements/Image";
 
 function Kids(props) {
   const { webSocket } = props;
-  const dispatch = useDispatch();
 
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
+  const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
   const image = useSelector((state) => state?.mirror?.image);
 
-  const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
-
   const [comp, setComp] = useState(""); // component 설정
-  const [video, setVideo] = useState(""); // 비디오 url
+  const [video, setVideo] = useState("brush_teeth"); // 비디오 url
 
   useEffect(() => {
     if (mirror_action === "first_appear") {
@@ -35,15 +33,19 @@ function Kids(props) {
       setComp("greeting");
     }
     if (mirror_action === "wash_hands") {
-      setComp("video");
       setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
-      setComp("video");
       setVideo("brush_teeth");
     }
     if (mirror_action === "message") {
       setComp("message");
+    }
+    if (mirror_action === "alert") {
+      setComp("alert");
+    }
+    if(mirror_action === "photo") {
+      setComp("photo");
     }
     if (mirror_action === "default") {
       setComp("kidsDefault");
@@ -91,7 +93,8 @@ function Kids(props) {
             alertMsg: (
               <>
                 <div className="text-div alert">
-                  <p className="alertMsg">{message}</p>
+                  <p className="alertMsg">{checkKorean(name)}, {alertMsg}</p>
+                  <div className="highlight"></div>
                 </div>
               </>
             ),

@@ -61,10 +61,10 @@
 
           window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
-          const timer = setInterval(() => {
+          const timer = setTimeout(() => {
             cameraOff(webcam);
             ws.close();
-          }, 200000);
+          }, 15000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -108,13 +108,12 @@
             }
           }
           if (brushing_off >= 10) {
-            const msg = { cmd: "alert", content: "", brushing_off, brushing_on };
+            const msg = { cmd: "alert", content: "" };
             const jsonMsg = JSON.stringify(msg);
             ws.send(jsonMsg);
             brushing_off = 0;
             brushing_on = 0;
           }
-
           // drawPose(pose); //웹캠 보이기
         }
 

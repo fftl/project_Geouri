@@ -4,8 +4,6 @@ import styled from "styled-components";
 const Image = ( props ) => {
     const { setComp, src } = props;
     
-
-    console.log(src)
     useEffect(() => {
       const timer = setTimeout(() => {
         setComp('none')

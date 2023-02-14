@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import Slideshow from "../../Elements/Slideshow";
 import "./BrushTeethVideo.css";
+import { levelApi } from "../../Redux/modules/api";
 
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
