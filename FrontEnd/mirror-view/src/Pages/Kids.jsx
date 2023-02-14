@@ -27,28 +27,28 @@ function Kids(props) {
   const [comp, setComp] = useState(""); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
 
-  useEffect(() => {
-    if (mirror_action === "first_appear") {
-      setComp("first_appear");
-    }
-    if (mirror_action === "greetings") {
-      setComp("greeting");
-    }
-    if (mirror_action === "wash_hands") {
-      setComp("video");
-      setVideo("wash_hands");
-    }
-    if (mirror_action === "brush_teeth") {
-      setComp("video");
-      setVideo("brush_teeth");
-    }
-    if (mirror_action === "message") {
-      setComp("message");
-    }
-    if (mirror_action === "default") {
-      setComp("kidsDefault");
-    }
-  }, [mirror_action]);
+  // useEffect(() => {
+  //   if (mirror_action === "first_appear") {
+  //     setComp("first_appear");
+  //   }
+  //   if (mirror_action === "greetings") {
+  //     setComp("greeting");
+  //   }
+  //   if (mirror_action === "wash_hands") {
+  //     setComp("video");
+  //     setVideo("wash_hands");
+  //   }
+  //   if (mirror_action === "brush_teeth") {
+  //     setComp("video");
+  //     setVideo("brush_teeth");
+  //   }
+  //   if (mirror_action === "message") {
+  //     setComp("message");
+  //   }
+  //   if (mirror_action === "default") {
+  //     setComp("kidsDefault");
+  //   }
+  // }, [mirror_action]);
 
   // 한글이름에 따라 'ㅇㅇ아' or 'ㅇㅇ야' 체크
   // const checkKorean = (name) => {

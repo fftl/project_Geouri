@@ -36,7 +36,6 @@ const WashHandsVideo = (props) => {
         autoPlay={true}
         id="player"
         onEnded={videoOff}
-        muted={true}
       />
     </div>
   );
