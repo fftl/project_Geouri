@@ -247,7 +247,7 @@ public class Utils {
         String api_key = "***REMOVED***";
         String api_secret = "***REMOVED***";
         Message coolsms = new Message(api_key, api_secret);
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
 
         params.put("to", tel);
         params.put("from", "01045620785");
@@ -256,7 +256,7 @@ public class Utils {
         params.put("app_version", "test app 1.2");
 
         try {
-            JSONObject obj = (JSONObject) coolsms.send(params);
+            JSONObject obj = coolsms.send(params);
             System.out.println(obj.toString());
         } catch (CoolsmsException e) {
             System.out.println(e.getMessage());
