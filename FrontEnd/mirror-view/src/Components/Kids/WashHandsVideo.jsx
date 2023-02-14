@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ReactPlayer from "react-player";
 import { levelApi } from "../../Redux/modules/api";
 import "./WashHandsVideo.css";
