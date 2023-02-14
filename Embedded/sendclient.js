@@ -6,13 +6,28 @@ ws.onopen = function() { // onopen 이벤트 리스너 호출: 서버와 연결�
 
     var data = {
         "cmd" : "voice_input",
-        "content" : "응",
+        "content" : "지금 몇시야?",
     }
+
 
     // var data = {
     //     "cmd" : "face_name",
     //     "content" : "60lm-pxTc",
     // }
+    
+
+    // var data = {
+    //     "cmd" : "person_leave",
+    //     "content" : "",
+    // }
+
+
+//소영
+    // var data = {
+    //     "cmd" : "face_name",
+    //     "content" : "nh3b-494F",
+    // }
+
     ws.send(JSON.stringify(data));
     ws.close();
 };

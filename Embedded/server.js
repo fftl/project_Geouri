@@ -24,6 +24,7 @@ var prevKey = 0;      // 이전에 보냈던 메세지
 var currentStatus = 0;     // 현재 상태.
 var kidsMode = false;
 var personFrontOfMirror = false;
+var waitingOrders = false;
 
 
 
@@ -75,10 +76,8 @@ wss.on('connection', function (ws, request) {
     else if (command === "voice_input") {
       const voice_input = await STT(obj.content);
 
-      console.log("voice command : ", voice_input)
-      
-
-      
+      console.log("voice command : ", voice_input);
+ 
       currentStatusCheck(voice_input);
     }
 
@@ -182,6 +181,7 @@ async function STT(voice_input){
     ["거울아"],
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
+    ["몇 시","몇시","몇분","시간","지금"],
     ["시작", "재생", "진행"],
     ["종료","그만","정지","중지"],
     ["다음","넥스트"], 
@@ -198,6 +198,7 @@ async function STT(voice_input){
     "mirrorcall",
     "quiz",
     "easteregg",
+    "whattime",
     "video_start",
     "video_stop",
     "video_next",
@@ -243,7 +244,10 @@ function TTS(str){
 
 
 
-function currentStatusCheck(voice_input){
+function currentStatusCheck(voicedata){
+
+  const voice_input = voicedata.cmd;
+
   // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
   if(currentStatus!=4){
     if (voice_input.includes("answer")) {
@@ -261,12 +265,28 @@ function currentStatusCheck(voice_input){
 
   else{ //평시
     //퀴즈모드 분기
+
+
     if (quizMode == 1){
         quiz(voice_input);
         return;
     }
 
-    if (voice_input.includes("video")){
+    if (waitingOrders == 1){
+      if(voice_input == "whattime"){
+        whatTime();
+      }
+      return;
+    } 
+
+
+
+    if(voice_input == "mirrorcall"){
+      mirrorCall();
+    }
+
+
+    else if (voice_input.includes("video")){
       const data = {
         "cmd": voice_input,
         "content": voice_input,
@@ -423,6 +443,7 @@ function person_appear(){
         "content": body.data,
       }
     }
+    currentStatus = 4; // 상황 : 평시
     wss.broadcast(JSON.stringify(data));
 
     //아기이면 greeting 까지 보내기.
@@ -668,6 +689,22 @@ function easteregg(){
   var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
   TTS(str);
 
+}
+
+
+function mirrorCall(){
+  console.log("EVENT : mirror called");
+  TTS("네 말씀하세요?");
+  waitingOrders = 1;
+}
+
+
+
+function whatTime(){
+  var today = new Date();
+  var str = "지금은 " + (today.getMonth() + 1) + "월 " + today.getDate() + "일 " + today.getHours() + "시 " + today.getMinutes() + "분 입니다."
+  TTS(str);
+  waitingOrders = 0;
 }
 
 
