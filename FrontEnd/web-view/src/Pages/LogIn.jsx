@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect }  from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginHeader, LoginBody, LoginFooter } from "../Components";
 
@@ -14,11 +13,11 @@ function Login(){
   }, []);
 
   return (
-      <>
+      <div className="container">
         <LoginHeader />
         <LoginBody />
         <LoginFooter/>
-      </>
+      </div>
   )
 }
 

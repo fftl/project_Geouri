@@ -51,6 +51,7 @@ function LoginBody(){
                 <div className="login-form-div">
                     <div className="input-box">
                         <label htmlFor="email">이메일</label>
+                        <div className="input-div">
                         <input id="email" name="email" type="email" placeholder="username@email.com" required
                             onChange={ async(e) => {
                                 const { value, name } = e.target;
@@ -64,6 +65,8 @@ function LoginBody(){
                                     setErrMsg("");
                                 }
                             }}/>
+                            
+                        </div>
                     </div>
                     {errMsg ? 
                         <div className="errorEmail">{errMsg}</div>   :
@@ -71,6 +74,7 @@ function LoginBody(){
                     }
                     <div className="input-box">
                         <label htmlFor="pwd">비밀번호</label>
+                        <div className="input-div">
                         <input id="pwd" name="password" type="password" placeholder="비밀번호" required
                             onChange={(e) => {
                                 const {value, name} = e.target;
@@ -81,6 +85,7 @@ function LoginBody(){
                                 })
                                 console.log(inputs)
                             }}/>
+                        </div>
                     </div>
                     <div className="autoLogin-box">
                         <input id="autoLogin" type="checkbox" 

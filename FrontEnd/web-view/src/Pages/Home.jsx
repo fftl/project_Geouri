@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileEdit from "../Components/Home/ProfileEdit";
 import { HomeHeader, Profiles } from "../Components/index";
 
 function Home() {
+<<<<<<< HEAD
   return (
     <>
-      {/* <HomeHeader />
-      <Profiles /> */}
-      <ProfileEdit />
+      <HomeHeader />
+      {/* <Profiles /> */}
+      {/* <ProfileEdit /> */}
     </>
   );
+=======
+  const navigate = useNavigate();
+  const is_login = sessionStorage.getItem('jwt');
+  useEffect(() => {
+    if (is_login) {
+      return (
+        <div className="container">
+          <HomeHeader />
+          <Profiles />
+          {/* <ProfileEdit /> */}
+        </div>
+      )
+    }
+    else {
+      navigate('/login');
+    }
+  }, []);
+>>>>>>> fad33b6fd1de86325b6615f1fb6175ad596727b8
 }
 
 export default Home;

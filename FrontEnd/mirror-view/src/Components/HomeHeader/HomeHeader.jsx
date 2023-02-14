@@ -62,8 +62,8 @@ function HomeHeader() {
       };
       // 위치정보는 mock data
       const member = useSelector((state) => state?.mirror?.member);
-      const lat = Math.round(member?.region?.lng * 100)/100;
-      const lon = Math.round(member?.region?.lat * 100)/100;
+      const lat = Math.round(member?.region?.lat * 100)/100;
+      const lon = Math.round(member?.region?.lng * 100)/100;
     
       // const [lat, lon] = [37.49, 126.73];
       const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
