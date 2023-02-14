@@ -54,9 +54,10 @@ public class MirrorController {
     private ScriptDetail scriptDetail;
     private Utils utils;
     private LevelService levelService;
+    private StoryService storyService;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, HandWashingService handWashingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, ScriptDetail scriptDetail, LevelService levelService, Utils utils) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, HandWashingService handWashingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, ScriptDetail scriptDetail, Utils utils, LevelService levelService, StoryService storyService) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -77,6 +78,7 @@ public class MirrorController {
         this.scriptDetail = scriptDetail;
         this.utils = utils;
         this.levelService = levelService;
+        this.storyService = storyService;
     }
 
     /* ***************************** Member ***************************** */
@@ -130,7 +132,6 @@ public class MirrorController {
 
 
         // 뉴스
-//        List<News> newsList = newsService.findByPress("YTN");
         List<News> newsList = newsService.findAll();
         List<ResponseNews> responseNewsList = new ArrayList<>();
         for (int i = 0; i < 50; i++) { // 50개만 전송
@@ -521,6 +522,26 @@ public class MirrorController {
                 .build();
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    //DB에 저장된 이야기를 하나 랜덤으로 가져옵니다.
+    @GetMapping("/getStory")
+    public ResponseEntity getStory(){
+        Story getStory = storyService.getStory();
+
+        //DB에 등록된 이야기가 존재하지 않을 경우
+        if(getStory == null){
+            return errorResponse("존재하는 이야기가 없습니다.");
+
+            //정상 동작의 경우
+        } else {
+            ResponseStory responseStory = ResponseStory.builder()
+                    .title(getStory.getTitle())
+                    .content(getStory.getContent())
+                    .build();
+
+            return successResponse(responseStory);
+        }
     }
 
 
