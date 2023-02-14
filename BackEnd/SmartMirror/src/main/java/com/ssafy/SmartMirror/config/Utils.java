@@ -20,6 +20,7 @@ import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -239,29 +240,28 @@ public class Utils {
         return res;
     }
 
-    public void sendSms(String memberKey) {
-        Member member = memberService.findByMemberKey(memberKey);
-        User user = member.getUser();
-        String tel = user.getTel();
-
-        String api_key = "***REMOVED***";
-        String api_secret = "***REMOVED***";
-        Message coolsms = new Message(api_key, api_secret);
-        HashMap<String, String> params = new HashMap<>();
-
-        params.put("to", tel);
-        params.put("from", "01045620785");
-        params.put("type", "LMS");
-        params.put("text", "[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!\n\n사진첩 바로가기: ");
-        params.put("app_version", "test app 1.2");
-
-        try {
-            JSONObject obj = coolsms.send(params);
-            System.out.println(obj.toString());
-        } catch (CoolsmsException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCode());
-        }
-
-    }
+//    public void sendSms(String memberKey) {
+//        Member member = memberService.findByMemberKey(memberKey);
+//        User user = member.getUser();
+//        String tel = user.getTel();
+//
+//        String api_key = "***REMOVED***";
+//        String api_secret = "***REMOVED***";
+//        Message coolsms = new Message(api_key, api_secret);
+//        HashMap<String, String> params = new HashMap<>();
+//
+//        params.put("to", tel);
+//        params.put("from", "01045620785");
+//        params.put("type", "LMS");
+//        params.put("text", "[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!\n\n사진첩 바로가기: ");
+//        params.put("app_version", "test app 1.2");
+//
+//        try {
+//            JSONObject obj = coolsms.send(params);
+//            System.out.println(obj.toString());
+//        } catch (CoolsmsException e) {
+//            System.out.println(e.getMessage());
+//            System.out.println(e.getCode());
+//        }
+//    }
 }
