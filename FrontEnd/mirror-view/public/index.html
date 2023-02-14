@@ -97,7 +97,6 @@
             // 정해진 시간 주기 간격으로 값 출력하기
 
             if (milliseconds >= 900) {    //
-              // console.log(classPrediction)
               if (i == 0 && cost >= 0.6) // 양치 중임의 기준을 좀 더 올리는게 나은가?
               {
                 brushing_on++;
@@ -111,8 +110,7 @@
           if (brushing_off >= 10) {
             const msg = { cmd: "alert", content: "", brushing_off, brushing_on };
             const jsonMsg = JSON.stringify(msg);
-            console.log(jsonMsg);
-            // ws.send(jsonMsg);
+            ws.send(jsonMsg);
             brushing_off = 0;
             brushing_on = 0;
           }
