@@ -28,7 +28,7 @@ const BrushTeethVideo = (props) => {
           width="1000px"
           height="700px"
           playing={true}
-          muted={true}
+          autoplay={true}
           controls={true}
           loop={false}
           id="player"
