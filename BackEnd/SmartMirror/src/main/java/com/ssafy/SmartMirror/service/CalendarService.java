@@ -25,7 +25,16 @@ public class CalendarService {
 
 
     public int updateLink(String link, String memberKey) {
-        int result = calendarRepository.updateLink(link, memberKey);
+        int result = 0;
+        if(calendarRepository.findById(memberKey)==null) {
+            Calendar calendar = Calendar.builder().memberKey(memberKey).link(link).build();
+            if( calendarRepository.save(calendar)!=null) {
+                result = 0;
+            }
+        } else {
+            result = calendarRepository.updateLink(link, memberKey);
+        }
+
         return result;
     }
 
