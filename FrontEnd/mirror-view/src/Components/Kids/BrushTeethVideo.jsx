@@ -20,7 +20,6 @@ const BrushTeethVideo = (props) => {
   const msg = { cmd: "brush_teeth_finish", content: "" };
   const jsonMsg = JSON.stringify(msg);
   const member_info = useSelector((state) => state?.mirror?.member);
-
   const videoOff = () => {
     setComp("camera");
     setVideo("");
