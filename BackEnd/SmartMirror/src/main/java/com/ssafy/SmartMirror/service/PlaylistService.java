@@ -25,7 +25,15 @@ public class PlaylistService {
     }
 
     public int updateLink(String link, String memberKey) {
-        int result = playlistRepository.updateLink(link, memberKey);
+        int result = 0;
+        if(playlistRepository.findById(memberKey)==null) {
+            Playlist playlist = Playlist.builder().memberKey(memberKey).link(link).build();
+            if( playlistRepository.save(playlist)!=null) {
+                result = 0;
+            }
+        } else {
+            result = playlistRepository.updateLink(link, memberKey);
+        }
         return result;
     }
 
