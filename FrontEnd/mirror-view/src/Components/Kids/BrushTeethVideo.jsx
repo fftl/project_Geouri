@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import "./BrushTeethVideo.css";
 import { levelApi } from "../../Redux/modules/api";
 
 const BrushTeethVideo = (props) => {
   const { webSocket, setComp, setVideo } = props;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -32,6 +34,8 @@ const BrushTeethVideo = (props) => {
       mission: mission,
     };
     levelApi.getLevel(requestBody).then((res) => console.log(res));
+
+    // dispatch(serialNumber, memberKey, mission);
   };
 
   const [teethver, setTeethver] = useState(false);
