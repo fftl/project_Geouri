@@ -3,7 +3,7 @@ import Join from "../Components/SignUp/Join";
 
 const SignUp = () => {
   return (
-    <div>
+    <div className="container">
       <Join />
     </div>
   );
