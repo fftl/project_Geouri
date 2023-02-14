@@ -1,5 +1,10 @@
 import { createAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+// 중복된 주소를 줄이는 방법
+axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 //Action TYPE
 const LOGIN = "user/LOGIN";
@@ -8,10 +13,6 @@ export const REGISTER_USER = "user/REGISTER_USER";
 // Action creator
 const login = createAction(LOGIN);
 const registerUser = createAction(REGISTER_USER);
-
-// 중복된 주소를 줄이는 방법
-axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 //InitialState
 const initialState = {
@@ -23,10 +24,13 @@ const initialState = {
   signupError: "",
 };
 
-//middleware - 비동기 작업
-
 // 여기에서 백이랑 api통신을 해서 데이터를 받아와 -> extraReducer : reducer을 만들어서 state저장해.
+const api = axios.create({
+  baseURL : 'http://i8a201.p.ssafy.io'
+}, {withCredentials: true})
 
+
+//middleware - 비동기 작업
 export const asyncLogin = createAsyncThunk(
   // type
   "userSlice/asyncLogin",
@@ -34,17 +38,24 @@ export const asyncLogin = createAsyncThunk(
   async (userInfo) => {
     const email = userInfo.email;
     const password = userInfo.password;
+    
+    const navigate = useNavigate();
 
-    // 여기에서 api 통신
-    const response = await axios.get("/dfsfsd", email, password);
-    // const response = await userAPI.loginDB(email.password);
-
-    // login하면 user 정보랑 token 줌
-    const user = response.data.user;
-    const jwt = user.token;
-    sessionStorage.setItem("jwt", jwt);
-    //sessionStorage와 localStorage의 차이점
-    return user;
+    // 여기에서 login api 통신
+    await axios.post("/login", {
+      email: email, 
+      password: password
+    })
+    .then((res) => {
+      const user = res.data.member;
+      const jwt = user.token;
+      localStorage.setItem("jwt", jwt);
+      userSlice.reducer.isLogin();
+      navigate('/');
+  })
+    .catch((err) => {
+      console.log("login : error ", err.response);
+    }) ;
   }
 );
 
@@ -54,7 +65,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     isLogin: (state) => {
-      if (localStorage.getItem("token")) {
+      if (localStorage.getItem("jwt")) {
         state.is_login = true;
       } else {
         state.is_login = false;
