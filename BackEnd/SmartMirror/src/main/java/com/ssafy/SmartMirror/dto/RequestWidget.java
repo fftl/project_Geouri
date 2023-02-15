@@ -11,7 +11,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class RequestWidget {
-    private String memberKey;
     private String cmd;
     private String value;
 }
