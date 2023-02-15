@@ -404,7 +404,10 @@ function mirrorCall(){
       pythonPath: process.env.PYTHON_PATH,
       pythonOptions: ['-u']
     };
-  
+    
+    TTS("얼굴 인식 중입니다.");
+
+
     PythonShell.PythonShell.run('face_recog_module.py', options, function (err, results) {
       if (err) throw err;
       // console.log('results: %j', results);
@@ -678,7 +681,7 @@ function quiz(voicedata){
   else if(quizMode == 1){
     console.log("아이의 정답: ",voicedata);
     //정답을 맞췄을 경우
-    if(voicedata.text.includes(quizAnswer) != -1){
+    if(voicedata.text.includes(quizAnswer)){
       const replayNum = getRandomInt(0,quiz_correct_reply.length);
       TTS(quiz_correct_reply[replayNum]);
       quizMode = 0;
