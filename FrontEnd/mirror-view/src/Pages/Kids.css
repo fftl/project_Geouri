@@ -1,0 +1,23 @@
+.main-box {
+  margin: 0 auto;
+  justify-content: center;
+  margin: 4rem auto 4rem auto;
+  padding: 2rem;
+  width: 80%;
+  text-align: center;
+}
+.text-div {
+  height: 10rem;
+  margin: 0 auto;
+}
+.text {
+  font-family: "binggrae";
+  font-size: 5rem;
+  font-weight: 400;
+}
+.alertMsg{
+  font-family: 'binggrae';
+  font-size: 5rem;
+  font-weight: 400;
+  color: lemonchiffon;
+}
