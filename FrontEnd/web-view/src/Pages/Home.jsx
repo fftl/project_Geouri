@@ -5,34 +5,22 @@ import ProfileEdit from "../Components/Home/ProfileEdit";
 import { HomeHeader, Profiles } from "../Components/index";
 
 function Home() {
-<<<<<<< HEAD
-  return (
-    <>
-      <HomeHeader />
-      {/* <Profiles /> */}
-      {/* <ProfileEdit /> */}
-    </>
-  );
-=======
   const navigate = useNavigate();
-  const is_login = sessionStorage.getItem('jwt')? true : false;
+  const is_login = sessionStorage.getItem("jwt") ? true : false;
 
   useEffect(() => {
-
     if (is_login) {
       return (
         <div className="container">
-        <HomeHeader />
-        <Profiles />
-        {/* <ProfileEdit /> */}
-      </div>
-      )
-    }
-    else {
-      navigate('/login');
+          <HomeHeader />
+          <Profiles />
+          {/* <ProfileEdit /> */}
+        </div>
+      );
+    } else {
+      navigate("/login");
     }
   }, []);
->>>>>>> fad33b6fd1de86325b6615f1fb6175ad596727b8
 }
 
 export default Home;

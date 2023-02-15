@@ -1,11 +1,17 @@
-import { Login, FindUser, NotFound404, MemberPage, AddMember } from "./Pages";
+import {
+  Login,
+  FindUser,
+  NotFound404,
+  MemberPage,
+  AddMember,
+  Photobook,
+} from "./Pages";
 import SignUp from "./Pages/SignUp";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 
 function App() {
-
   return (
     <div className="App">
       <Routes>
@@ -15,9 +21,9 @@ function App() {
         <Route path="/find-user" element={<FindUser />} />
         <Route path="/member/add" element={<AddMember />} />
         <Route path="/member/:id" element={<MemberPage />} />
+        <Route path="/snapshot" element={<Photobook />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
-      {/* <Photobook /> */}
     </div>
   );
 }

@@ -108,6 +108,11 @@ const Photolist = () => {
     padding: "1rem",
     borderRadius: "5px",
   };
+
+  const buttonStyles = {
+    position: "relative",
+    border: "1px solid blue",
+  };
   return (
     <div className="gal">
       <div className="thumbnail">

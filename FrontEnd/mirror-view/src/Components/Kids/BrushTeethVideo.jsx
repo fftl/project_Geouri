@@ -26,24 +26,25 @@ const BrushTeethVideo = (props) => {
     setComp("camera");
     setVideo("");
     webSocket.send(jsonMsg);
-    const serialNumber = "8DLL-44yh-x7vB-VuWK";
-    const memberKey = member_info?.memberKey;
-    const mission = "brushing";
-    const requestBody = {
-      serialNumber: serialNumber,
-      memberKey: memberKey,
-      mission: mission,
-    };
-    levelApi
-      .getLevel(requestBody)
-      .then((res) => dispatch(mirrorActions.getLev(res.data.data)));
   };
-
   const [teethver, setTeethver] = useState(false);
 
   // useEffect(() => {
   //   setTeethver(Math.random() >= 0.5);
   // }, []);
+
+  const serialNumber = "8DLL-44yh-x7vB-VuWK";
+  const memberKey = member_info?.memberKey;
+  const mission = "brushing";
+  const requestBody = {
+    serialNumber: serialNumber,
+    memberKey: memberKey,
+    mission: mission,
+  };
+
+  levelApi
+    .getLevel(requestBody)
+    .then((res) => dispatch(mirrorActions.getLev(res.data.data)));
 
   return (
     <div className="container">
@@ -52,12 +53,11 @@ const BrushTeethVideo = (props) => {
           url={process.env.PUBLIC_URL + "/videos/brushteeth.mp4"}
           width="1000px"
           height="700px"
-          autoPlay={true}
           playing={true}
-          autoplay={true}
-          controls={true}
+          autoPlay={true}
           loop={false}
           id="player"
+          muted={true}
           onEnded={videoOff}
         />
       ) : (
@@ -65,7 +65,7 @@ const BrushTeethVideo = (props) => {
           url={process.env.PUBLIC_URL + "/videos/brushguide.mp4"}
           width="1000px"
           height="700px"
-          autoplay={true}
+          autoPlay={true}
           playing={true}
           id="player"
           onEnded={videoOff}
