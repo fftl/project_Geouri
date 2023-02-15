@@ -64,7 +64,7 @@
           const timer = setTimeout(() => {
             cameraOff(webcam);
             ws.close();
-          }, 15000);
+          }, 10000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -107,12 +107,12 @@
               }
             }
           }
-          if (brushing_off >= 5) {
+          if (brushing_off >= 10) {
             const msg = { cmd: "alert", content: "" };
             const jsonMsg = JSON.stringify(msg);
             ws.send(jsonMsg);
-            brushing_off = 0;
-            brushing_on = 0;
+            ws.close();
+            cameraOff();
           }
           // drawPose(pose); //웹캠 보이기
         }
