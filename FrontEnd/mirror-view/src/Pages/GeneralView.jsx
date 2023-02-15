@@ -12,12 +12,15 @@ function GeneralView(props) {
     const no_calendar = member_info_widget?.calender;
     
     return (
-        <div className="general-view-box">
-            { member_info_widget?.calender && <Schedule /> }
-            { member_info_widget?.news && <NewsPlayer no_calendar={no_calendar} /> } 
-            { member_info_widget?.playlist && <YouTubePlayer no_calendar={no_calendar}/> }
-            { fortune && <FortuneTeller />}
-        </div>
+        <>
+        <HomeHeader />
+            <div className="general-view-box">
+                { member_info_widget?.calender && <Schedule /> }
+                { member_info_widget?.news && <NewsPlayer no_calendar={no_calendar} /> } 
+                { member_info_widget?.playlist && <YouTubePlayer no_calendar={no_calendar}/> }
+                { fortune && <FortuneTeller />}
+            </div>
+        </>
     )
 }
 
