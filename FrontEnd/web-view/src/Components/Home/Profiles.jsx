@@ -12,11 +12,13 @@ const api = axios.create({
 
 function Profiles() {
   const [memberList, setMemberList] = useState([]);
+  // const userKey = localStorage.getItem('userKey');
+  const userKey = "Fyw3-DOwW";
 
   useEffect(() => {
     api.get('/web/user/memberlist', {
       headers: {
-        "user-key": "Fyw3-DOwW",
+        "user-key": userKey,
       }
     }).then((response) => {
       setMemberList(response?.data?.data?.memberList);
@@ -37,7 +39,8 @@ function Profiles() {
         return (
           <React.Fragment 
             key={member?.memberKey}>
-            <Profile 
+            <Profile
+              type="member" 
               member={member}/>
           </React.Fragment>
         )

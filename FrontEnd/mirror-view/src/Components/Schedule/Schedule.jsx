@@ -48,8 +48,11 @@ function Schedule () {
         }
       })
     }
-
-    const new_result = new_schedule(schedule)
+    let new_result;
+    if (schedule.length > 0){
+      new_result = new_schedule(schedule)
+    }
+    
 
     return (
       <div className="schedule-box">

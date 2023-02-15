@@ -8,10 +8,12 @@ axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 //Action TYPE
 const LOGIN = "user/LOGIN";
+const REGISTER_MIRROR = "user/REGISTER_MIRROR";
 export const REGISTER_USER = "user/REGISTER_USER";
 
 // Action creator
 const login = createAction(LOGIN);
+const registerMirror = createAction(REGISTER_MIRROR);
 const registerUser = createAction(REGISTER_USER);
 
 //InitialState
@@ -38,11 +40,10 @@ export const asyncLogin = createAsyncThunk(
   async (userInfo) => {
     const email = userInfo.email;
     const password = userInfo.password;
-    
     const navigate = useNavigate();
 
     // 여기에서 login api 통신
-    await api.post("/login", {
+    await api.post("/web/login", {
       email: email, 
       password: password
     })
@@ -58,6 +59,26 @@ export const asyncLogin = createAsyncThunk(
     }) ;
   }
 );
+
+export const asyncRegisterMirror = createAsyncThunk(
+  // type
+  "userSlice/asyncRegisterMirror",
+  // function
+  async (userKey, serialNumber) => {
+    const navigate = useNavigate();
+    
+    await api.post("/addMirror", {
+      headers: {
+        "user-key": userKey,
+      },
+      'serial-num': serialNumber
+    })
+    .then((response) => {
+      console.log(response?.data?.data);
+    })
+
+  }
+)
 
 //reducer
 export const userSlice = createSlice({
@@ -90,6 +111,11 @@ export const userSlice = createSlice({
       state.status = "rejected";
       console.log(action.payload);
     });
+
+    builder.addCase(asyncRegisterMirror.fulfilled, (state, action) => {
+      state.serialNumber = action.payload.serialNumber;
+    });
+
     builder.addCase(signup.pending, (state, action) => {
       console.log("pending");
     });
@@ -141,6 +167,7 @@ export const signup = createAsyncThunk(
 const actionCreators = {
   login,
   registerUser,
+  registerMirror,
 };
 
 export { actionCreators };
