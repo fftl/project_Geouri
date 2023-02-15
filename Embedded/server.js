@@ -400,7 +400,7 @@ function mirrorCall(){
 
 
   // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
-  if(personFrontOfMirror == true && current_user == ""){
+  if(personFrontOfMirror == true && currentStatus == 0){
 
     var options = {
       mode: 'text',
