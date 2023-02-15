@@ -7,7 +7,7 @@ const AddMirror = () => {
 
     return (
         <>
-            <AddMirror />
+            <AddMirrorComp />
         </>
     )
 }

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
     const { member, type } = props;
-
+    console.log(member?.imgUrl);
     const navigator = useNavigate();
 
     const handleClick = (e) => {
@@ -26,8 +26,8 @@ const Profile = (props) => {
                 <Image 
                     type="member"
                     onClick={handleClick}
-                    src={member.image}/>
-                <Text>{member.name}</Text>
+                    src={member?.imgUrl}/>
+                <Text>{member?.nickname}</Text>
 
               </div>
             </>
