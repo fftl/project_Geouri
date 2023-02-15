@@ -25,6 +25,6 @@ public class Member {
     private boolean kidsMode;
 
     @ManyToOne
-    @JoinColumn(name = "user_key")
+    @JoinColumn(referencedColumnName = "user_key", name = "userKey")
     private User user;
 }
