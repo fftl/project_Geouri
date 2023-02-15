@@ -1,6 +1,3 @@
-// REACT_APP_WEATHER_API_KEY = ***REMOVED***
-// REACT_APP_YOUTUBE_API_KEY = ***REMOVED***
-
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ port: 9998 });
@@ -63,7 +60,6 @@ wss.on('connection', function (ws, request) {
 
     const obj = JSON.parse(msg);
     const command = obj.cmd;
-    console.log("@@INCOMING COMMAND -> " , command);
 
     if (command == "sensor_activate") {
       if(personFrontOfMirror == true) return;
@@ -125,12 +121,6 @@ wss.on('connection', function (ws, request) {
 // 아이 대답을 받아서 감정 분석하기(긍/부정)
 async function nlp(text) {
 
-  /**
-   * TODO(developer): Uncomment the following line to run this code.
-   */
-  // const text = 'Your text to analyze, e.g. Hello, world!';
-
-  // Prepares a document, representing the provided text
   const document = {
     content: text,
     type: 'PLAIN_TEXT',
@@ -140,27 +130,9 @@ async function nlp(text) {
   const [result] = await client.analyzeSentiment({document});
 
   const sentiment = result.documentSentiment;
-  // console.log('Document sentiment:');
-  // console.log(`  Score: ${sentiment.score}`);
-  // console.log(`  Magnitude: ${sentiment.magnitude}`);
 
   const sentences = result.sentences;
-  // sentences.forEach(sentence => {
-  //   console.log(`Sentence: ${sentence.text.content}`);
-  //   console.log(`  Score: ${sentence.sentiment.score}`);
-  //   console.log(`  Magnitude: ${sentence.sentiment.magnitude}`);
 
-
-
-
-    
-  //   // 긍정:1 ,부정/중립:0
-  //   if (sentiment.score >= 0.29)
-  //       return "answer_positive";
-  //   else if( sentiment.score <= -0.1)
-  //       return "answer_negative";
-  //   else return 0;
-  // });
   if (sentiment.score >= 0.29)
     return "answer_positive";
   else if( sentiment.score <= -0.1)
@@ -250,6 +222,8 @@ function currentStatusCheck(voicedata){
 
   const voice_input = voicedata.cmd;
 
+
+
   //양치가 시작했거나 손씻기가 시작했으면 무시
   if(currentStatus == 6 || currentStatus == 8) return;
 
@@ -278,10 +252,7 @@ function currentStatusCheck(voicedata){
         return;
     }
 
-
-
-    
-    if(waitingOrders != true && voice_input == "mirrorcall"){
+    if(waitingOrders == false && voice_input == "mirrorcall"){
       mirrorCall();
       return;
     }
@@ -429,7 +400,7 @@ function mirrorCall(){
 
 
   // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
-  if(personFrontOfMirror == true){
+  if(personFrontOfMirror == true && current_user == ""){
 
     var options = {
       mode: 'text',
@@ -480,12 +451,10 @@ function person_appear(){
       console.log("error -> ", err);
     } else{
       user_data = body.data;
-      console.log("userdata: " , user_data);
+      console.log("userdata: " , user_data.nickname);
       if(user_data.kidsMode == true){
         kidsMode = true;
       }
-      
-      console.log(user_data);
       data = {
         "cmd": "person_appear",
         "content": body.data,
