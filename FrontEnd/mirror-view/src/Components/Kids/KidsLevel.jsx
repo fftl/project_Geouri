@@ -7,19 +7,13 @@ import Confetti from "./Confetti";
 import { levelApi } from "../../Redux/modules/api";
 
 const KidsLevel = () => {
-  const [level, setLevel] = useState(0);
-  const [point, setPoint] = useState(0);
-  const [levelUp, setLevelUp] = useState(false);
-  const [mission, setMission] = useState("");
+  const level = useSelector((state) => state?.mirror?.level);
+  const point = useSelector((state) => state?.mirror?.point);
+  const levelUp = useSelector((state) => state?.mirror?.levelUp);
   const member_info = useSelector((state) => state?.mirror?.member);
   const memberKey = member_info?.memberKey;
   const serialNumber = "8DLL-44yh-x7vB-VuWK";
-  const missionCmd = member_info?.action;
-  if (missionCmd === "wash_hands") {
-    setMission("hand_washing");
-  } else {
-    setMission("brushing");
-  }
+
   // const memberKey = "fSBS-lCHb";
   // const mission = "hand_washing";
   // const requestBody = {

@@ -3,7 +3,7 @@ import Login from "./LogIn";
 import FindUser from "./FindUser";
 import MemberPage from "./MemberPage";
 import AddMember from "./AddMember";
-import AddMirror from "./AddMirror";
-import NotFound404 from './NotFound404';
+import NotFound404 from "./NotFound404";
+import Photobook from "./Photobook";
 
-export { Home, Login, FindUser, MemberPage, AddMember, AddMirror, NotFound404 }; 
+export { Login, FindUser, MemberPage, AddMember, NotFound404, Photobook };
