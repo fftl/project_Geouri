@@ -33,6 +33,7 @@ const mirrorSlice = createSlice({
     level: null,
     point: null,
     levelUp: null,
+    image: '',
   },
 
   reducers: {
@@ -67,6 +68,10 @@ const mirrorSlice = createSlice({
       state.content = "";
       state.action = "";
       state.image = "";
+    },
+    getPhoto(state, action){
+      state.action = action.payload.cmd;
+      state.image = action.payload.content;
     },
     getLev(state, action) {
       state.level = action.payload.lv;

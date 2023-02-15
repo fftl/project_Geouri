@@ -8,4 +8,14 @@
 .member-div{
     text-align: center;
     width: fit-content;
+    margin: 0 auto;
+}
+.profile-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.profile-list-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
 }

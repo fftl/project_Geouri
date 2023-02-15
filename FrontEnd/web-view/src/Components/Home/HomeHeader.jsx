@@ -1,14 +1,18 @@
 import React from "react";
 import { useDispatch, useSelector} from 'react-redux';
 
-function HomeHeader () {
+function HomeHeader (props) {
+    const { type } = props;
     const user = useSelector((state) => state.user);
     
-    return (
-        <div className="HomeHeader">
-          
-        </div>
-    )
+
+    if(type === 'HomeHeader'){
+        return (
+            <div className="HomeHeader">
+              
+            </div>
+        )
+    }
 
 }
 
