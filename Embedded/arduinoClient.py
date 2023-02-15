@@ -1,6 +1,6 @@
-"""
-pip install pyserial
-"""
+
+#pip install pyserial
+
 from websocket import create_connection
 import serial
 import time

@@ -180,10 +180,10 @@ async function STT(voice_input){
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
     ["몇 시","몇시","몇분","시간","지금"],
-    ["시작", "재생", "진행"],
-    ["종료","그만","정지","중지"],
-    ["다음","넥스트"], 
-    ["이전"],
+    // ["시작", "재생", "진행"],
+    // ["종료","그만","정지","중지"],
+    // ["다음","넥스트"], 
+    // ["이전"],
     ["아니","싫어"],
     ["응","좋아","그래", "네"],
     ["몰라","모르겠어","글쎄","힌트"],
@@ -197,10 +197,10 @@ async function STT(voice_input){
     "quiz",
     "easteregg",
     "whattime",
-    "video_start",
-    "video_stop",
-    "video_next",
-    "video_prev",
+    // "video_start",
+    // "video_stop",
+    // "video_next",
+    // "video_prev",
     "answer_negative",
     "answer_positive",
     "answer_neutral",
@@ -246,6 +246,10 @@ function currentStatusCheck(voicedata){
 
   const voice_input = voicedata.cmd;
 
+  //양치가 시작했거나 손씻기가 시작했으면 무시
+  if(currentStatus == 6 || currentStatus == 8) return;
+
+
   // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
   if(currentStatus!=4 && kidsMode == true){
     if (voice_input.includes("answer")) {
@@ -273,12 +277,12 @@ function currentStatusCheck(voicedata){
 
 
     
-    if(voice_input == "mirrorcall"){
+    if(waitingOrders != true && voice_input == "mirrorcall"){
       mirrorCall();
       return;
     }
 
-    if (waitingOrders == 1){
+    if (waitingOrders == true){
       if(voice_input == "whattime"){
         whatTime();
       }
@@ -291,15 +295,8 @@ function currentStatusCheck(voicedata){
       return;
     }
 
-     if (voice_input.includes("video")){
-      const data = {
-        "cmd": voice_input,
-        "content": voice_input,
-      }
-      wss.broadcast(JSON.stringify(data));
-    }
     // 아이가 먼저 양치하자고 하는 경우
-    else if (voice_input === "brush_teeth") {
+    if (voice_input === "brush_teeth") {
       
       let options = {
         url: 'http://i8a201.p.ssafy.io/mirror/getScript',
@@ -417,6 +414,9 @@ function sensor_activate(){
 function mirrorCall(){
   console.log("EVENT : mirror called");
 
+  
+
+
   // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
   if(personFrontOfMirror == true){
 
@@ -432,12 +432,15 @@ function mirrorCall(){
   
       console.log("face_name => ", results);
       const face_name = results[0];
-      current_user = face_name
+      current_user = "B7T3-jX6r"
+      // current_user = face_name
+
+      
       personFrontOfMirror = true;
       person_appear();
     });
   }
-  else{ // 테스트
+  else{ //그냥 평시 상황에서 불렀다면
     TTS("네 말씀하세요?");
     waitingOrders = 1;
   }
@@ -508,6 +511,8 @@ function person_leave(){
 
   kidsMode = false;
   personFrontOfMirror = false;
+  waitingOrders = false;
+
 
   const data = {
     "cmd": "person_leave",
