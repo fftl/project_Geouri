@@ -1,0 +1,13 @@
+.footer-no-mirror {
+    position: fixed;
+    bottom: 5%;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+}
+.member-div{
+    text-align: center;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+}

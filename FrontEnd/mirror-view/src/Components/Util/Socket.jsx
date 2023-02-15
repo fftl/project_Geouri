@@ -16,6 +16,9 @@ const Socket = (props) => {
   webSocket.onmessage = function (message) {
     const msg = JSON.parse(message.data);
 
+    if( msg.cmd === 'sensor_activate'){
+      navigate('/on');
+    }
     if ( msg.cmd === 'person_appear' ){
       // store에 member정보를 dispatch 하여 넣기
       if (msg.content.kidsMode === true) {
