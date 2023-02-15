@@ -5,9 +5,9 @@ function HomeHeader () {
     const user = useSelector((state) => state.user);
     
     return (
-        <>
-        
-        </>
+        <div className="HomeHeader">
+          
+        </div>
     )
 
 }

@@ -64,7 +64,7 @@
           const timer = setTimeout(() => {
             cameraOff(webcam);
             ws.close();
-          }, 15000);
+          }, 10000);
 
           // append/get elements to the DOM
           const canvas = document.getElementById("canvas");
@@ -97,11 +97,7 @@
             // 정해진 시간 주기 간격으로 값 출력하기
 
             if (milliseconds >= 900) {    //
-              if (i == 0 && cost >= 0.6) // 양치 중임의 기준을 좀 더 올리는게 나은가?
-              {
-                brushing_on++;
-              }
-              else if (i == 1 && cost > 0.7) // 양치 안함
+              if (i == 2 && cost > 0.7) // 양치 안함
               {
                 brushing_off++;
               }
@@ -111,8 +107,8 @@
             const msg = { cmd: "alert", content: "" };
             const jsonMsg = JSON.stringify(msg);
             ws.send(jsonMsg);
-            brushing_off = 0;
-            brushing_on = 0;
+            ws.close();
+            cameraOff();
           }
           // drawPose(pose); //웹캠 보이기
         }

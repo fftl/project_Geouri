@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@mui/material";
 import Profile from "./Profile";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Profile.css";
+
+const api = axios.create({
+  baseURL : 'http://i8a201.p.ssafy.io'
+}, {withCredentials: true})
 
 function Profiles() {
-  const user = useSelector((state) => state.user);
-  const members = user.members;
+  const [memberList, setMemberList] = useState([]);
+
+  useEffect(() => {
+    api.get('/web/user/memberlist', {
+      headers: {
+        "user-key": "Fyw3-DOwW",
+      }
+    }).then((response) => {
+      setMemberList(response?.data?.data?.memberList);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+  
   const navigate = useNavigate();
   const handleClick = (e) => {
     e.preventDefault();
-    // add-mirror modal open
+    navigate('/mirror/add');
   };
   return (
     <>
       <h1>멤버</h1>
-      {/* {members.map((member) => {
-              <Profile 
-                key={member.id}
-                member={member}/>
-          })} */}
+      {memberList.map((member) => {
+        return (
+          <React.Fragment 
+            key={member?.memberKey}>
+            <Profile 
+              member={member}/>
+          </React.Fragment>
+        )
+      })}
       <Profile type="add_member" />
       <div className="footer-no-mirror">
         <Button onClick={handleClick} variant="text">

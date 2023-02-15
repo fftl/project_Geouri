@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // 중복된 주소를 줄이는 방법
-axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 //Action TYPE
@@ -24,7 +24,7 @@ const initialState = {
   signupError: "",
 };
 
-// 여기에서 백이랑 api통신을 해서 데이터를 받아와 -> extraReducer : reducer을 만들어서 state저장해.
+// 여기에서 백이랑 api통신을 해서 데이터를 받아옴 -> extraReducer : reducer을 만들어서 state저장해.
 const api = axios.create({
   baseURL : 'http://i8a201.p.ssafy.io'
 }, {withCredentials: true})
@@ -42,7 +42,7 @@ export const asyncLogin = createAsyncThunk(
     const navigate = useNavigate();
 
     // 여기에서 login api 통신
-    await axios.post("/login", {
+    await api.post("/login", {
       email: email, 
       password: password
     })
@@ -110,6 +110,7 @@ export const signup = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post("/signup", data);
+      
       return response.data;
     } catch (error) {
       console.log(error);

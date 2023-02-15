@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
 import Rule from "../Components/Kids/Rule";
 import Image from "../Elements/Image";
+import { HomeHeader } from "../Components";
 
 function Kids(props) {
   const { webSocket } = props;
@@ -33,9 +34,11 @@ function Kids(props) {
       setComp("greeting");
     }
     if (mirror_action === "wash_hands") {
+      setComp("");
       setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
+      setComp("");
       setVideo("brush_teeth");
     }
     if (mirror_action === "message") {
@@ -64,6 +67,7 @@ function Kids(props) {
 
   return (
     <>
+        <HomeHeader />
       <div className="main-box">
         {
           {

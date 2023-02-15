@@ -1,13 +1,22 @@
 import React from "react";
+import { HomeHeader } from "../Components";
 
-function Home() {
-  // function webcam () {
-  //   window.init();
-  // }
-  return (
-    <React.Fragment>
-    </React.Fragment>
-  );
+function Home(props) {
+  const {type} = props;
+
+  if(type === 'basic'){
+    return (
+      <>
+      </>
+    )
+  }
+  else if (type === 'on'){
+    return (
+      <>
+        <HomeHeader />
+      </>
+    )
+  }
 }
 
 export default Home;

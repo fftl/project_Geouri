@@ -1,0 +1,23 @@
+.mirror-icon-box{
+  width: 50%;   
+  margin: auto;
+  height: 300px;
+  display: flex;
+  align-items: end;
+  padding-bottom: 2rem;
+}
+.mirror-icon{
+    width: 100%;
+}
+.add-mirror-box{
+    width: 90%;
+    margin: auto;
+}
+.add-mirror-title{
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.add-mirror-desc{
+    margin: 1rem auto;
+    color: #323232;
+}

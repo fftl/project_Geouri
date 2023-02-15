@@ -1,3 +1,4 @@
+import Home from "./Home";
 import Login from "./LogIn";
 import FindUser from "./FindUser";
 import MemberPage from "./MemberPage";
