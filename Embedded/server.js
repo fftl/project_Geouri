@@ -408,6 +408,13 @@ function afterStatusCheck(){
 // 초음파 센서가 움직임을 감지 했을때
 function sensor_activate(){
   personFrontOfMirror = true;
+
+  var data = {
+    "cmd": "sensor_activate",
+    "content": "",
+  };
+
+  wss.broadcast(JSON.stringify(data));
 }
 
 
