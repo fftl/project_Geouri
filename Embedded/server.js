@@ -676,7 +676,7 @@ function quiz(voicedata){
   }
     
   else if(quizMode == 1){
-    console.log("아이의 정답: ",voice_input);
+    console.log("아이의 정답: ",voicedata);
     //정답을 맞췄을 경우
     if(voicedata.text.includes(quizAnswer) != -1){
       const replayNum = getRandomInt(0,quiz_correct_reply.length);
@@ -686,12 +686,15 @@ function quiz(voicedata){
       quizHint = "";
       quizAnswer = "";
 
-      data = {
-        "cmd": "default",
-        "content": "",
-      }
 
-      wss.broadcast(JSON.stringify(data));
+      setTimeout(() => {
+        data = {
+          "cmd": "default",
+          "content": "",
+        }
+  
+        wss.broadcast(JSON.stringify(data));
+      }, 4000);
 
     }
     else if(voicedata.cmd === "answer_neutral"){ // 모른다고 했을때
