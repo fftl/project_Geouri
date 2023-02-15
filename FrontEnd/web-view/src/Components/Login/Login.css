@@ -12,7 +12,7 @@
   border: 1px solid #efefef;
   height: 50px;
 }
-#email, #pwd {
+#email, #pwd, #add-mirror-input {
   border: none;
   width: 100%;
   height: 100%;

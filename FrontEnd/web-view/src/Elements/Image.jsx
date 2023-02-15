@@ -4,21 +4,22 @@ import AddIcon from '@mui/icons-material/Add';
 
 function Image(props){
     const { onClick, src, type, imgUrl } = props;
-
+    
     if (type === 'member') {
         return (
             <div 
                 className="member-image"
                 onClick={onClick}
-                style={{backgroundImage:`url(${imgUrl})`}}></div>
+                >
+                    <img src={src}/>
+                </div>
         )  
     }
     if (type === 'add_member') {
         return (
             <div 
                 className="add-member-image"
-                onClick={onClick}
-                style={{backgroundImage:`url()`}}>
+                onClick={onClick}>
                 <AddIcon style={{fontSize:"2rem"}}/>
             </div>
         )

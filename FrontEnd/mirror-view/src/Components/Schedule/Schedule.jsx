@@ -11,17 +11,6 @@ function Schedule () {
     const date = new Date()
     const current_hour = date.getHours();
     const current_minute = date.getMinutes();
-
-    // all-day, non-all-day 구분하기
-    const allDay = schedule.filter((x) => x.allDay === true); 
-    const nonAllDay = schedule.filter((x) => x.allDay === false); 
-    
-      // 현재 진행중일 경우 ( end_time 이 지금 이후일 경우 , 직전시작 그전까지 출력 )
-      
-      // if(is_urgent(hour, minute)){
-      //   return true;
-      // }
-      // return false;
     
     const new_schedule = (list) => {
       const arr = [];
@@ -59,8 +48,11 @@ function Schedule () {
         }
       })
     }
-
-    const new_result = new_schedule(schedule)
+    let new_result;
+    if (schedule.length > 0){
+      new_result = new_schedule(schedule)
+    }
+    
 
     return (
       <div className="schedule-box">

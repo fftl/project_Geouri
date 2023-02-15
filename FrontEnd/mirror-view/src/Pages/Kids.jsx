@@ -11,18 +11,17 @@ import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
 import Rule from "../Components/Kids/Rule";
 import Image from "../Elements/Image";
+import { HomeHeader } from "../Components";
 
 function Kids(props) {
   const { webSocket } = props;
-  const dispatch = useDispatch();
 
   const member_info = useSelector((state) => state?.mirror?.member);
   const name = member_info?.nickname;
   const mirror_action = useSelector((state) => state?.mirror?.action);
   const message = useSelector((state) => state?.mirror?.message);
-  const image = useSelector((state) => state?.mirror?.image);
-
   const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
+  const image = useSelector((state) => state?.mirror?.image);
 
   const [comp, setComp] = useState(""); // component 설정
   const [video, setVideo] = useState(""); // 비디오 url
@@ -35,15 +34,21 @@ function Kids(props) {
       setComp("greeting");
     }
     if (mirror_action === "wash_hands") {
-      setComp("video");
+      setComp("");
       setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
-      setComp("video");
+      setComp("");
       setVideo("brush_teeth");
     }
     if (mirror_action === "message") {
       setComp("message");
+    }
+    if (mirror_action === "alert") {
+      setComp("alert");
+    }
+    if (mirror_action === "photo") {
+      setComp("photo");
     }
     if (mirror_action === "default") {
       setComp("kidsDefault");
@@ -62,6 +67,7 @@ function Kids(props) {
 
   return (
     <>
+        <HomeHeader />
       <div className="main-box">
         {
           {
@@ -82,7 +88,9 @@ function Kids(props) {
             greeting: (
               <>
                 <div className="text-div">
-                  <p className="text">{message}, {checkKorean(name)}</p>
+                  <p className="text">
+                    {message}, {checkKorean(name)}
+                  </p>
                 </div>
                 <Character />
               </>
@@ -91,7 +99,10 @@ function Kids(props) {
             alertMsg: (
               <>
                 <div className="text-div alert">
-                  <p className="alertMsg">{message}</p>
+                  <p className="alertMsg">
+                    {checkKorean(name)}, {alertMsg}
+                  </p>
+                  <div className="highlight"></div>
                 </div>
               </>
             ),

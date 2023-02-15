@@ -16,6 +16,9 @@ const Socket = (props) => {
   webSocket.onmessage = function (message) {
     const msg = JSON.parse(message.data);
 
+    if( msg.cmd === 'sensor_activate'){
+      navigate('/on');
+    }
     if ( msg.cmd === 'person_appear' ){
       // store에 member정보를 dispatch 하여 넣기
       if (msg.content.kidsMode === true) {
@@ -34,9 +37,13 @@ const Socket = (props) => {
       navigate('/');
     }
     else if (msg.cmd === 'message') {
-      console.log(msg);
-      // 거울 사용 종료시 
       dispatch(mirrorActions.getMessage(msg));
+    }
+    else if (msg.cmd === 'alert') {
+      dispatch(mirrorActions.getAlertMsg(msg));
+      setTimeout(() => {
+        dispatch(mirrorActions.delMessage());
+      }, 3000);
     }
     else {
       dispatch(mirrorActions.getAction(msg))

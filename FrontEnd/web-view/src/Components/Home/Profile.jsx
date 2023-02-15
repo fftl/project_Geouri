@@ -5,17 +5,17 @@ import { useDispatch, useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
-    const { member, key, type } = props;
-
+    const { member, type } = props;
+    console.log(member?.imgUrl);
     const navigator = useNavigate();
 
     const handleClick = (e) => {
         e.preventDefault();
-        navigator(`/member/${member.id}`);
+        navigator('/member');
     }
     const addMemberClick = (e) => {
         e.preventDefault();
-        navigator(`/member/add`);
+        navigator('/member/add');
 
     }
     
@@ -26,8 +26,8 @@ const Profile = (props) => {
                 <Image 
                     type="member"
                     onClick={handleClick}
-                    src={member.image}/>
-                <Text>{member.name}</Text>
+                    src={member?.imgUrl}/>
+                <Text>{member?.nickname}</Text>
 
               </div>
             </>
