@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @Getter
@@ -15,5 +17,8 @@ public class ResponseUser {
     private String email;
     private String tel;
     private String birth;
+    private List<ResponseMirror> mirrorList;
+
+
 
 }

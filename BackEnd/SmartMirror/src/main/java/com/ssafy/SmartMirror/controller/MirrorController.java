@@ -149,11 +149,12 @@ public class MirrorController {
         String lastVisit = visitService.getLastVisit(member);
 
         // 방문기록 저장
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String visitTime = formatter.format(date);
-        visitService.saveVisit(member, visitTime);
-
+        if(!"fSBS-lCHb".equals(memberKey)) { // 정윤언니 제외
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String visitTime = formatter.format(date);
+            visitService.saveVisit(member, visitTime);
+        }
 
         // 멤버 동코드에 해당하는 지역 경도, 위도 정보
         ResponseRegion responseRegion = null;
@@ -272,24 +273,25 @@ public class MirrorController {
 
                 break;
             case "hand_washing": // 손씻기
-                // 일단 손씻기 기록 추가
-                handWashingService.saveHandWashing(member, visitTime);
+                if(!"fSBS-lCHb".equals(memberKey)) {
 
-                // 경험치를 제공하기 위해선 오늘 한 손씻기 횟수가 3번 미만이어야 합니다.
-                // 오늘의 양치기록 세기
-                count = handWashingService.countAllByMemberAndHandWashingTimeStartingWith(member, visitDay);
-                // 맥스 확인 ( 손씻기의 경우 10번이 맥스 )
-                System.out.println("visitDay : "+visitDay);
-                System.out.println("오늘 손씻기 : "+count);
-                if (count <= 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
-                    exp += 2; // 경험치 추가
-                    success = true;
+
+                    // 일단 손씻기 기록 추가
+                    handWashingService.saveHandWashing(member, visitTime);
+
+                    // 경험치를 제공하기 위해선 오늘 한 손씻기 횟수가 3번 미만이어야 합니다.
+                    // 오늘의 양치기록 세기
+                    count = handWashingService.countAllByMemberAndHandWashingTimeStartingWith(member, visitDay);
+                    // 맥스 확인 ( 손씻기의 경우 10번이 맥스 )
+                    System.out.println("visitDay : " + visitDay);
+                    System.out.println("오늘 손씻기 : " + count);
+                    if (count <= 10) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                        exp += 2; // 경험치 추가
+                        success = true;
+                    }
                 }
                 break;
 
-            case "CMD3": //
-                exp += 10;
-                break;
         }
 
 
