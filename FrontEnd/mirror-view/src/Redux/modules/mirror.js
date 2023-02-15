@@ -40,14 +40,9 @@ const mirrorSlice = createSlice({
     content: "",
     action: "",
     alertMsg: "",
-<<<<<<< HEAD
     level: null,
     point: null,
     levelUp: null,
-=======
-    level: "",
-    point: "",
->>>>>>> 8d9d5ddc2c749c5d1564a54a4b5154a9e0d2c52f
   },
 
   reducers: {
