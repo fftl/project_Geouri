@@ -248,7 +248,7 @@ public class MirrorController {
                 // 일단 양치 기록 추가
                 int count = 0;
 
-                if(memberKey != "fSBS-lCHb") {
+                if(!"fSBS-lCHb".equals(memberKey)) {
                     brushingService.saveBrushing(member, visitTime, 1);
 // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
                     // 오늘의 양치기록 세기
