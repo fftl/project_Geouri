@@ -246,24 +246,30 @@ public class MirrorController {
         switch (requestExp.getMission()) {
             case "brushing": // 양치
                 // 일단 양치 기록 추가
-                brushingService.saveBrushing(member, visitTime, 1);
-                // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
-                // 오늘의 양치기록 세기
-                int count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
-                // 맥스 확인 ( 양치의 경우 3번이 맥스 )
-                if (count <= 3) { // 오늘 한 양치의 횟수가 3번 이상이라면
-                    exp += 5; // 경험치 추가
-                    success = true;
-                }
-                if(count == 3) { // 양치 3번 달성
-                    utils.sendThreeSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                int count = 0;
+
+                if(memberKey != "fSBS-lCHb") {
+                    brushingService.saveBrushing(member, visitTime, 1);
+// 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
+                    // 오늘의 양치기록 세기
+                    count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
+                    // 맥스 확인 ( 양치의 경우 3번이 맥스 )
+                    if (count <= 3) { // 오늘 한 양치의 횟수가 3번 이상이라면
+                        exp += 5; // 경험치 추가
+                        success = true;
+                    }
+                    if(count == 3) { // 양치 3번 달성
+                        utils.sendThreeSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                    }
+
+                    // 이번이 첫 양치라면 칭찬 문자를 전송합니다.
+                    int totalCount = brushingService.countAllByMemberAndBrushingTimeStartingWith(member,"");
+                    if(totalCount == 1) {
+                        utils.sendFirstSms(memberKey);
+                    }
                 }
 
-                // 이번이 첫 양치라면 칭찬 문자를 전송합니다.
-                int totalCount = brushingService.countAllByMemberAndBrushingTimeStartingWith(member,"");
-                if(totalCount == 1) {
-                    utils.sendFirstSms(memberKey);
-                }
+
                 break;
             case "hand_washing": // 손씻기
                 // 일단 손씻기 기록 추가
