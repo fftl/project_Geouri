@@ -185,8 +185,9 @@ public class WebController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity getUser(@RequestParam String userKey) { // 유저 읽기
+    public ResponseEntity getUser(@RequestHeader("user-key") String userKey) { // 유저 읽기
         ResponseDefault responseDefault = null;
+        System.out.println(userKey);
         User user = userService.findByUserKey(userKey);
 
         if(user == null){
@@ -213,9 +214,9 @@ public class WebController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity updateUser(@RequestBody RequestUser requestUser) { // 유저 수정
+    public ResponseEntity updateUser(@RequestHeader("user-key") String userKey, @RequestBody RequestUser requestUser) { // 유저 수정
         ResponseDefault responseDefault = null;
-        User updateUser = userService.saveUser(requestUser, requestUser.getUserKey());
+        User updateUser = userService.saveUser(requestUser, userKey);
 
         if(updateUser == null){
             responseDefault = ResponseDefault.builder()
@@ -235,7 +236,7 @@ public class WebController {
     }
 
     @DeleteMapping("/user")
-    public ResponseEntity deleteUser(@RequestParam String userKey) { // 유저 삭제
+    public ResponseEntity deleteUser(@RequestHeader("user-key") String userKey) { // 유저 삭제
         ResponseDefault responseDefault = null;
         User getUser = userService.findByUserKey(userKey);
 
@@ -263,8 +264,8 @@ public class WebController {
      * @param userKey
      * @return
      */
-    @PostMapping("/user/memberlist")
-    public ResponseEntity getMemberList(@RequestParam String userKey) {
+    @GetMapping("/user/memberlist")
+    public ResponseEntity getMemberList(@RequestHeader("user-key") String userKey) {
         ResponseDefault responseDefault = null; // response 객체 생성
 
         // 해당 유저 있는지 확인
@@ -329,11 +330,11 @@ public class WebController {
      * @return
      */
     @PostMapping("/member")
-    public ResponseEntity addMember(@RequestBody RequestMember requestMember) {
+    public ResponseEntity addMember(@RequestHeader("user-key") String userKey, @RequestBody RequestMember requestMember) {
         ResponseDefault responseDefault = null;
 
         // 유저 불러오기
-        User user = userService.findByUserKey(requestMember.getUserKey());
+        User user = userService.findByUserKey(userKey);
 
         if(user == null) {
             responseDefault = ResponseDefault.builder()
@@ -450,14 +451,13 @@ public class WebController {
      * @return
      */
     @GetMapping("/member")
-    public ResponseEntity getWidget(@RequestParam String memberKey) throws ParserException, IOException {
+    public ResponseEntity getWidget(@RequestHeader("member-key") String memberKey) throws ParserException, IOException {
         ResponseDefault responseDefault = null;
 
         // 해당 멤버 있는지 확인
         if(!utils.isValidMemberKey(memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (해당 유저 없음)", HttpStatus.OK);
         }
-
 
         // 멤버 정보 가져오기
         Member member = memberService.findByMemberKey(memberKey); // 멤버
@@ -519,11 +519,10 @@ public class WebController {
      * @return
      */
     @PutMapping("/widget")
-    public ResponseEntity updateWidget(@RequestBody RequestWidget requestWidget) {
+    public ResponseEntity updateWidget(@RequestHeader("member-key") String memberKey, @RequestBody RequestWidget requestWidget) {
         ResponseDefault responseDefault = null;
 
         // 멤버키 유효성 확인
-        String memberKey = requestWidget.getMemberKey();
         if(!utils.isValidMemberKey(memberKey)) {
             return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음)",HttpStatus.OK);
         }
@@ -563,6 +562,12 @@ public class WebController {
                 break;
         }
 
+        responseDefault = ResponseDefault.builder()
+                .success(true)
+                .msg(null)
+                .data(null)
+                .build();
+
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
@@ -575,7 +580,7 @@ public class WebController {
      * @return
      */
     @GetMapping("/brushlog")
-    public ResponseEntity getBrushLog(@RequestParam String memberKey, String year, String month) {
+    public ResponseEntity getBrushLog(@RequestHeader("member-key") String memberKey, @RequestParam String year, @RequestParam String month) {
         ResponseDefault responseDefault = null;
 
         // 해당 멤버 있는지 확인
@@ -611,7 +616,7 @@ public class WebController {
      * @return
      */
     @GetMapping("/snapShot/all")
-    public ResponseEntity getAllSnapShot(@RequestParam String memberKey){
+    public ResponseEntity getAllSnapShot(@RequestHeader("member-key") String memberKey){
         // 반환값을 담을 Response 객체들을 선언
         ResponseDefault responseDefault = null;
         List<ResponseSnapShot> responseSnapShotList = null;
@@ -670,7 +675,7 @@ public class WebController {
      * @return
      */
     @GetMapping("/snapShot/week")
-    public ResponseEntity getWeekSnapShot(@RequestParam String memberKey){
+    public ResponseEntity getWeekSnapShot(@RequestHeader("member-key") String memberKey){
 
         // 반환값을 담을 Response 객체들을 선언
         ResponseDefault responseDefault = null;
@@ -688,7 +693,7 @@ public class WebController {
         List<Snapshot> snapshotList = snapshotService.getWeekSnapShot(member);
 
         // 일주일 내의 사진이 하나도 없을 경우 false 반환
-        if(snapshotList.isEmpty()) {
+        if(snapshotList == null) {
             responseDefault = ResponseDefault.builder()
                     .success(false)
                     .msg("멤버의 사진이 존재하지 않습니다.")

@@ -13,7 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 public class RequestMember {
 
-    private String userKey; // 유저 키
     private String nickname;
     private String birth;
     private String imgUrl; // 학습이미지

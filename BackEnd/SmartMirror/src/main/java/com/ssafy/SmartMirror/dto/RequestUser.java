@@ -10,7 +10,6 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 public class RequestUser {
-    private String userKey;
     private String email;
     private String password;
     private String name;
