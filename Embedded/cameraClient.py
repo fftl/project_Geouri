@@ -18,8 +18,6 @@ def sendInfo(msg):
 
 
 if __name__ == '__main__':
-
-    time.sleep(1)
     output = face_recog_module.detected_face()
     sendInfo(output)
 

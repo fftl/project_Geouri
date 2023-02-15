@@ -1,111 +1,156 @@
+import "./Kids.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Timer } from "../Elements";
 import BrushTeethVideo from "../Components/Kids/BrushTeethVideo";
 import WashHandsVideo from "../Components/Kids/WashHandsVideo";
 import Effect from "../Components/Kids/Effect";
-import "./Kids.css";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import PageParticles from "../Components/Kids/PageParticles";
 import Character from "../Components/Kids/Character";
+import "bootstrap/dist/css/bootstrap.css";
+import KidsDefault from "../Components/Kids/KidsDefault";
+import Rule from "../Components/Kids/Rule";
+import Image from "../Elements/Image";
 
 function Kids(props) {
-  const { webSocket, msg } = props;
-  // const member_info = useSelector(state => state?.member?.info);
-  // const message = useSelector(state => state?.message);
+  const { webSocket } = props;
+  const dispatch = useDispatch();
 
-  const member_info = {
-    member: {
-      info: {
-        name: "소영",
-        is_child: true,
-      },
-    },
+  const member_info = useSelector((state) => state?.mirror?.member);
+  const name = member_info?.nickname;
+  const mirror_action = useSelector((state) => state?.mirror?.action);
+  const message = useSelector((state) => state?.mirror?.message);
+  const image = useSelector((state) => state?.mirror?.image);
+
+  const alertMsg = useSelector((state) => state?.mirror?.alertMsg);
+
+  const [comp, setComp] = useState(""); // component 설정
+  const [video, setVideo] = useState(""); // 비디오 url
+
+  useEffect(() => {
+    if (mirror_action === "first_appear") {
+      setComp("first_appear");
+    }
+    if (mirror_action === "greetings") {
+      setComp("greeting");
+    }
+    if (mirror_action === "wash_hands") {
+      setComp("video");
+      setVideo("wash_hands");
+    }
+    if (mirror_action === "brush_teeth") {
+      setComp("video");
+      setVideo("brush_teeth");
+    }
+    if (mirror_action === "message") {
+      setComp("message");
+    }
+    if (mirror_action === "default") {
+      setComp("kidsDefault");
+    }
+  }, [mirror_action]);
+
+  // 한글이름에 따라 'ㅇㅇ아' or 'ㅇㅇ야' 체크
+  const checkKorean = (name) => {
+    const lastChar = name.charCodeAt(name.length - 1);
+    const isThereLastChar = (lastChar - 0xac00) % 28;
+    if (isThereLastChar) {
+      return `${name}아`;
+    }
+    return `${name}야`;
   };
 
-  const [comp, setComp] = useState('message');
-  const [video, setVideo] = useState('');
-  const [videoEnded, setVideoEnded] = useState(false);   // 자식 컴포넌트에서 비디오 재생이 끝나면 true로 바뀜
+  return (
+    <>
+      <div className="main-box">
+        {
+          {
+            first_appear: (
+              <>
+                <Rule setComp={setComp} />
+              </>
+            ),
+            // 시계만 있는 ('/')과 같은 페이지
+            none: (
+              <>
+                <div className="text-div">
+                  <p className="text"></p>
+                </div>
+              </>
+            ),
+            // 메시지 창에서 인사말을 보여줌
+            greeting: (
+              <>
+                <div className="text-div">
+                  <p className="text">{message}, {checkKorean(name)}</p>
+                </div>
+                <Character />
+              </>
+            ),
+            // alertmsg가 있으면 메시지 창에서 보여줌
+            alertMsg: (
+              <>
+                <div className="text-div alert">
+                  <p className="alertMsg">{message}</p>
+                </div>
+              </>
+            ),
 
-  // useEffect(() => {
-  //   if( message?.msg && message?.action ){
-  //     if( message?.action === 'wash_hands' ){
-  //       setComp('video')
-  //       setVideo('wash_hands');
-  //     } else {
-  //       setComp('video')
-  //       setVideo('brush_teeth');
-  //     }
-  //   }
-  //   else if(message && !message?.action ) {
-  //     setVideo('');
-  //     setComp('message');
-  //   }
-  // }, [message])
-
-  // useEffect(() => {
-  //   if (videoEnded) {
-  //     setComp('ending');
-  //   }
-  // }, [videoEnded])
-  useEffect(() => {
-    // setComp("video");
-    setComp("greeting");
-    // setVideo("wash_hands");
-  }, []);
-
-  useEffect(() => {
-    if (videoEnded) {
-      setComp("ending");
-    }
-  }, [videoEnded]);
-
-  // 그 다음 소켓으로 양치 요청이 들어오면 이를 닦아보자! 보여주고, 이닦는 동영상 재생, 동영상 완료 후 3,2,1 타이머 보여주고, 찰칵 , 마지막 인삿말
-  if (comp === "greeting") {
-    return (
-      <>
-        {member_info ? (
-          <div className="total">
-            <div className="balloon">
-              <p className="balloon-text">
-                안녕, {member_info?.name}아! {member_info.greeting}!
-              </p>
-              <Character />
-            </div>
-          </div>
-        ) : null}
-      </>
-    );
-  } else if (comp === "message") {
-    return (
-      <>
-        {msg ? (
-          <div className="balloon">
-            <p className="balloon-text">{msg}</p>
-          </div>
-        ) : null}
-      </>
-    );
-  } else if (comp === "video" && videoEnded === false) {
-    if (video === "wash_hands") {
-      return (
+            // 메시지 창에서 메시지를 보여줌
+            message: (
+              <>
+                <div className="text-div">
+                  <p className="text">{message}</p>
+                </div>
+                <Character />
+              </>
+            ),
+            // 카메라 촬영 모드
+            camera: (
+              <>
+                <Timer setComp={setComp} />
+              </>
+            ),
+            // 기본 화면
+            kidsDefault: (
+              <>
+                <KidsDefault />
+              </>
+            ),
+          }[comp]
+        }
+      </div>
+      {/* 비디오 값이 있으면 비디오 재생 */}
+      {video === "brush_teeth" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <WashHandsVideo webSocket={webSocket} videoEnded={videoEnded} />
+          <BrushTeethVideo
+            webSocket={webSocket}
+            setComp={setComp}
+            setVideo={setVideo}
+          />
         </div>
-      );
-    } else if (video === "brush_teeth") {
-      return (
+      )}
+      {video === "wash_hands" && (
         <div className="video-box">
           <PageParticles />
           <Effect />
-          <BrushTeethVideo webSocket={webSocket} videoEnded={videoEnded} />
+          <WashHandsVideo
+            webSocket={webSocket}
+            setComp={setComp}
+            setVideo={setVideo}
+          />
         </div>
-      );
-    }
-  } else if (comp === "ending") {
-    return <div className="balloon">{msg}</div>;
-  }
+      )}
+      {/* 컴포넌트 이미지이고, 이미지 값있으면 이미지 출력 */}
+      {comp === "image" && image && (
+        <div className="image-box">
+          <Image setComp={setComp} src={image} />
+        </div>
+      )}
+    </>
+  );
 }
 
 export default Kids;

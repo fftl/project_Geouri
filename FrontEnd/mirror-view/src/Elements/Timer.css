@@ -1,0 +1,12 @@
+
+.timer {
+    width: 100%;
+    padding: 10rem 20rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.timer-num {
+    font-size: 20rem;
+}

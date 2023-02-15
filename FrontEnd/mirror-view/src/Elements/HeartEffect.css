@@ -1,0 +1,67 @@
+.heartmove {
+  /* position: relative; */
+  background-color: transparent;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 80vw;
+  height: 80vh;
+  overflow: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.heartpp {
+  position: absolute;
+  top: -50%;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -m-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.heartpp:before {
+  position: absolute;
+  top: -50%;
+  left: 0;
+  display: block;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 100%;
+}
+
+.heartpp:after {
+  position: absolute;
+  top: 0;
+  right: -50%;
+  display: block;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 100%;
+}
+
+@-webkit-keyframes lovepp {
+  0% {
+    top: 110%;
+  }
+}
+@-moz-keyframes lovepp {
+  0% {
+    top: 110%;
+  }
+}
+@-ms-keyframes lovepp {
+  0% {
+    top: 110%;
+  }
+}
+@keyframes lovepp {
+  0% {
+    top: 110%;
+  }
+}

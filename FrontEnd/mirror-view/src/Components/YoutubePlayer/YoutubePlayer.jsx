@@ -1,42 +1,43 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import "./YoutubePlayer.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-function YoutubePlayer(){
-    const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
-    // mute 해주거나
-    const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&mute=1&autoplay=1&loop=1`
-    // unmute 하거나
-    const url2 = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&loop=1`
+function YoutubePlayer( props ) {
+  const { no_calendar } = props; // calendar 없으면 youtube_iframe은 위로 옮겨줄 것 -> css 다르게 적용
 
-    return (
-        <>
-            <iframe  
-                title="ytplayer"
-                id="ytplayer" 
-                type="text/html" 
-                width="640" height="360"
-                src={url}></iframe>
-        </>
-    )
+  // const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
+  const playlist = useSelector((state) => state?.mirror?.member?.playlist);
+  const playlistId = playlist.slice(playlist.indexOf("=")+1)
+  const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&enablejsapi=1&controls=0`;
+  const [play, setPlay] = useState(true);
+  const action = useSelector((state) => state?.mirror?.action);
+
+  useEffect(() => {
+    if (action === "play_music") {
+      setPlay(true);
+    } else if (action === "stop_music") {
+      setPlay(false);
+    }
+  }, [action]);
+
+  return (
+    <div className={no_calendar ? 'youtube-box' : 'no-calendar-youtube-box'}>
+      {play && playlistId ? (
+        <iframe
+          title="ytplayer"
+          id="ytplayer"
+          className="ytplayer"
+          name="ytplayer"
+          type="text/html"
+          enablejsapi="1"
+          width="640"
+          height="360"
+          src={url}
+        ></iframe>
+      ) : null}
+    </div>
+  );
 }
 
 export default YoutubePlayer;
-
-    // const API_URL = `https://www.googleapis.com/youtube/v3/playlistItems?`;
-    // const API_KEY = '***REMOVED***';
-    // const [playList, setPlayList] = useState([]);
-
-    // useEffect(() => {
-    //     axios({
-    //         method:'get',
-    //         url: `${API_URL}part=snippet&playlistId=${playlistId}&maxResults=50&key=${API_KEY}`,
-    //     }).then((res) => {
-    //         const list = res.data.items;
-    //         const videoIdList = list.map((item) => {
-    //             return item.snippet.resourceId.videoId
-    //         })
-    //         setPlayList([...playList, videoIdList])
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-        
-    // }, [])
