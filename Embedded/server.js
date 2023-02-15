@@ -424,7 +424,7 @@ function mirrorCall(){
   }
   else{ //그냥 평시 상황에서 불렀다면
     TTS("네 말씀하세요?");
-    waitingOrders = 1;
+    waitingOrders = true;
   }
 }
 
@@ -673,7 +673,7 @@ function quiz(voicedata){
         wss.broadcast(JSON.stringify(data));
 
         quizMode = 1;
-        
+        waitingOrders = false;
       }
     });
   }
@@ -715,14 +715,14 @@ function easteregg(){
   const name = callName_ga(user_data.nickname);
   var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
   TTS(str);
-
+  waitingOrders = false;
 }
 
 function whatTime(){
   var today = new Date();
   var str = "지금은 " + (today.getMonth() + 1) + "월 " + today.getDate() + "일 " + today.getHours() + "시 " + today.getMinutes() + "분 입니다."
   TTS(str);
-  waitingOrders = 0;
+  waitingOrders = false;
 }
 
 
