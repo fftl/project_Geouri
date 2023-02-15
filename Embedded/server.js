@@ -396,9 +396,6 @@ function sensor_activate(){
 function mirrorCall(){
   console.log("EVENT : mirror called");
 
-  
-
-
   // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
   if(personFrontOfMirror == true && currentStatus == 0){
 
@@ -414,7 +411,8 @@ function mirrorCall(){
   
       console.log("face_name => ", results);
       const face_name = results[0];
-      current_user = face_name
+      // current_user = face_name
+      current_user = "fSBS-lCHb"
 
       
       personFrontOfMirror = true;
