@@ -271,6 +271,12 @@ public class MirrorController {
                 }
 
 
+                // 정윤 언니라면 exp 와 lv 만 더합니다
+                if("fSBS-lCHb".equals(memberKey)) {
+                 exp += 5;
+                }
+
+
                 break;
             case "hand_washing": // 손씻기
                 if(!"fSBS-lCHb".equals(memberKey)) {
@@ -290,6 +296,11 @@ public class MirrorController {
                         success = true;
                     }
                 }
+
+                // 정윤 언니라면 exp 와 lv 만 더합니다
+                if("fSBS-lCHb".equals(memberKey)) {
+                    exp += 2;
+                }
                 break;
 
         }
@@ -299,11 +310,15 @@ public class MirrorController {
         if(exp >= 100) {
             exp -= 100;
             lv += 1;
-            levelService.updateLv(lv, memberKey);
+            if(!"fSBS-lCHb".equals(memberKey)) {
+                levelService.updateLv(lv, memberKey);
+            }
             levelUp = true;
         }
 
-        levelService.updateExp(exp, memberKey);
+        if(!"fSBS-lCHb".equals(memberKey)) {
+            levelService.updateExp(exp, memberKey);
+        }
 
         ResponseLevel responseLevel = ResponseLevel.builder()
                 .exp(exp)
