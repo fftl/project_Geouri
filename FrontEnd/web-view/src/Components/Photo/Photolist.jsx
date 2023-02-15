@@ -1,13 +1,19 @@
 import { current } from "immer";
 import React, { useState, useEffect } from "react";
-import ReactGridGallery from "react-grid-gallery";
-import instance from "../../Redux/modules/instance";
 import "./Photolist.css";
+import axios from "axios";
 
-const photoApi = {
-  getPhoto: (memberKey) =>
-    instance.get(`web/snapShot/all?memberKey=${memberKey}`),
-};
+// const photoApi = {
+//   getPhoto: (memberKey) =>
+//     instance.get(`web/snapShot/all?memberKey=${memberKey}`),
+// };
+
+const api = axios.create(
+  {
+    baseURL: "http://i8a201.p.ssafy.io",
+  },
+  { withCredentials: true }
+);
 
 const Photolist = () => {
   const [url, setUrl] = useState(null);
@@ -53,21 +59,38 @@ const Photolist = () => {
   // }, [imageList]);
 
   // console.log(list);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       await photoApi.getPhoto(memberKey).then((response) => {
+  //         const data = response.data.data;
+  //         setList((prev) => [...prev, ...data]);
+  //         console.log(response.data.data);
+  //       });
+  //     } catch (error) {
+  //       console.error(error);
+  //       // setUrl(null);
+  //     }
+  //   };
+  //   fetchData();
+  //   // console.log(list);
+  // }, []);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await photoApi.getPhoto(memberKey).then((response) => {
-          const data = response.data.data;
-          setList((prev) => [...prev, ...data]);
-          console.log(response.data.data);
-        });
-      } catch (error) {
-        console.error(error);
-        // setUrl(null);
-      }
-    };
-    fetchData();
-    // console.log(list);
+    api
+      .get("web/snapShot/all", {
+        headers: {
+          "member-key": "nh3b-494F",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        const data = response.data.data;
+        setList((prev) => [...prev, ...data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   useEffect(() => {
@@ -111,7 +134,9 @@ const Photolist = () => {
 
   const buttonStyles = {
     position: "relative",
-    border: "1px solid blue",
+    // margin: "10px",
+    padding: "10px",
+    border: "none",
   };
   return (
     <div className="gal">
@@ -129,9 +154,16 @@ const Photolist = () => {
         {modalOpen && (
           <div style={modalStyles}>
             <img src={url} />
-            <button onClick={() => setModalOpen(false)}>❌</button>
-            <button onClick={handlePrevClick}>◀️</button>
-            <button onClick={handleNextClick}>▶️</button>
+            <br></br>
+            <button onClick={handlePrevClick} style={buttonStyles}>
+              ◀️
+            </button>
+            <button onClick={() => setModalOpen(false)} style={buttonStyles}>
+              ❌
+            </button>
+            <button onClick={handleNextClick} style={buttonStyles}>
+              ▶️
+            </button>
           </div>
         )}
       </div>
