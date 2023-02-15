@@ -42,6 +42,9 @@ const Socket = (props) => {
         dispatch(mirrorActions.delMessage());
       }, 3000);
     }
+    else if (msg.cmd === 'photo_taken') {
+      dispatch(mirrorActions.getPhoto(msg));
+    }
     else {
       dispatch(mirrorActions.getAction(msg))
     }

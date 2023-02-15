@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
     const { member, type } = props;
-    console.log(member?.imgUrl);
     const navigator = useNavigate();
 
     const handleClick = (e) => {
