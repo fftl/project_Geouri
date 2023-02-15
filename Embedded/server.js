@@ -1,3 +1,7 @@
+// REACT_APP_WEATHER_API_KEY = ***REMOVED***
+// REACT_APP_YOUTUBE_API_KEY = ***REMOVED***
+
+
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ port: 9998 });
 const rq = require('request');
