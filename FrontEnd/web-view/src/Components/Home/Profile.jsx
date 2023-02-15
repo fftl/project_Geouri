@@ -5,17 +5,17 @@ import { useDispatch, useSelector} from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
-    const { member, key, type } = props;
+    const { member, type } = props;
 
     const navigator = useNavigate();
 
     const handleClick = (e) => {
         e.preventDefault();
-        navigator(`/member/${member.id}`);
+        navigator('/member');
     }
     const addMemberClick = (e) => {
         e.preventDefault();
-        navigator(`/member/add`);
+        navigator('/member/add');
 
     }
     
