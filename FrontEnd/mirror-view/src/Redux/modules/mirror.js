@@ -40,8 +40,9 @@ const mirrorSlice = createSlice({
     content: "",
     action: "",
     alertMsg: "",
-    level: "",
-    point: "",
+    level: null,
+    point: null,
+    levelUp: null,
   },
 
   reducers: {
@@ -80,6 +81,7 @@ const mirrorSlice = createSlice({
     getLev(state, action) {
       state.level = action.payload.lv;
       state.point = action.payload.exp;
+      state.levelUp = action.payload.levelUp;
     },
   },
 });

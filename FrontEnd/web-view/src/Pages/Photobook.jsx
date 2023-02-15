@@ -3,9 +3,9 @@ import Photolist from "../Components/Photo/Photolist";
 
 const Photobook = () => {
   return (
-    <div>
+    <>
       <Photolist />
-    </div>
+    </>
   );
 };
 
