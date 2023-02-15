@@ -53,7 +53,6 @@ const BrushTeethVideo = (props) => {
           autoPlay={true}
           loop={false}
           id="player"
-          muted={true}
           onEnded={videoOff}
         />
       ) : (
