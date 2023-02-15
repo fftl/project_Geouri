@@ -248,7 +248,7 @@ function currentStatusCheck(voicedata){
 
 
     if (quizMode == 1){
-        quiz(voice_input);
+        quiz(voicedata);
         return;
     }
 
@@ -636,7 +636,7 @@ function takePicture(){
 
 
 // status 0 : 질문을 물어보는 단계, 1: 질문을 받는 단계?
-function quiz(voice_input){
+function quiz(voicedata){
 
   const quiz_wrong_reply = ["다시 생각해보자~","아닌것 같아, 다시 생각해보자."];
   const quiz_correct_reply = ["정답이야! 잘 맞추는걸?","정답이야!"]
@@ -659,7 +659,7 @@ function quiz(voice_input){
       }else{
 
 
-        quizString = body.data.question;
+        quizString = body.data.question + "이건 무슨 동물일까? ";
         quizHint = body.data.hint;
         quizAnswer =body.data.answer;
 
@@ -679,9 +679,8 @@ function quiz(voice_input){
     
   else if(quizMode == 1){
     console.log("아이의 정답: ",voice_input);
-
     //정답을 맞췄을 경우
-    if(voice_input.indexOf(quizAnswer) != -1){
+    if(voicedata.text.includes(quizAnswer) != -1){
       const replayNum = getRandomInt(0,quiz_correct_reply.length);
       TTS(quiz_correct_reply[replayNum]);
       quizMode = 0;
@@ -697,7 +696,7 @@ function quiz(voice_input){
       wss.broadcast(JSON.stringify(data));
 
     }
-    else if(voice_input === "answer_neutral"){ // 모른다고 했을때
+    else if(voicedata.cmd === "answer_neutral"){ // 모른다고 했을때
       TTS(quizHint);
     }
     else{
