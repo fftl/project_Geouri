@@ -107,7 +107,7 @@
               }
             }
           }
-          if (brushing_off >= 10) {
+          if (brushing_off >= 5) {
             const msg = { cmd: "alert", content: "" };
             const jsonMsg = JSON.stringify(msg);
             ws.send(jsonMsg);

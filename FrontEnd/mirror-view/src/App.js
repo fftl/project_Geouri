@@ -15,11 +15,12 @@ function App() {
     <React.Fragment>
       {/* Socket 컴포넌트에서 socket관련 함수 실행 */}
       <Socket webSocket={webSocket}></Socket>
-      <HomeHeader />
       {/* React-Router */}
       <Routes>
         {/* 기본화면 */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home type="basic"/>} />
+        {/* Header있는 기본 화면 */}
+        <Route path="/on" element={<Home type="on"/>}/>
         {/* 아이모드 */}
         <Route path="/kids" element={<Kids webSocket={webSocket} />} />
         {/* 일반모드 */}
