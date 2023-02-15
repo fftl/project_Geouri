@@ -16,29 +16,30 @@ function Profiles() {
   useEffect(() => {
     api.get('/web/user/memberlist', {
       headers: {
-        "userKey": "Fyw3-DOwW",
+        "user-key": "Fyw3-DOwW",
       }
     }).then((response) => {
-      setMemberList(response?.data?.memberList);
+      setMemberList(response?.data?.data?.memberList);
     }).catch((err) => {
       console.log(err);
-
     })
   }, []);
   
   const navigate = useNavigate();
   const handleClick = (e) => {
     e.preventDefault();
-    // add-mirror modal open
+    navigate('/mirror/add');
   };
   return (
     <>
       <h1>멤버</h1>
       {memberList.map((member) => {
         return (
+          <React.Fragment 
+            key={member?.memberKey}>
             <Profile 
-            key={member.memberKey}
-            member={member}/>
+              member={member}/>
+          </React.Fragment>
         )
       })}
       <Profile type="add_member" />

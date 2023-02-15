@@ -9,7 +9,6 @@ function Home() {
   const is_login = sessionStorage.getItem('jwt')? true : false;
 
   // useEffect(() => {
-
   //   if (is_login) {
   //     return (
   //       <div className="container">
