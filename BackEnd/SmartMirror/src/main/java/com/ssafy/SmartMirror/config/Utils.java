@@ -252,7 +252,7 @@ public class Utils {
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01045620785");
         message.setTo(tel);
-        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!");
+        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!\n\n사진첩 바로가기: http://i8a201.p.ssafy.io/snapshot");
 //        message.setText("테스트발송");
 
 
@@ -269,7 +269,7 @@ public class Utils {
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01045620785");
         message.setTo(tel);
-        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 첫 번째 양치를 완료했어요!\n우리 아이의 첫 시작을 응원해주세요!");
+        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 첫 번째 양치를 완료했어요!\n우리 아이의 첫 시작을 응원해주세요!\n\n사진첩 바로가기: http://i8a201.p.ssafy.io/snapshot");
 //        message.setText("테스트발송");
 
 
