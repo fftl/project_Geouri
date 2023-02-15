@@ -39,7 +39,7 @@ dependencies {
 	implementation("org.mnode.ical4j:ical4j:4.0.0-beta2")	   //ical파일 읽기, 일정 리스트 가져오기
 
 	implementation ("net.nurigo:sdk:4.2.7")
-//	compileOnly("net.nurigo:javaSDK:2.2")
+//	compileOnly("net.nurigo:javaSDK:2.2")jen
 }
 
 

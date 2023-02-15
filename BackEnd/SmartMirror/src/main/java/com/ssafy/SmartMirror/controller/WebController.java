@@ -62,6 +62,35 @@ public class WebController {
 
     /* ***************************** User ***************************** */
 
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody RequestLogin requestLogin) {
+        ResponseDefault responseDefault = null;
+        String email = requestLogin.getEmail();
+        String password = requestLogin.getPassword();
+
+        // email 과 password 에 맞는 계정이 있는지 확인
+        User user = userService.findByEmailAndPassword(email, password);
+
+        // 해당 유저의 유저키 반환
+        if(user == null) {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("아이디/비밀번호가 일치하지 않습니다.")
+                    .data(null)
+                    .build();
+        } else {
+            ResponseLogin responseLogin = ResponseLogin.builder()
+                    .userKey(user.getUserKey())
+                    .build();
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(responseLogin)
+                    .build();
+        }
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
     //회원가입 시에 이메일을 입력하여 임시 이메일과 토큰을 DB에 저장합니다.
     @PostMapping("/addEmailCheck")
     public ResponseEntity addEmailCheck(@RequestParam String email) { // 이메일 등록
