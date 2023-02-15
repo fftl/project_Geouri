@@ -34,9 +34,11 @@ function Kids(props) {
       setComp("greeting");
     }
     if (mirror_action === "wash_hands") {
+      setComp("");
       setVideo("wash_hands");
     }
     if (mirror_action === "brush_teeth") {
+      setComp("");
       setVideo("brush_teeth");
     }
     if (mirror_action === "message") {
