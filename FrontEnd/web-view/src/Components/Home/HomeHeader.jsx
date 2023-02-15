@@ -9,7 +9,14 @@ function HomeHeader (props) {
     if(type === 'HomeHeader'){
         return (
             <div className="HomeHeader">
-              
+              <p>옆에 햄버거 버튼</p>
+            </div>
+        )
+    }
+    if(type === 'BasicHeader'){
+        return (
+            <div className="BasicHeader">
+              <p>뒤로 가기 버튼</p>
             </div>
         )
     }

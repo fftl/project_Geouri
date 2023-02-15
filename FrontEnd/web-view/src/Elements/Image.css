@@ -9,7 +9,7 @@
     background-color: #EFEFEF;
 }
 .member-image{
-    margin: .5rem;
+    margin: .5rem auto;
     width: 100px;
     height: 100px;
     border-radius: 100px;
@@ -19,4 +19,5 @@
 }
 .member-image img{
     width: 100%;
+
 }

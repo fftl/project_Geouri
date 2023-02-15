@@ -7,23 +7,22 @@ import { useNavigate } from "react-router-dom";
 axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 //Action TYPE
-const LOGIN = "user/LOGIN";
-const REGISTER_MIRROR = "user/REGISTER_MIRROR";
 export const REGISTER_USER = "user/REGISTER_USER";
 
 // Action creator
-const login = createAction(LOGIN);
-const registerMirror = createAction(REGISTER_MIRROR);
 const registerUser = createAction(REGISTER_USER);
 
 //InitialState
 const initialState = {
   user: null,
+  member: {},
   is_login: false,
   status: "idle",
   signupDone: false,
   isJoining: false,
   signupError: "",
+  loading: false,
+  error: null
 };
 
 // 여기에서 백이랑 api통신을 해서 데이터를 받아옴 -> extraReducer : reducer을 만들어서 state저장해.
@@ -60,6 +59,24 @@ export const asyncLogin = createAsyncThunk(
   }
 );
 
+// 
+export const asyncGetMember = createAsyncThunk(
+  // type
+  "userSlice/asyncGetMember",
+  // function
+  async (memberKey) => {
+    const response = await api.get('/web/member', {
+      headers:{
+        'member-key':memberKey,
+      },
+    });
+    if(!response){
+      throw new Error('error');
+    }
+    return response.data.data;
+  }
+);
+
 export const asyncRegisterMirror = createAsyncThunk(
   // type
   "userSlice/asyncRegisterMirror",
@@ -75,6 +92,11 @@ export const asyncRegisterMirror = createAsyncThunk(
     })
     .then((response) => {
       console.log(response?.data?.data);
+      window.alert('')
+      navigate('/');
+    })
+    .catch((err) => {
+      console.log(err);
     })
 
   }
@@ -82,7 +104,7 @@ export const asyncRegisterMirror = createAsyncThunk(
 
 //reducer
 export const userSlice = createSlice({
-  name: "user",
+  name: "userSlice",
   initialState,
   reducers: {
     isLogin: (state) => {
@@ -107,20 +129,25 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
       }
     });
-    builder.addCase(asyncLogin.rejected, (state, action) => {
+    builder.addCase(asyncLogin.rejected, (state) => {
       state.status = "rejected";
-      console.log(action.payload);
     });
-
-    builder.addCase(asyncRegisterMirror.fulfilled, (state, action) => {
-      state.serialNumber = action.payload.serialNumber;
+    
+    // asyncGetMember
+    builder.addCase(asyncGetMember.pending, (state) => {
+      console.log('pending');
+    });
+    builder.addCase(asyncGetMember.fulfilled, (state, action) => {
+      state.member = action.payload;
+    });
+    builder.addCase(asyncGetMember.rejected, (state) => {
+      console.log('rejected');
     });
 
     builder.addCase(signup.pending, (state, action) => {
       console.log("pending");
     });
     builder.addCase(signup.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.signupDone = true;
     });
     builder.addCase(signup.rejected, (state, action) => {
@@ -165,9 +192,8 @@ export const signup = createAsyncThunk(
 // }
 
 const actionCreators = {
-  login,
   registerUser,
-  registerMirror,
+  
 };
 
 export { actionCreators };
