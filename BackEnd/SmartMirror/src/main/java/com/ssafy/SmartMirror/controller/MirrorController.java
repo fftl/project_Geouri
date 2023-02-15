@@ -247,7 +247,6 @@ public class MirrorController {
             case "brushing": // 양치
                 // 일단 양치 기록 추가
                 brushingService.saveBrushing(member, visitTime, 1);
-
                 // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
                 // 오늘의 양치기록 세기
                 int count = brushingService.countAllByMemberAndBrushingTimeStartingWith(member, visitDay);
@@ -257,7 +256,13 @@ public class MirrorController {
                     success = true;
                 }
                 if(count == 3) { // 양치 3번 달성
-                    utils.sendSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                    utils.sendThreeSms(memberKey); // 해당 멤버의 유저 번호로 칭찬 문자를 전송합니다.
+                }
+
+                // 이번이 첫 양치라면 칭찬 문자를 전송합니다.
+                int totalCount = brushingService.countAllByMemberAndBrushingTimeStartingWith(member,"");
+                if(totalCount == 1) {
+                    utils.sendFirstSms(memberKey);
                 }
                 break;
             case "hand_washing": // 손씻기

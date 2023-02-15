@@ -241,7 +241,7 @@ public class Utils {
     }
 
 
-    public void sendSms(String memberKey){
+    public void sendThreeSms(String memberKey){
 
         Member member = memberService.findByMemberKey(memberKey);
         User user = member.getUser();
@@ -252,37 +252,28 @@ public class Utils {
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01045620785");
         message.setTo(tel);
-//        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!");
-        message.setText("테스트발송");
+        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!");
+//        message.setText("테스트발송");
 
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-//        System.out.println(response);
+    }
+        public void sendFirstSms(String memberKey){
+
+        Member member = memberService.findByMemberKey(memberKey);
+        User user = member.getUser();
+        String tel = user.getTel();
+
+
+        Message message = new Message();
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01045620785");
+        message.setTo(tel);
+        message.setText("[우리가족 거우리]\n딩동! 우리 아이가 첫 번째 양치를 완료했어요!\n우리 아이의 첫 시작을 응원해주세요!");
+//        message.setText("테스트발송");
+
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
     }
 
-
-//    public void sendSms2(String memberKey) {
-//        Member member = memberService.findByMemberKey(memberKey);
-//        User user = member.getUser();
-//        String tel = user.getTel();
-//
-//        String api_key = "***REMOVED***";
-//        String api_secret = "***REMOVED***";
-////        Message coolsms = new Message(api_key, api_secret);
-//        HashMap<String, String> params = new HashMap<>();
-//
-//        params.put("to", tel);
-//        params.put("from", "01045620785");
-//        params.put("type", "LMS");
-//        params.put("text", "[우리가족 거우리]\n딩동! 우리 아이가 세 번의 양치를 완료했어요!\n기특한 우리 아이에게 칭찬을 선물해주세요^^!\n\n사진첩 바로가기: ");
-//        params.put("app_version", "test app 1.2");
-//
-//        try {
-//            JSONObject obj = coolsms.send(params);
-//            System.out.println(obj.toString());
-//        } catch (CoolsmsException e) {
-//            System.out.println(e.getMessage());
-//            System.out.println(e.getCode());
-//        }
-//    }
 }
