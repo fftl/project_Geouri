@@ -3,7 +3,7 @@ import NewsPlayer from "../Components/NewsPlayer/NewsPlayer";
 import Schedule from "../Components/Schedule/Schedule";
 import './Home.css';
 import { useSelector } from "react-redux";
-import { FortuneTeller } from "../Components";
+import { FortuneTeller, HomeHeader } from "../Components";
 
 function GeneralView(props) {
     const { webSocket } = props;

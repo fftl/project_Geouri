@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import KidsDefault from "../Components/Kids/KidsDefault";
 import Rule from "../Components/Kids/Rule";
 import Image from "../Elements/Image";
+import { HomeHeader } from "../Components";
 
 function Kids(props) {
   const { webSocket } = props;
