@@ -27,7 +27,6 @@ const WashHandsVideo = (props) => {
   };
 
   levelApi.getLevel(requestBody).then((res) => {
-    console.log(res.data.data);
     dispatch(mirrorActions.getLev(res.data.data));
   });
 

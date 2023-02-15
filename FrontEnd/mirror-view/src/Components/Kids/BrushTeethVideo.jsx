@@ -29,10 +29,6 @@ const BrushTeethVideo = (props) => {
   };
   const [teethver, setTeethver] = useState(false);
 
-  // useEffect(() => {
-  //   setTeethver(Math.random() >= 0.5);
-  // }, []);
-
   const serialNumber = "8DLL-44yh-x7vB-VuWK";
   const memberKey = member_info?.memberKey;
   const mission = "brushing";
