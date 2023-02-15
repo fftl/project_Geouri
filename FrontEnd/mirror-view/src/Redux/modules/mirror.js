@@ -4,37 +4,27 @@ const mirrorSlice = createSlice({
   name: "mirror",
   initialState: {
     member: {
-      memberKey: "fSBS-lCHb",
-      nickname: "짱윤이",
-      birth: "1997-09-11",
-      kidsMode: true,
+      memberKey: "",
+      nickname: "",
+      birth: "",
+      kidsMode: false,
       widget: {
         news: true,
-        playlist: true,
+        playlist: false,
         shot: false,
-        calender: true,
+        calender: false,
       },
       playlist:
-        "https://youtube.com/playlist?list=PLRDEZ1-f6MAemydrZr4qK9JN3fXKCplNy",
-      calender:
-        "https://calendar.google.com/calendar/ical/sy980911%40gmail.com/private-b100ab3c5330aff53dec9b13ab4615ad/basic.ics",
+        "",
+      calender:[],
       region: {
-        sidoName: "인천광역시",
-        gugunName: "부평구",
-        dongName: "부개동",
-        lng: 37.4893497823,
-        lat: 126.7297474239,
+        sidoName: "",
+        gugunName: "",
+        dongName: "",
+        lng: 0,
+        lat: 0,
       },
-      news: [
-        {
-          press: "YTN",
-          title: '얼굴 공개한 조민 "떳떳...檢, 우리 가족에 가혹"',
-        },
-        {
-          press: "YTN",
-          title: '중국 정찰풍선 "한반도 위로 지나갔을 것"...美 기상전문가 분석',
-        },
-      ],
+      news: [],
     },
     message: "",
     content: "",
