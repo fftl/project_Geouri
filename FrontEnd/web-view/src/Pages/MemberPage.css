@@ -1,8 +1,13 @@
+.member-header{
+  margin: 2rem 0;
+}
 .toggle-label{
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  width: 100%;
+  justify-content: space-between;
 }
 .is_flex{
   display: inline-flex;
@@ -39,4 +44,38 @@
 [type="checkbox"]:checked {
     background-color: #007be5;
     border-color: #007be5;
+}
+#youtube-link-input, #calendar-link-input{
+  width: 100%;
+}
+
+.widget-input{
+  padding: 4px;
+  border: 1px solid grey;
+  border-radius: 10px;
+}
+.toggle-box{
+  width: 90%;
+  margin: .5rem auto;
+  justify-content: space-between;
+}
+
+.link-label{
+  width: 100%;
+  margin: .5rem 0;
+}
+.widget-title{
+  font-weight: 600;
+}
+.photo-book-link{
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+.delete-member{
+  color: darkgrey;
+  position: absolute;
+  bottom: 3%;
+  right: 1rem;
 }

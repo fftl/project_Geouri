@@ -31,10 +31,16 @@ function Profiles() {
   }, []);
   
   const navigate = useNavigate();
+  const handleAddMemberClick = (e) => {
+    e.preventDefault();
+    navigate('/member/add');
+  }
+
   const handleClick = (e) => {
     e.preventDefault();
     navigate('/mirror/add');
   };
+  
   return (
     <>
       <HomeHeader type="HomeHeader"/>
