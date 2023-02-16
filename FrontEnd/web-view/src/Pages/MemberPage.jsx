@@ -4,14 +4,23 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { HomeHeader } from "../Components";
 import { Image, Text } from "../Elements";
-
-const api = axios.create({
-  baseURL : 'http://i8a201.p.ssafy.io'
-}, {withCredentials: true})
+import './MemberPage.css';
 
 function MemberPage () {
   const member = useSelector((state) => state?.user?.member);
+  const [kidsMode, setKidsMode] = useState();
   
+  console.log(member);
+  const changeKidsMode = () => {
+    setKidsMode((prev) => !prev);
+  }
+  useEffect(() => {
+    if(member){
+      setKidsMode(member.kidsMode);
+      console.log(kidsMode);
+
+    }
+  }, []);
   
   //아이 모드
   if(member && member?.kidsMode === true) {
@@ -23,7 +32,22 @@ function MemberPage () {
           <Text>{member?.nickname}</Text>
         </div>
         <div className="widget-box">
-          <div className="kidMode-box"></div>
+          <div className="kidMode-box">
+          {kidsMode ? 
+              <label className="toggle-label">
+                <span>아이모드</span>
+                <input type="checkbox" role="switch"
+                  defaultChecked
+                  onClick={changeKidsMode}/>
+              </label>
+                : 
+                <label className="toggle-label">
+                <span>아이모드</span>
+                <input type="checkbox" role="switch"
+                  onClick={changeKidsMode}/>
+              </label>
+            }
+          </div>
           <div className="location-box"></div>
           <div className="youtube-box"></div>
           <div className="news-box"></div>
@@ -44,7 +68,22 @@ function MemberPage () {
           <Text>{member?.nickname}</Text>
         </div>
         <div className="widget-box">
-          <div className="kidMode-box"></div>
+          <div className="kidMode-box">
+            {kidsMode ? 
+              <label className="toggle-label">
+                <span>아이모드</span>
+                <input type="checkbox" role="switch"
+                  checked
+                  onClick={changeKidsMode}/>
+              </label>
+                : 
+                <label className="toggle-label">
+                <span>아이모드</span>
+                <input type="checkbox" role="switch"
+                  onClick={changeKidsMode}/>
+              </label>
+            }
+          </div>
           <div className="location-box"></div>
           <div className="youtube-box"></div>
           <div className="news-box"></div>
