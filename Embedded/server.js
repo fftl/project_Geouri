@@ -154,7 +154,7 @@ async function STT(voice_input){
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
     ["몇 시","몇시","몇분","시간","지금"],
-    // ["시작", "재생", "진행"],
+    ["잘가", "잘 가", "종료", "잘 있어"],
     // ["종료","그만","정지","중지"],
     // ["다음","넥스트"], 
     // ["이전"],
@@ -171,7 +171,7 @@ async function STT(voice_input){
     "quiz",
     "easteregg",
     "whattime",
-    // "video_start",
+    "person_leave",
     // "video_stop",
     // "video_next",
     // "video_prev",
@@ -216,6 +216,15 @@ function TTS(str){
 function currentStatusCheck(voicedata){
 
   const voice_input = voicedata.cmd;
+
+
+  // 종료 명령어를 최우선으로 알아들음
+  if(voice_input == "person_leave"){
+    person_leave();
+    return;
+  }
+
+
   //아기 모드
   if(kidsMode == true){
     if(currentStatus == 6 || currentStatus == 8) return;
@@ -359,7 +368,21 @@ function currentStatusCheck(voicedata){
   } //아기모드 end
   else{ // 어른 모드
 
-    
+
+    if(voice_input == "mirrorcall"){
+      mirrorCall();
+      return;
+    }
+
+    if (waitingOrders == true){
+      if(voice_input == "whattime"){
+        whatTime();
+      }
+
+      waitingOrders = false;
+      return;
+    }
+
   }// / 어른 모드 end 
 }
 
@@ -425,7 +448,7 @@ function mirrorCall(){
       console.log("face_name => ", results);
       const face_name = results[0];
       // current_user = face_name
-      current_user = "fSBS-lCHb"
+      current_user = "B7T3-jX6r"
 
       
       personFrontOfMirror = true;
@@ -598,7 +621,7 @@ function answerAndReply(reaction){
       console.log("error -> ", err);
     }else{
 
-      console.log(options)
+      // console.log(options)
       console.log(body)
 
       const returnScript = replaceScript(body.data.script);
