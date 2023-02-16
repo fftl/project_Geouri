@@ -8,6 +8,7 @@ function HomeHeader (props) {
     const { type } = props;
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
+    
     const goBack = () => {
         navigate(-1);
     }

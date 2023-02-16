@@ -18,7 +18,7 @@ const Profile = (props) => {
     }
     const addMemberClick = (e) => {
         e.preventDefault();
-        navigator('/member/add');
+        navigate('/member/add');
 
     }
     

@@ -39,23 +39,17 @@ export const asyncLogin = createAsyncThunk(
   async (userInfo) => {
     const email = userInfo.email;
     const password = userInfo.password;
-    const navigate = useNavigate();
 
     // 여기에서 login api 통신
-    await api.post("/web/login", {
+    const response = await api.post("/web/login", {
       email: email, 
       password: password
-    })
-    .then((res) => {
-      const user = res.data.member;
-      const jwt = user.token;
-      localStorage.setItem("jwt", jwt);
-      userSlice.reducer.isLogin();
-      navigate('/');
-  })
-    .catch((err) => {
-      console.log("login : error ", err.response);
-    }) ;
+    });
+    if(!response){
+      throw new Error('err');
+    }
+    return response.data.data.userKey;
+    
   }
 );
 
@@ -117,21 +111,12 @@ export const userSlice = createSlice({
   },
   // 비동기 작업의 reducers
   extraReducers: (builder) => {
-    builder.addCase(asyncLogin.pending, (state, action) => {
-      if (state.status === "idle") {
-        state.status = "pending";
-      }
-    });
     builder.addCase(asyncLogin.fulfilled, (state, action) => {
-      if (state.status === "pending" && state.is_login === false) {
-        state.status = "idle";
-        state.is_login = true;
-        state.user = action.payload.user;
+      console.log(action.payload);
+      state.userKey = action.payload;
       }
-    });
-    builder.addCase(asyncLogin.rejected, (state) => {
-      state.status = "rejected";
-    });
+    );
+    
     
     // asyncGetMember
     builder.addCase(asyncGetMember.pending, (state) => {

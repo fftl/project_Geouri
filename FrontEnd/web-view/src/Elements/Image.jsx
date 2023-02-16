@@ -9,8 +9,7 @@ function Image(props){
         return (
             <div 
                 className="member-image"
-                onClick={onClick}
-                >
+                onClick={onClick}>
                     <img src={src}/>
                 </div>
         )  
