@@ -27,12 +27,14 @@ var kidsMode = false;
 var personFrontOfMirror = false;
 var waitingOrders = false;
 
-
+var firstVisit = false;
 
 
 // 유저 정보
 var current_user = "";     // 유저 코드
 var serialNumber = "8DLL-44yh-x7vB-VuWK"
+
+// 유저 정보 json
 var user_data = {
   "data" : {
   },
@@ -57,7 +59,7 @@ wss.on('connection', function (ws, request) {
     // console.log(`수신함 : ${msg}` );
 
     // 받아온 메세지 파싱 후, 그거에 맞는 로직 실행
-
+    console.log("현재 status : ", currentStatus);
     const obj = JSON.parse(msg);
     const command = obj.cmd;
 
@@ -73,9 +75,7 @@ wss.on('connection', function (ws, request) {
 
     else if (command === "voice_input") {
       const voice_input = await STT(obj.content);
-
       console.log("voice command : ", voice_input);
- 
       currentStatusCheck(voice_input);
     }
 
@@ -131,8 +131,6 @@ async function nlp(text) {
 
   const sentiment = result.documentSentiment;
 
-  const sentences = result.sentences;
-
   if (sentiment.score >= 0.29)
     return "answer_positive";
   else if( sentiment.score <= -0.1)
@@ -156,7 +154,7 @@ async function STT(voice_input){
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
     ["몇 시","몇시","몇분","시간","지금"],
-    // ["시작", "재생", "진행"],
+    ["잘가", "잘 가", "종료", "잘 있어"],
     // ["종료","그만","정지","중지"],
     // ["다음","넥스트"], 
     // ["이전"],
@@ -173,7 +171,7 @@ async function STT(voice_input){
     "quiz",
     "easteregg",
     "whattime",
-    // "video_start",
+    "person_leave",
     // "video_stop",
     // "video_next",
     // "video_prev",
@@ -212,47 +210,166 @@ function TTS(str){
 
   PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
     if (err) throw err;
-    // console.log('results: %j', results);
   });
 }
-
-
 
 function currentStatusCheck(voicedata){
 
   const voice_input = voicedata.cmd;
 
 
-
-  //양치가 시작했거나 손씻기가 시작했으면 무시
-  if(currentStatus == 6 || currentStatus == 8) return;
-
-
-  // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
-  if(currentStatus!=4 && kidsMode == true){
-    if (voice_input.includes("answer")) {
-      var reaction = 1;
-
-      if (voice_input == "answer_positive")
-        reaction = 1;
-      else if (voice_input == "answer_negative" || voice_input == "answer_neutral")
-        reaction = 0;
-      
-
-      answerAndReply(reaction);    
-    }
+  // 종료 명령어를 최우선으로 알아들음
+  if(voice_input == "person_leave"){
+    person_leave();
+    return;
   }
 
-  else{ //평시
-    //퀴즈모드 분기
+
+  //아기 모드
+  if(kidsMode == true){
+    if(currentStatus == 6 || currentStatus == 8) return;
 
 
-    if (quizMode == 1){
+    // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
+    if(currentStatus != 4){
+      if (voice_input.includes("answer")) {
+        var reaction = 1;
+  
+        if (voice_input == "answer_positive")
+          reaction = 1;
+        else if (voice_input == "answer_negative" || voice_input == "answer_neutral")
+          reaction = 0;
+        answerAndReply(reaction);    
+      }
+    }
+    else{ // 아기 - 평소 모드 - 4
+      
+      if (quizMode == 1){
         quiz(voicedata);
         return;
-    }
+      }
 
-    if(waitingOrders == false && voice_input == "mirrorcall"){
+
+      // 아기가 '거울아'라고 이미 부른 상태임.
+      if (waitingOrders == true){
+        if(voice_input == "whattime"){
+          whatTime();
+        }
+        else if (voice_input == "quiz") {
+          quiz(""); 
+        }
+        else if(voice_input == "easteregg"){
+          easteregg();
+        }
+        waitingOrders = false;
+        return;
+      }
+
+      // 이 밑으로는 아기가 '거울아'라고 부른 상태가 아님.
+
+      if(voice_input == "mirrorcall"){
+        mirrorCall();
+        return;
+      }
+      
+      if(voice_input == "quiz"){
+        quiz(""); 
+        return;
+      }
+      
+      if(voice_input == "easteregg"){
+        easteregg();
+        return;
+      }
+
+      if (voice_input === "brush_teeth") {
+      
+        let options = {
+          url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+          method: 'POST',
+          body: {
+            "serialNumber": serialNumber,
+            "memberKey": current_user,
+            "reqKey": 0,
+            "type": 5,
+            "reaction": 1
+          },
+          json: true,
+        };
+  
+            
+        rq.post(options, function (err, httpResponse, body) {
+          if(err){
+            console.log("error -> ", err);
+          } else{
+            // console.log(options)
+            console.log(body)
+  
+  
+            const returnScript = replaceScript(body.data.script);
+  
+            prevKey = body.data.res_key;
+            currentStatus = body.data.type;
+            data = {
+              "cmd": "message",
+              "content": returnScript,
+            }
+  
+            TTS(returnScript);
+            wss.broadcast(JSON.stringify(data));
+  
+            afterStatusCheck();
+          }
+        });
+        waitingOrders = false;
+        return;
+      } // end brush teeth
+  
+      if (voice_input === "wash_hands") {
+        let options = {
+          url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+          method: 'POST',
+          body: {
+            "serialNumber": serialNumber,
+            "memberKey": current_user,
+            "reqKey": 0,
+            "type": 7,
+            "reaction": 1
+          },
+          json: true,
+        };
+  
+            
+        rq.post(options, function (err, httpResponse, body) {
+          if(err){
+            console.log("error -> ", err);
+          } else{
+            // console.log(options)
+            console.log(body)
+            const returnScript = replaceScript(body.data.script);
+  
+            prevKey = body.data.res_key;
+            currentStatus = body.data.type;
+            data = {
+              "cmd": "message",
+              "content": returnScript,
+            }
+  
+            TTS(returnScript);
+            wss.broadcast(JSON.stringify(data));
+  
+            afterStatusCheck();
+          }
+        });
+        waitingOrders = false;
+        return;
+      }// end wash hands
+    }//아기 평소모드  end
+  } //아기모드 end
+  else{ // 어른 모드
+
+
+    if(voice_input == "mirrorcall"){
       mirrorCall();
       return;
     }
@@ -261,96 +378,12 @@ function currentStatusCheck(voicedata){
       if(voice_input == "whattime"){
         whatTime();
       }
-      else if (voice_input === "quiz" && kidsMode == true) {
-        quiz(""); 
-      }
-      else if(voice_input === "easteregg" && kidsMode == true){
-        easteregg();
-      }
+
+      waitingOrders = false;
       return;
     }
 
-    // 아이가 먼저 양치하자고 하는 경우
-    if (voice_input === "brush_teeth") {
-      
-      let options = {
-        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-        method: 'POST',
-        body: {
-          "serialNumber": serialNumber,
-          "memberKey": current_user,
-          "reqKey": 0,
-          "type": 5,
-          "reaction": 1
-        },
-        json: true,
-      };
-
-          
-      rq.post(options, function (err, httpResponse, body) {
-        if(err){
-          console.log("error -> ", err);
-        } else{
-          // console.log(options)
-          console.log(body)
-
-
-          const returnScript = replaceScript(body.data.script);
-
-          prevKey = body.data.res_key;
-          currentStatus = body.data.type;
-          data = {
-            "cmd": "message",
-            "content": returnScript,
-          }
-
-          TTS(returnScript);
-          wss.broadcast(JSON.stringify(data));
-
-          afterStatusCheck();
-        }
-      });
-    }
-
-    else if (voice_input === "wash_hands") {
-      let options = {
-        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-        method: 'POST',
-        body: {
-          "serialNumber": serialNumber,
-          "memberKey": current_user,
-          "reqKey": 0,
-          "type": 7,
-          "reaction": 1
-        },
-        json: true,
-      };
-
-          
-      rq.post(options, function (err, httpResponse, body) {
-        if(err){
-          console.log("error -> ", err);
-        } else{
-          console.log(options)
-          console.log(body)
-          const returnScript = replaceScript(body.data.script);
-
-          prevKey = body.data.res_key;
-          currentStatus = body.data.type;
-          data = {
-            "cmd": "message",
-            "content": returnScript,
-          }
-
-          TTS(returnScript);
-          wss.broadcast(JSON.stringify(data));
-
-          afterStatusCheck();
-        }
-      });
-    }
-
-  }// end status 4
+  }// / 어른 모드 end 
 }
 
 // 통신하고 현재 상태가 바뀐 후 프론트쪽으로 보낼 메세지
@@ -415,7 +448,7 @@ function mirrorCall(){
       console.log("face_name => ", results);
       const face_name = results[0];
       // current_user = face_name
-      current_user = "fSBS-lCHb"
+      current_user = "B7T3-jX6r"
 
       
       personFrontOfMirror = true;
@@ -447,7 +480,7 @@ function person_appear(){
     },
     json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
   };
-  rq.post(options, function (err, httpResponse, body) {
+  rq.post(options, async function (err, httpResponse, body) {
     if(err){
       console.log("error -> ", err);
     } else{
@@ -466,11 +499,8 @@ function person_appear(){
 
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
-
-      if(user_data.lastVisit === null){
-        firstAppear();
-        setTimeout(() => {
-        }, 15000);
+      if(true){
+        await firstAppear();
       }
       greetings();
     }
@@ -492,7 +522,7 @@ function person_leave(){
   kidsMode = false;
   personFrontOfMirror = false;
   waitingOrders = false;
-
+  firstVisit = false;
 
   const data = {
     "cmd": "person_leave",
@@ -550,15 +580,16 @@ function greetings(){
 };  
 
 
-function firstAppear(){
+async function firstAppear(){
   var data = {
     "cmd": "first_appear",
-    "content": returnScript,
+    "content": "테스트입니다",
   }
 
-  var str = "반가워" + callName_ya(user_data.nickname) + ". 양치를 하고 손을 깨끗이 씻으면서 나만의 캐릭터를 키워보자!"
+  var str = "반가워 " + callName_ya(user_data.nickname) + ". 매일매일 양치를 하고 손을 깨끗이 씻으면서 너만의 귀여운 공룡을 키워보자!!"
   TTS(str);
   wss.broadcast(JSON.stringify(data));
+  await new Promise((resolve, reject) => setTimeout(resolve, 15000));
 }
 
 
@@ -590,7 +621,7 @@ function answerAndReply(reaction){
       console.log("error -> ", err);
     }else{
 
-      console.log(options)
+      // console.log(options)
       console.log(body)
 
       const returnScript = replaceScript(body.data.script);
