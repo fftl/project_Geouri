@@ -7,13 +7,13 @@ ws.onopen = function() { // onopen 이벤트 리스너 호출: 서버와 연결�
 
 
     var data = {
-        "cmd" : "sensor_activate",
-        "content" : "",
+        // "cmd" : "sensor_activate",
+        // "content" : "",
 
 
-        // "cmd" : "voice_input",
-        // "content" : "응",
-        // "content" : "손 씻기",
+        "cmd" : "voice_input",
+        // "content" : "거울아",
+        "content" : "양치",
 
 
         //     "cmd" : "face_name",
@@ -21,7 +21,7 @@ ws.onopen = function() { // onopen 이벤트 리스너 호출: 서버와 연결�
 
 
         // "cmd" : "person_leave",
-        // "content" : "",
+        // // "content" : "",
 
     }
 

@@ -27,8 +27,6 @@ var kidsMode = false;
 var personFrontOfMirror = false;
 var waitingOrders = false;
 
-var firstVisit = false;
-
 
 // 유저 정보
 var current_user = "";     // 유저 코드
@@ -93,8 +91,8 @@ wss.on('connection', function (ws, request) {
 
     //양치가 끝나면,3 초후 사진을 찍은 다음 평시 상황으로 돌아간다.
     else if (command === "brush_teeth_finish"){ 
-      setTimeout(() => {
-        takePicture();
+      setTimeout(async () => {
+        await takePicture();
         setTimeout(() => {
           var data = {
             "cmd": "default",
@@ -102,8 +100,8 @@ wss.on('connection', function (ws, request) {
           };
           wss.broadcast(JSON.stringify(data));
           currentStatus = 4;
-        }, 2000);
-      }, 3000);
+        }, 3000);
+      }, 5000);
     }
 
     else if (command === "reply") {
@@ -447,8 +445,8 @@ function mirrorCall(){
   
       console.log("face_name => ", results);
       const face_name = results[0];
-      // current_user = face_name
-      current_user = "B7T3-jX6r"
+      // current_user = face_name;
+      current_user = "fSBS-lCHb";
 
       
       personFrontOfMirror = true;
@@ -499,7 +497,7 @@ function person_appear(){
 
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
-      if(true){
+      if(user_data.lastVisit==null){
         await firstAppear();
       }
       greetings();
@@ -642,11 +640,11 @@ function answerAndReply(reaction){
 
 
 
-function takePicture(){
+async function takePicture(){
   console.log("사진 촬영 시작");
   var data = {
-    "cmd" : "message",
-    "content" : "picture taken",
+    "cmd" : "photo_taken",
+    "content" : "",
   }
 
   var options = {
@@ -656,13 +654,19 @@ function takePicture(){
     args: [serialNumber, current_user]
   };
 
-  PythonShell.PythonShell.run('capture_img_db.py', options, function (err, results) {
+  PythonShell.PythonShell.run('capture_img_db.py', options, await function (err, results) {
     if (err) throw err;
     console.log('results: %j', results);
-    data.content = results;
+
+    const parsedata = JSON.parse(results);
+    console.log(parsedata)
+
+    data.content = parsedata.data;
+
+    wss.broadcast(JSON.stringify(data));
   });
 
-  wss.broadcast(JSON.stringify(data));
+  
   console.log("사진 촬영 끝");
 }
 
