@@ -15,7 +15,7 @@ function MemberPage () {
   const [newsMode, setNewsMode] = useState();
   
   const changeKidsMode = () => {
-    setKidsMode((prev) => !prev);
+    setKidsMode(!kidsMode);
   }
   const changeYoutubeMode = () => {
     setYoutubeMode((prev) => !prev);
@@ -34,8 +34,9 @@ function MemberPage () {
       setNewsMode(member?.widget?.news);
       setCalendarMode(member?.widget?.calendar);
       console.log(member);
+      console.log(kidsMode);
     }
-  }, [member]);
+  }, [member, kidsMode]);
 
   // 다음 지도 api
   // const [openLocationModal, setOpenLocationModal] = useState(false);
@@ -55,7 +56,7 @@ function MemberPage () {
   // }
 
   //아이 모드
-  if(member && member?.kidsMode === true && kidsMode === true) {
+  if(member && (member?.kidsMode === true || kidsMode === true)) {
     return (
       <div className="container">
         <HomeHeader type="BasicHeader" />
@@ -82,20 +83,7 @@ function MemberPage () {
               </label>
             }
           </div>
-          <div className="location-box is_flex">
-            <div className="location-title">위치</div>
-            <input type="text" placeholder="시군동을 입력해주세요" />
-            {/* <div onClick={setOpenLocationModal}>위치</div>
-            {openLocationModal&& 
-            <DaumPostcode
-            style={postCodeStyle}
-            autoClose
-            onComplete={onCompletePost}
-              />
-            } */}
-          </div>
-          {}
-          <div className="youtube-box"></div>
+                    <div className="youtube-box"></div>
           <div className="news-box"></div>
           <div className="calendar-box"></div>
           <div className=""></div>
@@ -105,7 +93,7 @@ function MemberPage () {
   }
 
     //어른 모드
-  if(member) {
+  if(member && (member?.kidsMode === false || kidsMode === false )) {
     return (
       <div className="container">
         <HomeHeader type="BasicHeader" />
@@ -135,8 +123,40 @@ function MemberPage () {
               </label>
             }
           </div>
-          <div className="location-box"></div>
-          <div className="youtube-box"></div>
+          <div className="location-box">
+            <div className="location-box is_flex">
+              <div className="location-title">위치</div>
+              <input type="text" placeholder="시군동을 입력해주세요" 
+                defaultValue={`${member?.region?.sidoName} ${member?.region?.gugunName} ${member?.region?.dongName}`} />
+              {/* <div onClick={setOpenLocationModal}>위치</div>
+              {openLocationModal&& 
+              <DaumPostcode
+              style={postCodeStyle}
+              autoClose
+              onComplete={onCompletePost}
+                />
+              } */}
+            </div>
+          </div>
+          <div className="youtube-box">
+          {youtubeMode ? 
+              <>
+                <label className="toggle-label">
+                  <div>Youtube 재생목록 링크</div>
+                  <input type="checkbox" role="switch"
+                    checked
+                    onClick={changeYoutubeMode}/>
+                </label>
+                <input type="text" />
+              </>
+                : 
+                <label className="toggle-label">
+                <span>Youtube 재생목록 링크</span>
+                <input type="checkbox" role="switch"
+                  onClick={changeYoutubeMode}/>
+              </label>
+            }
+          </div>
           <div className="news-box"></div>
           <div className="calendar-box"></div>
           <div className=""></div>
