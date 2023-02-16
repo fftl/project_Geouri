@@ -14,15 +14,6 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
   <script type="text/javascript" id="www-widgetapi-script"
     src="https://s.ytimg.com/yts/jsbin/www-widgetapi-vflS50iB-/www-widgetapi.js" async=""></script>
   <script src="https://www.youtube.com/player_api"></script>
@@ -47,7 +38,7 @@
     var flag = 0;
 
     async function init() {
-
+      console.log("작동되긴함?")
       const modelURL = url + "model.json";
       const metadataURL = url + "metadata.json";
       model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
@@ -72,23 +63,24 @@
           const jsonMsg = JSON.stringify(msg);
           flag = 1;
 
-          var ws = new WebSocket("ws://localhost:9998");
-          ws.onopen = () => {ws.send(jsonMsg);
-            ws.close();
-          };
-          
+          const ws = new WebSocket("ws://localhost:9998");
+          ws.onopen = async () => {
 
-          brushing_off = 0;
-          brushing_on = 0;
+            await ws.send(jsonMsg);
+            await ws.close();
+
+          };
         }
+        brushing_off = 0;
+        brushing_on = 0;
         cameraOff(webcam);
       }, 10000);
 
       // append/get elements to the DOM
-      const canvas = document.getElementById("canvas");
+      var canvas = document.getElementById("canvas");
       canvas.width = size;
       canvas.height = size;
-      ctx = canvas.getContext("2d");
+      // ctx = canvas.getContext("2d");
       //labelContainer = document.getElementById("label-container");
       // for (let i = 0; i < maxPredictions; i++) {
       //   labelContainer.appendChild(document.createElement("div"));

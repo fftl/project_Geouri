@@ -6,6 +6,8 @@ var PythonShell = require('python-shell');
 
 var dotenv = require("dotenv").config();
 
+
+
 // Imports the Google Cloud client library
 const language = require('@google-cloud/language');
 // Instantiates a client
@@ -101,8 +103,14 @@ wss.on('connection', function (ws, request) {
       currentStatus = 4;
     }
 
-    else if (command === "reply") {
-      console.log("응답받음")
+    else if(command == "alert"){
+
+      var str = callName_ya(user_data.nickname) + ", 우리 치카치카 제대로 해서 칭찬받자! "
+      TTS(str);
+    }
+
+    else{
+      console.log(obj.cmd, obj.content)
     }
 
   });
@@ -145,6 +153,7 @@ async function STT(voice_input){
 
 
   const arr_str = [
+    ["안녕"],
     ["거울아"],
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
@@ -162,6 +171,7 @@ async function STT(voice_input){
   ];
 
   const arr_voicecmd = [
+    "hello",
     "mirrorcall",
     "quiz",
     "easteregg",
@@ -363,6 +373,11 @@ function currentStatusCheck(voicedata){
   } //아기모드 end
   else{ // 어른 모드 or 인식 안된 상태
 
+    if(voice_input == "hello"){
+      if(personFrontOfMirror == true || current_user != "") return;
+      sensor_activate();
+      return;
+    }
 
 
     if(voice_input == "mirrorcall"){
@@ -400,7 +415,7 @@ function afterStatusCheck(){
     // 이제 양치를 시작해보자~ 라고 말할때 잠시 대기
     setTimeout(() => {
       wss.broadcast(JSON.stringify(data));
-    }, 5000);
+    }, 6000);
   }
 
   else if(currentStatus == 8){
@@ -411,7 +426,7 @@ function afterStatusCheck(){
     // 이제 양치를 시작해보자~ 라고 말할때 잠시 대기
     setTimeout(() => {
       wss.broadcast(JSON.stringify(data));
-    }, 5000);
+    }, 6000);
   }
 
 }
@@ -503,9 +518,9 @@ function person_appear(){
 
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
-      if(user_data.lastVisit==null){
-        await firstAppear();
-      }
+      // if(user_data.lastVisit==null){
+      //   await firstAppear();
+      // }
       greetings();
     }
   });
@@ -589,7 +604,7 @@ async function firstAppear(){
   var str = "반가워 " + callName_ya(user_data.nickname) + ". 매일매일 양치를 하고 손을 깨끗이 씻으면서 너만의 귀여운 공룡을 키워보자!!"
   TTS(str);
   wss.broadcast(JSON.stringify(data));
-  await new Promise((resolve, reject) => setTimeout(resolve, 15000));
+  await new Promise((resolve, reject) => setTimeout(resolve, 13000));
 }
 
 
