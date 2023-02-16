@@ -36,13 +36,11 @@ function LoginBody(){
             'email' : inputs.email,
             'password' : inputs.password,
         }
-        try {
-            await dispatch(asyncLogin(userInfo)).unwrap();
-            navigate("/");
-        } catch (err) {
-            window.alert('이메일과 비밀번호를 확인해주세요.');  
-            onReset();
-        }
+        dispatch(asyncLogin(userInfo))
+            .then(() => {
+                navigate('/');
+            })
+        
     }
     
     return (
@@ -90,7 +88,7 @@ function LoginBody(){
                     <div className="autoLogin-box">
                         <input id="autoLogin" type="checkbox" 
                             onChange={(e) => {setCheckAutoLogin(!checkAutoLogin)}}/>
-                        <label htmlFor="autoLogin">자동 로그인</label>
+                        <label style={{marginLeft:'1rem'}} htmlFor="autoLogin">자동 로그인</label>
                     </div>
                     <div className="login-btn-box">
                         { regex.test(inputs.email) && inputs.password.trim() != '' ? 
