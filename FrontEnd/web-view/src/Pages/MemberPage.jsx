@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { HomeHeader } from "../Components";
 import { Image, Text } from "../Elements";
 import './MemberPage.css';
+import DaumPostcode from 'react-daum-postcode';
 
 function MemberPage () {
   const member = useSelector((state) => state?.user?.member);
@@ -17,8 +18,6 @@ function MemberPage () {
   useEffect(() => {
     if(member){
       setKidsMode(member.kidsMode);
-      console.log(kidsMode);
-
     }
   }, []);
   
@@ -48,7 +47,10 @@ function MemberPage () {
               </label>
             }
           </div>
-          <div className="location-box"></div>
+          <div className="location-box">
+              <label className="location-label">
+              </label>
+          </div>
           <div className="youtube-box"></div>
           <div className="news-box"></div>
           <div className="calendar-box"></div>
