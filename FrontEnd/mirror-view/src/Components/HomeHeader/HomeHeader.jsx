@@ -58,10 +58,12 @@ function HomeHeader() {
       const [minute, setMinute] = useState("");
       
       useEffect(() => {
-        var time = setInterval(() => {
-          var date = new Date();
-          var h = date.getHours();
-          if (h >= 12) { 
+        const time = setInterval(() => {
+          const date = new Date();
+          let h = date.getHours();
+          if (h > 12) { 
+            h -= 12
+            setHour(h);
             setMorning("오후");
             if (h > 12){
               h -= 12

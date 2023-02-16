@@ -1,6 +1,7 @@
-import React from "react";
-import { useDispatch, useSelector} from 'react-redux';
+import React, { useState } from "react";
+import { useSelector } from 'react-redux';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
 
 function HomeHeader (props) {
@@ -10,11 +11,17 @@ function HomeHeader (props) {
     const goBack = () => {
         navigate(-1);
     }
+    const [sideBar, setSideBar] = useState(false);
+    const openSidBar = () => {
+      setSideBar(!sideBar);
+    }
 
     if(type === 'HomeHeader'){
         return (
             <div className="HomeHeader">
-              <p>옆에 햄버거 버튼</p>
+              <div className="hamburger-button">
+                <MenuIcon onClick={openSidBar}/>
+              </div>
             </div>
         )
     }
