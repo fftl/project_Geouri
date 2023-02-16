@@ -254,7 +254,7 @@ function currentStatusCheck(voicedata){
           quiz(""); 
         }
         else if(voice_input == "easteregg"){
-          easteregg();
+          easteregg(0);
         }
         waitingOrders = false;
         return;
@@ -273,7 +273,7 @@ function currentStatusCheck(voicedata){
       }
       
       if(voice_input == "easteregg"){
-        easteregg();
+        easteregg(0);
         return;
       }
 
@@ -361,7 +361,8 @@ function currentStatusCheck(voicedata){
       }// end wash hands
     }//아기 평소모드  end
   } //아기모드 end
-  else{ // 어른 모드
+  else{ // 어른 모드 or 인식 안된 상태
+
 
 
     if(voice_input == "mirrorcall"){
@@ -372,10 +373,15 @@ function currentStatusCheck(voicedata){
     if (waitingOrders == true){
       if(voice_input == "whattime"){
         whatTime();
+        waitingOrders = false;
+        return;
       }
 
-      waitingOrders = false;
-      return;
+      if(voice_input == "easteregg"){
+        easteregg(1);
+        waitingOrders = false;
+        return;
+      }
     }
 
   }// / 어른 모드 end 
@@ -738,10 +744,19 @@ function quiz(voicedata){
   }
 }
 
-function easteregg(){
+function easteregg(type){
   console.log(user_data.nickname);
   const name = callName_ga(user_data.nickname);
-  var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
+  var str = "";
+  if(type == 0){
+    str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
+  }
+  else{
+    if(personFrontOfMirror == true || user_data != "")
+      str = "물론 우리 " + name + "님이 세상에서 가장 이쁘죠.";
+      else
+        str = "어디 계시나요? 잘 안 보여요.";
+  }
   TTS(str);
   waitingOrders = false;
 }
