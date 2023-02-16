@@ -379,9 +379,12 @@ function currentStatusCheck(voicedata){
 
       if(voice_input == "easteregg"){
         easteregg(1);
-        waitingOrders = false;
+        
         return;
       }
+
+      waitingOrders = false;
+      return;
     }
 
   }// / 어른 모드 end 
