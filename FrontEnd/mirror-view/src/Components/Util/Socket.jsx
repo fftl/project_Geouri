@@ -9,9 +9,6 @@ const Socket = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  // client에서 보낼 메시지
-  const [text, setText] = useState("");
-
   // 소켓을 통해 메시지가 전달된 경우, 실행되는 함수
   webSocket.onmessage = function (message) {
     const msg = JSON.parse(message.data);
@@ -44,6 +41,9 @@ const Socket = (props) => {
       setTimeout(() => {
         dispatch(mirrorActions.delMessage());
       }, 3000);
+    }
+    else if (msg.cmd === 'photo_taken') {
+      dispatch(mirrorActions.getPhoto(msg));
     }
     else {
       dispatch(mirrorActions.getAction(msg))

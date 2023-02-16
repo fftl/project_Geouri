@@ -9,11 +9,15 @@
     background-color: #EFEFEF;
 }
 .member-image{
-    margin: 16px;
+    margin: .5rem auto;
     width: 100px;
     height: 100px;
     border-radius: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.member-image img{
+    width: 100%;
+
 }

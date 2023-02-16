@@ -48,8 +48,11 @@ function Schedule () {
         }
       })
     }
-
-    const new_result = new_schedule(schedule)
+    let new_result;
+    if (schedule.length > 0){
+      new_result = new_schedule(schedule)
+    }
+    
 
     return (
       <div className="schedule-box">
@@ -57,7 +60,9 @@ function Schedule () {
           new_result? 
             new_result.map((item, idx) => {
               return (
-                <ScheduleItem item={item} key={idx}/>
+                <React.Fragment key={idx}>
+                  <ScheduleItem item={item}/>
+                </React.Fragment>
               )
             })
           :

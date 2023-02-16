@@ -3,5 +3,15 @@
     grid-template-rows: 1fr 0.2fr;
 }
 .HomeHeader{
-    height: 100px;
+    height: 60px;
+}
+
+.BasicHeader {
+    height: 60px;
+    position: relative;
+}
+.go-back-button{
+    position: absolute;
+    left: .5rem;
+    top: .5rem;
 }

@@ -1,17 +1,20 @@
 import React from "react";
 import "./Home.css";
 import { Image, Text } from "../../Elements/index"; 
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+import { asyncGetMember } from "../../Redux/modules/user";
+
 
 const Profile = (props) => {
     const { member, type } = props;
-
-    const navigator = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleClick = (e) => {
         e.preventDefault();
-        navigator('/member');
+        dispatch(asyncGetMember(member?.memberKey));
+        navigate('/member');
     }
     const addMemberClick = (e) => {
         e.preventDefault();
@@ -26,8 +29,8 @@ const Profile = (props) => {
                 <Image 
                     type="member"
                     onClick={handleClick}
-                    src={member.image}/>
-                <Text>{member.name}</Text>
+                    src={member?.imgUrl}/>
+                <Text>{member?.nickname}</Text>
 
               </div>
             </>

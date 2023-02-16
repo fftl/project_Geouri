@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 function YoutubePlayer( props ) {
   const { no_calendar } = props; // calendar 없으면 youtube_iframe은 위로 옮겨줄 것 -> css 다르게 적용
 
-  // const playlistId = 'PLph2xcT2CJAIzf_OkcVYjw8qhx7wyxE_D'; // 후에 Back으로부터 받아옴
   const playlist = useSelector((state) => state?.mirror?.member?.playlist);
   const playlistId = playlist.slice(playlist.indexOf("=")+1)
   const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&enablejsapi=1&controls=0`;

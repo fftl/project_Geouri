@@ -12,8 +12,9 @@ function NewsPlayer (props) {
             <div className="news-player">
             {newsData?.map((news, idx) => {
                 return (
-                    <News news={news} key={idx}/>        
-                    // {/* // 추후에 index 말고 id 값으로 줘야함 */}
+                    <React.Fragment key={idx}>
+                        <News news={news} />        
+                    </React.Fragment>
                 )
             })}
 

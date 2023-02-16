@@ -6,7 +6,7 @@ import storm from "../../assets/weatherIcons/009-storm-1.png";
 import drop from "../../assets/weatherIcons/028-drop.png";
 import sun from "../../assets/weatherIcons/039-sun.png";
 import windy from "../../assets/weatherIcons/010-windy.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useSelector } from "react-redux";
 
@@ -38,15 +38,8 @@ const dateBuilder = (d) => {
   };
   
   const clockBuilder = (d) => {
-    let hour = d.getHours();
-    let morning = '오전';
   
-    if (hour > 12) { 
-      hour -= 12
-      morning = '오후';
-    }
     if (hour < 10){
-      hour = '0'+String(hour)
     }
     let minute = d.getMinutes();
     if (minute < 10) {
@@ -60,17 +53,42 @@ function HomeHeader() {
         key: process.env.REACT_APP_WEATHER_API_KEY,
         base: "http://api.openweathermap.org/data/2.5/",
       };
-      // 위치정보는 mock data
+
       const member = useSelector((state) => state?.mirror?.member);
       const lat = Math.round(member?.region?.lat * 100)/100;
       const lon = Math.round(member?.region?.lng * 100)/100;
     
-      // const [lat, lon] = [37.49, 126.73];
       const url = `${api.base}weather?lat=${lat}&lon=${lon}&appid=${api.key}`;
       const [temp, setTemp] = useState("");
       const [weather, setWeather] = useState("");
       const [icon, setIcon] = useState("");
       
+      const [morning, setMorning] = useState("");
+      const [hour, setHour] = useState("");
+      const [minute, setMinute] = useState("");
+
+      useEffect(() => {
+        const time = setInterval(() => {
+          const h = new Date().getHours;
+          if (h > 12) { 
+            h -= 12
+            setHour(String(h));
+            setMorning("오후");
+          }
+          if (h < 10) {
+            setHour('0'+String(h))
+          }
+          setMinute(String(new Date().getMinutes));
+          if (minute < 10) {
+            setMinute('0' + String(minute));
+          }
+        }, 1000);
+        return () => {
+          clearInterval(time)
+        }
+      }, []);
+      
+
       axios({
         method:'get',
         url: url,
@@ -112,7 +130,7 @@ function HomeHeader() {
         <div className='header'>
           <div className='clock'>
             <p className='date'>{dateBuilder(new Date())}</p>
-            <p className='time'>{clockBuilder(new Date())}</p>
+            <p className='time'>{morning} {hour}시 {minute}분</p>
           </div>
           {lat && lon ? 
             <div className='weather'>
@@ -131,7 +149,7 @@ function HomeHeader() {
             </div>
               : 
               <div style={{fontSize: '2rem', margin: '4rem'}}>
-                날씨 및 위치 정보를 불러올 수 없습니다.   
+                --
               </div>
           }
         </div>
