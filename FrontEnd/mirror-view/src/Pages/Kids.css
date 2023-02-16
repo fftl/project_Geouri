@@ -1,9 +1,8 @@
 .main-box {
-  margin: 0 auto;
+
   justify-content: center;
-  margin: 4rem auto 4rem auto;
-  padding: 2rem;
-  width: 80%;
+  margin: 0 auto;
+  width: 100vw;
   text-align: center;
 }
 .text-div {
@@ -12,8 +11,9 @@
 }
 .text {
   font-family: "binggrae";
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 400;
+  padding : 2rem 4rem;
 }
 .alertMsg{
   font-family: 'binggrae';

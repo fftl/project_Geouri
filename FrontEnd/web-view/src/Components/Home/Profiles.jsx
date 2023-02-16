@@ -16,7 +16,8 @@ function Profiles() {
   // const userKey = localStorage.getItem('userKey');
   const serialNumber = localStorage.getItem('serialNumber');
   // const serialNumber = "8DLL-44yh-x7vB-VuWK";
-  const userKey = "Fyw3-DOwW";
+  // const userKey = "Fyw3-DOwW";
+  const userKey = useSelector((state) => state.user.userKey);
 
   useEffect(() => {
     api.get('/web/user/memberlist', {
@@ -31,10 +32,16 @@ function Profiles() {
   }, []);
   
   const navigate = useNavigate();
+  const handleAddMemberClick = (e) => {
+    e.preventDefault();
+    navigate('/member/add');
+  }
+
   const handleClick = (e) => {
     e.preventDefault();
     navigate('/mirror/add');
   };
+  
   return (
     <>
       <HomeHeader type="HomeHeader"/>

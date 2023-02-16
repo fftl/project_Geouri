@@ -4,6 +4,12 @@
 }
 .HomeHeader{
     height: 60px;
+    position: relative;
+}
+.hamburger-button{
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
 }
 
 .BasicHeader {

@@ -49,11 +49,6 @@ const Socket = (props) => {
       dispatch(mirrorActions.getAction(msg))
     }
   };
-    // 서버로 메시지를 전송하는 함수
-    function sendMessage(){
-        //웹소켓으로 textMessage객체의 값을 보낸다.
-        webSocket.send(text);
-    }
 }
 
 export default Socket;

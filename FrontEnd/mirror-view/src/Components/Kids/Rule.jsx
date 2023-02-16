@@ -18,8 +18,8 @@ const Rule = (props) => {
     <>
       <div className="rule">
         <div className="text-div">
-          <span className="text">양치를 하고 손을 깨끗이 씻으면서</span>
-          <span className="text">나만의 캐릭터를 키워보자!</span>
+          <span className="textrule">양치를 하고 손을 깨끗이 씻으면서</span>
+          <span className="textrule">나만의 캐릭터를 키워보자!</span>
         </div>
         <div className="kidslevel">
           <img

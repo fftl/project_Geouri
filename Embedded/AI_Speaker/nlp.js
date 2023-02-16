@@ -2,7 +2,8 @@
 npm install --save @google-cloud/language
 */
 
-async function quickstart() {
+var a = 0;
+async function nlp(text) {
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');
 
@@ -21,10 +22,17 @@ async function quickstart() {
     const [result] = await client.analyzeSentiment({ document: document });
     const sentiment = result.documentSentiment;
 
-    console.log(`Text: ${text}`);
-    console.log(`Sentiment score: ${sentiment.score}`);
-    console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+    // console.log(`Text: ${text}`);
+    // console.log(`Sentiment score: ${sentiment.score}`);
+    // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+
+    //  a = sentiment.score;
+    return sentiment.score;
 }
 
-quickstart()
+async function start() {
+    a = await nlp(text);
+    console.log(a);
+}
 
+start();

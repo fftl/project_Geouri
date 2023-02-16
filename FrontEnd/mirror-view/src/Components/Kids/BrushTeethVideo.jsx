@@ -27,7 +27,7 @@ const BrushTeethVideo = (props) => {
     setVideo("");
     webSocket.send(jsonMsg);
   };
-  const [teethver, setTeethver] = useState(false);
+  const [teethver, setTeethver] = useState(true);
 
   const serialNumber = "8DLL-44yh-x7vB-VuWK";
   const memberKey = member_info?.memberKey;
@@ -53,7 +53,6 @@ const BrushTeethVideo = (props) => {
           autoPlay={true}
           loop={false}
           id="player"
-          muted={true}
           onEnded={videoOff}
         />
       ) : (
@@ -64,6 +63,7 @@ const BrushTeethVideo = (props) => {
           autoPlay={true}
           playing={true}
           id="player"
+          volume = {0.8}
           onEnded={videoOff}
         />
       )}
