@@ -38,12 +38,12 @@
   <script type="text/javascript">
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
-    const ws = new WebSocket("ws://localhost:9998");
+    
 
     const url = ""; //모델이 들어있는 파일 이름
-    let model, webcam, ctx, labelContainer, maxPredictions;
-    let brushing_on = 0;
-    let brushing_off = -5;
+    var model, webcam, ctx, labelContainer, maxPredictions;
+    var brushing_on = 0;
+    var brushing_off = 0;
     var flag = 0;
 
     async function init() {
@@ -63,9 +63,25 @@
 
       window.requestAnimationFrame(loop); //계속해서 프레임을 송출하기 위함
 
-      const timer = setTimeout(() => {
+      const timer = setTimeout(async () => {
+        // window.cancelAnimationFrame();
+        console.log("off:" ,brushing_off , " on:",brushing_on );
+
+        if (brushing_on <= brushing_off) {
+          const msg = { cmd: "alert", content: "" };
+          const jsonMsg = JSON.stringify(msg);
+          flag = 1;
+
+          var ws = new WebSocket("ws://localhost:9998");
+          ws.onopen = () => {ws.send(jsonMsg);
+            ws.close();
+          };
+          
+
+          brushing_off = 0;
+          brushing_on = 0;
+        }
         cameraOff(webcam);
-        ws.close();
       }, 10000);
 
       // append/get elements to the DOM
@@ -81,44 +97,32 @@
 
     async function loop(timestamp) {
       webcam.update(); // update the webcam frame
-
-      if (flag == 0)
-        predict();
-
-      if (brushing_off < 5)
-        window.requestAnimationFrame(loop);  //계속해서 프레임을 송출하기 위함
-
-      if (brushing_off >= 5)
-        cameraOff(webcam);
+      await predict();
+      window.requestAnimationFrame(loop);  //계속해서 프레임을 송출하기 위함
     }
 
     async function predict() {
       //자세 추정하기
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
       const prediction = await model.predict(posenetOutput);
-      const date = new Date();
 
       for (let i = 0; i < maxPredictions; i++) {
         // 추정한 자세와 정확도 나타내기 (소숫점두번째까지)
         const cost = prediction[i].probability.toFixed(2);
         const classPrediction = prediction[i].className + ": " + cost;
-        const milliseconds = date.getMilliseconds();
         // 정해진 시간 주기 간격으로 값 출력하기
 
-        if (milliseconds >= 900) {    //
-          if (i == 2 && cost > 0.7) // 양치 안함
-          {
-            brushing_off++;
-          }
+        if ((i == 0 || i == 1) && cost > 0.7) // 양치 함
+        {
+          brushing_on++;
         }
+        if (i == 2 && cost > 0.7) // 양치 안함
+        {
+          brushing_off++;
+        }
+
       }
-      if (brushing_off >= 10 && flag == 0) {
-        const msg = { cmd: "alert", content: "" };
-        const jsonMsg = JSON.stringify(msg);
-        ws.send(jsonMsg);
-        ws.close();
-        flag = 1;
-      }
+
       // drawPose(pose); //웹캠 보이기
     }
 
