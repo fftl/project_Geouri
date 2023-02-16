@@ -17,7 +17,7 @@ const api = axios.create(
 
 const Photolist = () => {
   const [url, setUrl] = useState(null);
-  const [memberKey, setMemberKey] = useState("nh3b-494F");
+  const [memberKey, setMemberKey] = useState("fSBS-lCHb");
   const [list, setList] = useState([]);
   const [imageList, setImageList] = useState([]);
 
@@ -80,7 +80,7 @@ const Photolist = () => {
     api
       .get("web/snapShot/all", {
         headers: {
-          "member-key": "nh3b-494F",
+          "member-key": "fSBS-lCHb",
         },
       })
       .then((response) => {
