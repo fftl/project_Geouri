@@ -38,6 +38,7 @@ const WashHandsVideo = (props) => {
         height="700px"
         playing={true}
         autoPlay={true}
+        volume = {0.3}
         id="player"
         onEnded={videoOff}
       />

@@ -185,17 +185,19 @@ def listen_print_loop(responses, stream):
 
         if result.is_final:
             print(transcript)
-            ws = create_connection("ws://localhost:9998")
-            voicecmd = transcript.strip()
-            if voicecmd != "none":
-                audio_data = {
-                    "cmd": "voice_input",
-                    "content": voicecmd,
-                }
-                ws.send(json.dumps(audio_data))
+            try:
+                ws = create_connection("ws://localhost:9998")
+                voicecmd = transcript.strip()
+                if voicecmd != "none":
+                    audio_data = {
+                        "cmd": "voice_input",
+                        "content": voicecmd,
+                    }
+                    ws.send(json.dumps(audio_data))
 
-            ws.close()
-
+                ws.close()
+            except:
+                print("conn error")
             stream.is_final_end_time = stream.result_end_time
             stream.last_transcript_was_final = True
 
