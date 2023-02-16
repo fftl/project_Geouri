@@ -60,7 +60,7 @@ function HomeHeader() {
       useEffect(() => {
         const time = setInterval(() => {
           const date = new Date();
-          const h = date.getHours();
+          let h = date.getHours();
           if (h > 12) { 
             h -= 12
             setHour(h);
