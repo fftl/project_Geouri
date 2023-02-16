@@ -61,10 +61,12 @@ function HomeHeader() {
         const time = setInterval(() => {
           const date = new Date();
           const h = date.getHours();
-          if (h > 12) { 
-            h -= 12
-            setHour(h);
+          if (h >= 12) { 
             setMorning("오후");
+            if (h > 12){
+              h -= 12
+              setHour(h);
+            }
           }else{
             setHour(h);
             setMorning("오전")

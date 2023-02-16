@@ -91,17 +91,14 @@ wss.on('connection', function (ws, request) {
 
     //양치가 끝나면,3 초후 사진을 찍은 다음 평시 상황으로 돌아간다.
     else if (command === "brush_teeth_finish"){ 
-      setTimeout(async () => {
-        await takePicture();
-        setTimeout(() => {
-          var data = {
-            "cmd": "default",
-            "content": "",
-          };
-          wss.broadcast(JSON.stringify(data));
-          currentStatus = 4;
-        }, 3000);
-      }, 5000);
+      await takePicture();
+
+      var data = {
+        "cmd": "default",
+        "content": "",
+      };
+      wss.broadcast(JSON.stringify(data));
+      currentStatus = 4;
     }
 
     else if (command === "reply") {
@@ -133,7 +130,7 @@ async function nlp(text) {
     return "answer_positive";
   else if( sentiment.score <= -0.1)
     return "answer_negative";
-  else return 0;
+  else return "reply";
 }
 
 
@@ -161,7 +158,7 @@ async function STT(voice_input){
     ["몰라","모르겠어","글쎄","힌트"],
     ["사진","촬영"],
     ["양치","치카","칫솔질"],
-    ["손 씻기","손 씻을래", "손 닦"]
+    ["손 씻기","손 씻을래", "손 닦","손 씻"]
   ];
 
   const arr_voicecmd = [
@@ -530,10 +527,6 @@ function person_leave(){
 }
 
 
-
-
-
-
 function greetings(){
   var data  = {
       "cmd": "greetings",
@@ -548,7 +541,7 @@ function greetings(){
       "serialNumber": serialNumber,
       "memberKey": current_user,
       "reqKey": prevKey,
-      "type": currentStatus,
+      "type": 0,
       "reaction": 0
     },
     json: true,
@@ -559,7 +552,7 @@ function greetings(){
       console.log("error -> ", err);
     } else{
 
-      console.log(options)
+      // console.log(options)
       console.log(body)
 
       const returnScript = replaceScript(body.data.script);
@@ -642,11 +635,7 @@ function answerAndReply(reaction){
 
 async function takePicture(){
   console.log("사진 촬영 시작");
-  var data = {
-    "cmd" : "photo_taken",
-    "content" : "",
-  }
-
+  await new Promise((resolve, reject) => setTimeout(resolve, 3000));
   var options = {
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
@@ -661,12 +650,16 @@ async function takePicture(){
     const parsedata = JSON.parse(results);
     console.log(parsedata)
 
-    data.content = parsedata.data;
-
+    var data = {
+      "cmd" : "photo_taken",
+      "content" : parsedata.data,
+    }
+  
     wss.broadcast(JSON.stringify(data));
   });
 
-  
+  await new Promise((resolve, reject) => setTimeout(resolve, 5000));
+
   console.log("사진 촬영 끝");
 }
 

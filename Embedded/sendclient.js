@@ -7,13 +7,13 @@ ws.onopen = function() { // onopen 이벤트 리스너 호출: 서버와 연결�
 
 
     var data = {
-        // "cmd" : "sensor_activate",
+        "cmd" : "sensor_activate",
         // "content" : "",
 
 
-        "cmd" : "voice_input",
+        // "cmd" : "voice_input",
         // "content" : "거울아",
-        "content" : "양치",
+        "content" : "양치하자",
 
 
         //     "cmd" : "face_name",
