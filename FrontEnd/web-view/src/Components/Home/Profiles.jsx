@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
+import HomeHeader from "./HomeHeader";
 
 const api = axios.create({
   baseURL : 'http://i8a201.p.ssafy.io'
@@ -36,6 +37,7 @@ function Profiles() {
   };
   return (
     <>
+      <HomeHeader type="HomeHeader"/>
       <p className="profile-list-title">멤버</p>
       <div className="profile-list">
         {memberList.map((member) => {
