@@ -68,19 +68,20 @@
         console.log("off:" ,brushing_off , " on:",brushing_on );
 
         if (brushing_on <= brushing_off) {
-          const ws = new WebSocket("ws://localhost:9998");
           const msg = { cmd: "alert", content: "" };
           const jsonMsg = JSON.stringify(msg);
           flag = 1;
-          ws.send(jsonMsg);
-          ws.close();
+
+          var ws = new WebSocket("ws://localhost:9998");
+          ws.onopen = () => {ws.send(jsonMsg);
+            ws.close();
+          };
+          
 
           brushing_off = 0;
           brushing_on = 0;
         }
         cameraOff(webcam);
-        
-
       }, 10000);
 
       // append/get elements to the DOM

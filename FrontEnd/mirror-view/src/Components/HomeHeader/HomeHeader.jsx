@@ -56,11 +56,11 @@ function HomeHeader() {
       const [morning, setMorning] = useState("");
       const [hour, setHour] = useState("");
       const [minute, setMinute] = useState("");
-
+      
       useEffect(() => {
-        const time = setInterval(() => {
-          const date = new Date();
-          const h = date.getHours();
+        var time = setInterval(() => {
+          var date = new Date();
+          var h = date.getHours();
           if (h >= 12) { 
             setMorning("오후");
             if (h > 12){
@@ -71,7 +71,7 @@ function HomeHeader() {
             setHour(h);
             setMorning("오전")
           }
-          const m = date.getMinutes();
+          var m = date.getMinutes();
           setMinute(m);
           }
         , 1000);

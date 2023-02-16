@@ -442,8 +442,8 @@ function mirrorCall(){
   
       console.log("face_name => ", results);
       const face_name = results[0];
-      // current_user = face_name;
-      current_user = "fSBS-lCHb";
+      current_user = face_name;
+      // current_user = "fSBS-lCHb";
 
       
       personFrontOfMirror = true;
