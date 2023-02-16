@@ -755,10 +755,10 @@ function easteregg(type){
     str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
   }
   else{
-    if(personFrontOfMirror == true || user_data != "")
+    if(current_user != "")
       str = "물론 우리 " + name + "님이 세상에서 가장 이쁘죠.";
-      else
-        str = "어디 계시나요? 잘 안 보여요.";
+    else
+      str = "어디 계시나요? 잘 안 보여요.";
   }
   TTS(str);
   waitingOrders = false;
