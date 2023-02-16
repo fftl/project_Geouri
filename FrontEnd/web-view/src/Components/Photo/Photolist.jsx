@@ -99,8 +99,8 @@ const Photolist = () => {
         list.map((image) => {
           return {
             src: image.imgUrl,
-            width: 320,
-            height: 320,
+            width: 200,
+            height: 200,
           };
         })
       );

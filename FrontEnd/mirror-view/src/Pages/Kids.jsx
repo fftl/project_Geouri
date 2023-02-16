@@ -67,7 +67,7 @@ function Kids(props) {
 
   return (
     <>
-        <HomeHeader />
+      <HomeHeader />
       <div className="main-box">
         {
           {
