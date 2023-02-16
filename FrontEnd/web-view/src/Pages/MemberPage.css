@@ -4,6 +4,12 @@
   gap: 0.5rem;
   cursor: pointer;
 }
+.is_flex{
+  display: inline-flex;
+}
+.edit-button{
+  display: flex;
+}
 [type="checkbox"] {
   appearance: none;
   position: relative;
