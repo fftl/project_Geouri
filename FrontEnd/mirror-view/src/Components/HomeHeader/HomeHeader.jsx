@@ -37,16 +37,6 @@ const dateBuilder = (d) => {
     return `${year}/${month}/${date} (${day})`;
   };
   
-  const clockBuilder = (d) => {
-  
-    if (hour < 10){
-    }
-    let minute = d.getMinutes();
-    if (minute < 10) {
-      minute = '0' + String(minute);
-    }
-    return `${morning} ${hour}:${minute}`;
-  }
 
 function HomeHeader() {
     const api = {
