@@ -1,31 +1,15 @@
+
+#pip install pyserial
+
 from websocket import create_connection
 import serial
 import time
 import json
-import face_recog_module
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 ARDUINO_PORT = os.getenv('ARDUINO_PORT')
-
-class FacerecogModule:
-    def recog(self):
-        output = face_recog_module.detected_face()
-        return output
-
-
-def sendInfo(msg):
-
-    json_object = {
-        "cmd": "face_name",
-        "content": msg,
-    }
-    json_string = json.dumps(json_object)
-
-    ws = create_connection("ws://localhost:9998")
-    ws.send(json_string)
-    ws.close()
 
 
 def main():
@@ -53,13 +37,24 @@ def main():
                     detect_cnt = detect_cnt + 1
 
                     if detect_cnt > TIME_UNTIL_RECOG:
-                        # 얼굴 인식 후 전송
-                        facemodule = FacerecogModule()
-                        face_name = facemodule.recog()
-                        sendInfo(face_name)
+                        # # 얼굴 인식 후 전송
+                        # facemodule = FacerecogModule()
+                        # face_name = facemodule.recog()
 
-                        person_detected = not person_detected
-                        detect_cnt = 0
+                        # 사람 인식 후 전송
+                        json_object = {
+                            "cmd": "sensor_activate",
+                            "content": "",
+                        }
+                        json_string = json.dumps(json_object)
+                        try:
+                            ws = create_connection("ws://localhost:9998")
+                            ws.send(json_string)
+                            ws.close()
+                            person_detected = not person_detected
+                            detect_cnt = 0
+                        except Exception: #오류 났을때 초기화, 약간 텀을 위해서 -부터 다시카운트
+                            detect_cnt = -8
                 else:   # 사람이 인식되어 카운트 되는 도중에 다시 사람이 나갔을 때, 카운트 초기화
                     detect_cnt = 0
             else:
@@ -67,10 +62,20 @@ def main():
                     detect_cnt = detect_cnt + 1
 
                     if detect_cnt > TIME_UNTIL_RESET:
-                        message = "leave"
-                        sendInfo(message)
-                        person_detected = not person_detected
-                        detect_cnt = 0
+                        json_object = {
+                            "cmd": "person_leave",
+                            "content": "",
+                        }
+                        json_string = json.dumps(json_object)
+                        try:
+                            ws = create_connection("ws://localhost:9998")
+                            ws.send(json_string)
+                            ws.close()
+                            person_detected = not person_detected
+                            detect_cnt = 0
+                        except Exception:  # 오류 났을때 초기화, 약간 텀을 위해서 -부터  다시카운트
+                            person_detected = False
+                            detect_cnt = -8
                 else :
                     detect_cnt = 0
 

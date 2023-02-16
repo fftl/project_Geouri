@@ -37,16 +37,6 @@ const dateBuilder = (d) => {
     return `${year}/${month}/${date} (${day})`;
   };
   
-  const clockBuilder = (d) => {
-  
-    if (hour < 10){
-    }
-    let minute = d.getMinutes();
-    if (minute < 10) {
-      minute = '0' + String(minute);
-    }
-    return `${morning} ${hour}:${minute}`;
-  }
 
 function HomeHeader() {
     const api = {
@@ -69,20 +59,20 @@ function HomeHeader() {
 
       useEffect(() => {
         const time = setInterval(() => {
-          const h = new Date().getHours;
+          const date = new Date();
+          const h = date.getHours();
           if (h > 12) { 
             h -= 12
-            setHour(String(h));
+            setHour(h);
             setMorning("오후");
+          }else{
+            setHour(h);
+            setMorning("오전")
           }
-          if (h < 10) {
-            setHour('0'+String(h))
+          const m = date.getMinutes();
+          setMinute(m);
           }
-          setMinute(String(new Date().getMinutes));
-          if (minute < 10) {
-            setMinute('0' + String(minute));
-          }
-        }, 1000);
+        , 1000);
         return () => {
           clearInterval(time)
         }
@@ -130,7 +120,9 @@ function HomeHeader() {
         <div className='header'>
           <div className='clock'>
             <p className='date'>{dateBuilder(new Date())}</p>
-            <p className='time'>{morning} {hour}시 {minute}분</p>
+            {hour && minute && 
+              <p className='time'>{morning} {`${hour}시`} {`${minute}분`}</p>
+            }
           </div>
           {lat && lon ? 
             <div className='weather'>

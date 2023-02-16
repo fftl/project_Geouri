@@ -3,6 +3,12 @@
 중립적	"score": 0.1, "magnitude": 0.0
 혼합	"score": 0.0, "magnitude": 4.0
 
+text: 네
+score: 0
+
+text: 넹
+socre: 0.5
+
 Text: 알겠어
 Sentiment score: 0.30000001192092896
 Sentiment magnitude: 0.30000001192092896

@@ -1,30 +1,42 @@
+
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ port: 9998 });
 const rq = require('request');
 var PythonShell = require('python-shell');
 
 var dotenv = require("dotenv").config();
-// var pythonPath = "/usr/bin/python3";
 
-var prevKey = 0;      // 이전에 보냈던 메세지
-var currentStatus = 0;     // 현재 상태.
+// Imports the Google Cloud client library
+const language = require('@google-cloud/language');
+// Instantiates a client
+const client = new language.LanguageServiceClient();
 
+
+
+// 퀴즈 관련
 var quizMode = 0; //현재 퀴즈 상태인가?
 var quizString = "";
 var quizHint = "";
 var quizAnswer = "";
 
-var current_user = "fSBS-lCHb";     // 유저 코드
-var serialNumber = "8DLL-44yh-x7vB-VuWK"
+
+//상태 정보
+var prevKey = 0;      // 이전에 보냈던 메세지
+var currentStatus = 0;     // 현재 상태.
+var kidsMode = false;
+var personFrontOfMirror = false;
+var waitingOrders = false;
+
 
 // 유저 정보
+var current_user = "";     // 유저 코드
+var serialNumber = "8DLL-44yh-x7vB-VuWK"
+
+// 유저 정보 json
 var user_data = {
   "data" : {
-    "nickname" : "영현",
   },
 };  
-var kidsMode = false;
-var personExist = false;
 
 
 
@@ -41,21 +53,17 @@ wss.on('connection', function (ws, request) {
   console.log("connected", request.socket.remoteAddress);
 
   //소켓 접속이 된 클라이언트한테 메세지를 수신했을때 실행됩니다
-  ws.on('message', function (msg) {
+  ws.on('message', async function (msg) {
     // console.log(`수신함 : ${msg}` );
 
     // 받아온 메세지 파싱 후, 그거에 맞는 로직 실행
-
+    console.log("현재 status : ", currentStatus);
     const obj = JSON.parse(msg);
     const command = obj.cmd;
-    console.log("@@INCOMING COMMAND -> " , command);
 
-    if (command == "face_name") {
-      console.log("face_name => ", obj.content);
-      const face_name = obj.content;
-      //current_user = face_name
-      current_user = "nh3b-494F";
-      person_appear();
+    if (command == "sensor_activate") {
+      if(personFrontOfMirror == true) return;
+      sensor_activate();
     }
 
     else if (command === "person_leave") {
@@ -64,9 +72,8 @@ wss.on('connection', function (ws, request) {
 
 
     else if (command === "voice_input") {
-      const voice_input = STT(obj.content);
-      console.log("voice command : ", voice_input)
-      
+      const voice_input = await STT(obj.content);
+      console.log("voice command : ", voice_input);
       currentStatusCheck(voice_input);
     }
 
@@ -84,8 +91,8 @@ wss.on('connection', function (ws, request) {
 
     //양치가 끝나면,3 초후 사진을 찍은 다음 평시 상황으로 돌아간다.
     else if (command === "brush_teeth_finish"){ 
-      setTimeout(() => {
-        takePicture();
+      setTimeout(async () => {
+        await takePicture();
         setTimeout(() => {
           var data = {
             "cmd": "default",
@@ -93,24 +100,13 @@ wss.on('connection', function (ws, request) {
           };
           wss.broadcast(JSON.stringify(data));
           currentStatus = 4;
-        }, 2000);
-      }, 3000);
+        }, 3000);
+      }, 5000);
     }
-
-    // else if(command === "brush_teeth"){
-    //   currentStatus = 5;
-    //   updateStatus();
-    // }
-
-    // else if(command === "wash_hands"){
-    //   currentStatus = 8;
-    //   updateStatus();
-    // }
 
     else if (command === "reply") {
       console.log("응답받음")
     }
-
 
   });
 
@@ -120,32 +116,63 @@ wss.on('connection', function (ws, request) {
   });
 });
 
+// 아이 대답을 받아서 감정 분석하기(긍/부정)
+async function nlp(text) {
+
+  const document = {
+    content: text,
+    type: 'PLAIN_TEXT',
+  };
+
+  // Detects the sentiment of the document
+  const [result] = await client.analyzeSentiment({document});
+
+  const sentiment = result.documentSentiment;
+
+  if (sentiment.score >= 0.29)
+    return "answer_positive";
+  else if( sentiment.score <= -0.1)
+    return "answer_negative";
+  else return 0;
+}
 
 
-function STT(voice_input){
 
-  var arr_str = [
+
+async function STT(voice_input){
+
+  var voicedata = {
+    "cmd" : null,
+    "text" : voice_input,
+  }
+
+
+  const arr_str = [
+    ["거울아"],
     ["수수께끼","문제","퀴즈"],
     ["세상에서 누가"],
-    ["시작", "재생", "진행"],
-    ["종료","그만","정지","중지"],
-    ["다음","넥스트"], 
-    ["이전"],
+    ["몇 시","몇시","몇분","시간","지금"],
+    ["잘가", "잘 가", "종료", "잘 있어"],
+    // ["종료","그만","정지","중지"],
+    // ["다음","넥스트"], 
+    // ["이전"],
     ["아니","싫어"],
-    ["응","좋아","그래"],
+    ["응","좋아","그래", "네"],
     ["몰라","모르겠어","글쎄","힌트"],
     ["사진","촬영"],
     ["양치","치카","칫솔질"],
     ["손 씻기","손 씻을래", "손 닦"]
-  ]
+  ];
 
-  var arr_voicecmd = [
+  const arr_voicecmd = [
+    "mirrorcall",
     "quiz",
-    "test",
-    "video_start",
-    "video_stop",
-    "video_next",
-    "video_prev",
+    "easteregg",
+    "whattime",
+    "person_leave",
+    // "video_stop",
+    // "video_next",
+    // "video_prev",
     "answer_negative",
     "answer_positive",
     "answer_neutral",
@@ -157,12 +184,16 @@ function STT(voice_input){
 
   for(var i = 0 ; i < arr_str.length; i++){
     for(var j = 0 ; j < arr_str[i].length; j++){
-      if(voice_input.includes(arr_str[i][j]))
-      return arr_voicecmd[i]
+      if(voice_input.includes(arr_str[i][j])){
+        voicedata.cmd = arr_voicecmd[i];
+        return voicedata;
+      }
+      
     }
   }
-
-  return voice_input;
+  var output = await nlp(voice_input);
+  voicedata.cmd = output;
+  return voicedata;
 }
 
 
@@ -177,131 +208,180 @@ function TTS(str){
 
   PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
     if (err) throw err;
-    // console.log('results: %j', results);
   });
 }
 
+function currentStatusCheck(voicedata){
+
+  const voice_input = voicedata.cmd;
 
 
-function currentStatusCheck(voice_input){
-  // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
-  if(currentStatus!=4){
-    if (voice_input.includes("answer")) {
-      var reaction = 1;
-
-      if (voice_input == "answer_positive")
-        reaction = 1;
-      else if (voice_input == "answer_negative")
-        reaction = 0;
-
-      answerAndReply(reaction);    
-    }
+  // 종료 명령어를 최우선으로 알아들음
+  if(voice_input == "person_leave"){
+    person_leave();
+    return;
   }
 
-  else{ //평시
-    //퀴즈모드 분기
-    if (quizMode == 1){
-        quiz(voice_input);
-        return;
-    }
 
-    if (voice_input.includes("video")){
-      const data = {
-        "cmd": voice_input,
-        "content": voice_input,
+  //아기 모드
+  if(kidsMode == true){
+    if(currentStatus == 6 || currentStatus == 8) return;
+
+
+    // 거울이 아이에게 무언가를 물어본 상태, 아이에게 yes/no 대답을 기대하는 중.
+    if(currentStatus != 4){
+      if (voice_input.includes("answer")) {
+        var reaction = 1;
+  
+        if (voice_input == "answer_positive")
+          reaction = 1;
+        else if (voice_input == "answer_negative" || voice_input == "answer_neutral")
+          reaction = 0;
+        answerAndReply(reaction);    
       }
-      wss.broadcast(JSON.stringify(data));
     }
-    // 아이가 먼저 양치하자고 하는 경우
-    else if (voice_input === "brush_teeth") {
+    else{ // 아기 - 평소 모드 - 4
       
-      let options = {
-        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-        method: 'POST',
-        body: {
-          "serialNumber": serialNumber,
-          "memberKey": current_user,
-          "reqKey": 0,
-          "type": 5,
-          "reaction": 1
-        },
-        json: true,
-      };
-
-          
-      rq.post(options, function (err, httpResponse, body) {
-        if(err){
-          console.log("error -> ", err);
-        } else{
-          console.log(options)
-          console.log(body)
+      if (quizMode == 1){
+        quiz(voicedata);
+        return;
+      }
 
 
-          const returnScript = replaceScript(body.data.script);
-
-          prevKey = body.data.res_key;
-          currentStatus = body.data.type;
-          data = {
-            "cmd": "message",
-            "content": returnScript,
-          }
-
-          TTS(returnScript);
-          wss.broadcast(JSON.stringify(data));
-
-          afterStatusCheck();
+      // 아기가 '거울아'라고 이미 부른 상태임.
+      if (waitingOrders == true){
+        if(voice_input == "whattime"){
+          whatTime();
         }
-      });
-    }
-
-    else if (voice_input === "wash_hands") {
-      let options = {
-        url: 'http://i8a201.p.ssafy.io/mirror/getScript',
-        method: 'POST',
-        body: {
-          "serialNumber": serialNumber,
-          "memberKey": current_user,
-          "reqKey": 0,
-          "type": 7,
-          "reaction": 1
-        },
-        json: true,
-      };
-
-          
-      rq.post(options, function (err, httpResponse, body) {
-        if(err){
-          console.log("error -> ", err);
-        } else{
-          console.log(options)
-          console.log(body)
-          const returnScript = replaceScript(body.data.script);
-
-          prevKey = body.data.res_key;
-          currentStatus = body.data.type;
-          data = {
-            "cmd": "message",
-            "content": returnScript,
-          }
-
-          TTS(returnScript);
-          wss.broadcast(JSON.stringify(data));
-
-          afterStatusCheck();
+        else if (voice_input == "quiz") {
+          quiz(""); 
         }
-      });
+        else if(voice_input == "easteregg"){
+          easteregg();
+        }
+        waitingOrders = false;
+        return;
+      }
+
+      // 이 밑으로는 아기가 '거울아'라고 부른 상태가 아님.
+
+      if(voice_input == "mirrorcall"){
+        mirrorCall();
+        return;
+      }
+      
+      if(voice_input == "quiz"){
+        quiz(""); 
+        return;
+      }
+      
+      if(voice_input == "easteregg"){
+        easteregg();
+        return;
+      }
+
+      if (voice_input === "brush_teeth") {
+      
+        let options = {
+          url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+          method: 'POST',
+          body: {
+            "serialNumber": serialNumber,
+            "memberKey": current_user,
+            "reqKey": 0,
+            "type": 5,
+            "reaction": 1
+          },
+          json: true,
+        };
+  
+            
+        rq.post(options, function (err, httpResponse, body) {
+          if(err){
+            console.log("error -> ", err);
+          } else{
+            // console.log(options)
+            console.log(body)
+  
+  
+            const returnScript = replaceScript(body.data.script);
+  
+            prevKey = body.data.res_key;
+            currentStatus = body.data.type;
+            data = {
+              "cmd": "message",
+              "content": returnScript,
+            }
+  
+            TTS(returnScript);
+            wss.broadcast(JSON.stringify(data));
+  
+            afterStatusCheck();
+          }
+        });
+        waitingOrders = false;
+        return;
+      } // end brush teeth
+  
+      if (voice_input === "wash_hands") {
+        let options = {
+          url: 'http://i8a201.p.ssafy.io/mirror/getScript',
+          method: 'POST',
+          body: {
+            "serialNumber": serialNumber,
+            "memberKey": current_user,
+            "reqKey": 0,
+            "type": 7,
+            "reaction": 1
+          },
+          json: true,
+        };
+  
+            
+        rq.post(options, function (err, httpResponse, body) {
+          if(err){
+            console.log("error -> ", err);
+          } else{
+            // console.log(options)
+            console.log(body)
+            const returnScript = replaceScript(body.data.script);
+  
+            prevKey = body.data.res_key;
+            currentStatus = body.data.type;
+            data = {
+              "cmd": "message",
+              "content": returnScript,
+            }
+  
+            TTS(returnScript);
+            wss.broadcast(JSON.stringify(data));
+  
+            afterStatusCheck();
+          }
+        });
+        waitingOrders = false;
+        return;
+      }// end wash hands
+    }//아기 평소모드  end
+  } //아기모드 end
+  else{ // 어른 모드
+
+
+    if(voice_input == "mirrorcall"){
+      mirrorCall();
+      return;
     }
 
+    if (waitingOrders == true){
+      if(voice_input == "whattime"){
+        whatTime();
+      }
 
-    else if (voice_input === "quiz") {
-      quiz(""); 
+      waitingOrders = false;
+      return;
     }
 
-    else if(voice_input === "test"){
-      easteregg();
-    }
-
-  }// end status 4
+  }// / 어른 모드 end 
 }
 
 // 통신하고 현재 상태가 바뀐 후 프론트쪽으로 보낼 메세지
@@ -330,6 +410,58 @@ function afterStatusCheck(){
 
 }
 
+
+// 초음파 센서가 움직임을 감지 했을때
+function sensor_activate(){
+  personFrontOfMirror = true;
+
+  var data = {
+    "cmd": "sensor_activate",
+    "content": "",
+  };
+
+  wss.broadcast(JSON.stringify(data));
+}
+
+
+function mirrorCall(){
+  console.log("EVENT : mirror called");
+
+  // 초음파 센서가 이미 움직임을 동작한 후에 거울아 라고 부른다면
+  if(personFrontOfMirror == true && currentStatus == 0){
+
+    var options = {
+      mode: 'text',
+      pythonPath: process.env.PYTHON_PATH,
+      pythonOptions: ['-u']
+    };
+    
+    TTS("얼굴 인식 중입니다.");
+
+
+    PythonShell.PythonShell.run('face_recog_module.py', options, function (err, results) {
+      if (err) throw err;
+      // console.log('results: %j', results);
+  
+      console.log("face_name => ", results);
+      const face_name = results[0];
+      // current_user = face_name;
+      current_user = "fSBS-lCHb";
+
+      
+      personFrontOfMirror = true;
+      person_appear();
+    });
+  }
+  else{ //그냥 평시 상황에서 불렀다면
+    TTS("네 말씀하세요?");
+    waitingOrders = true;
+  }
+}
+
+
+
+
 function person_appear(){
   // http로 사람 정보를 받아와서, 프론트로 보낼 정보를 가공해서 리턴.
   var data = {
@@ -346,23 +478,28 @@ function person_appear(){
     },
     json: true //json으로 보낼경우 true로 해주어야 header값이 json으로 설정됩니다.
   };
-  rq.post(options, function (err, httpResponse, body) {
+  rq.post(options, async function (err, httpResponse, body) {
     if(err){
       console.log("error -> ", err);
     } else{
-      if(body.data.kidsMode == true){
+      user_data = body.data;
+      console.log("userdata: " , user_data.nickname);
+      if(user_data.kidsMode == true){
         kidsMode = true;
       }
-      user_data = body.data;
       data = {
         "cmd": "person_appear",
         "content": body.data,
       }
     }
+    currentStatus = 4; // 상황 : 평시
     wss.broadcast(JSON.stringify(data));
 
     //아기이면 greeting 까지 보내기.
     if(kidsMode == true){
+      if(user_data.lastVisit==null){
+        await firstAppear();
+      }
       greetings();
     }
   });
@@ -374,10 +511,16 @@ function person_leave(){
   prevKey = 0;
   currentStatus = 0;
   
-  current_user;
-  serialNumber = "8DLL-44yh-x7vB-VuWK"
+  current_user = "";
+  user_data = {
+    "data" : {
+    },
+  };  
+
   kidsMode = false;
-  personExist = false;
+  personFrontOfMirror = false;
+  waitingOrders = false;
+  firstVisit = false;
 
   const data = {
     "cmd": "person_leave",
@@ -386,8 +529,13 @@ function person_leave(){
   wss.broadcast(JSON.stringify(data));
 }
 
+
+
+
+
+
 function greetings(){
-  var returnData  = {
+  var data  = {
       "cmd": "greetings",
       "content" : ""
     };
@@ -429,6 +577,22 @@ function greetings(){
   });
 };  
 
+
+async function firstAppear(){
+  var data = {
+    "cmd": "first_appear",
+    "content": "테스트입니다",
+  }
+
+  var str = "반가워 " + callName_ya(user_data.nickname) + ". 매일매일 양치를 하고 손을 깨끗이 씻으면서 너만의 귀여운 공룡을 키워보자!!"
+  TTS(str);
+  wss.broadcast(JSON.stringify(data));
+  await new Promise((resolve, reject) => setTimeout(resolve, 15000));
+}
+
+
+
+
 function answerAndReply(reaction){
 
 
@@ -455,7 +619,7 @@ function answerAndReply(reaction){
       console.log("error -> ", err);
     }else{
 
-      console.log(options)
+      // console.log(options)
       console.log(body)
 
       const returnScript = replaceScript(body.data.script);
@@ -476,11 +640,11 @@ function answerAndReply(reaction){
 
 
 
-function takePicture(){
+async function takePicture(){
   console.log("사진 촬영 시작");
   var data = {
-    "cmd" : "message",
-    "content" : "picture taken",
+    "cmd" : "photo_taken",
+    "content" : "",
   }
 
   var options = {
@@ -490,19 +654,25 @@ function takePicture(){
     args: [serialNumber, current_user]
   };
 
-  PythonShell.PythonShell.run('capture_img_db.py', options, function (err, results) {
+  PythonShell.PythonShell.run('capture_img_db.py', options, await function (err, results) {
     if (err) throw err;
     console.log('results: %j', results);
-    data.content = results;
+
+    const parsedata = JSON.parse(results);
+    console.log(parsedata)
+
+    data.content = parsedata.data;
+
+    wss.broadcast(JSON.stringify(data));
   });
 
-  wss.broadcast(JSON.stringify(data));
+  
   console.log("사진 촬영 끝");
 }
 
 
 // status 0 : 질문을 물어보는 단계, 1: 질문을 받는 단계?
-function quiz(voice_input){
+function quiz(voicedata){
 
   const quiz_wrong_reply = ["다시 생각해보자~","아닌것 같아, 다시 생각해보자."];
   const quiz_correct_reply = ["정답이야! 잘 맞추는걸?","정답이야!"]
@@ -525,7 +695,7 @@ function quiz(voice_input){
       }else{
 
 
-        quizString = body.data.question;
+        quizString = body.data.question + "이건 무슨 동물일까? ";
         quizHint = body.data.hint;
         quizAnswer =body.data.answer;
 
@@ -538,16 +708,15 @@ function quiz(voice_input){
         wss.broadcast(JSON.stringify(data));
 
         quizMode = 1;
-        
+        waitingOrders = false;
       }
     });
   }
     
   else if(quizMode == 1){
-    console.log("아이의 정답: ",voice_input);
-
+    console.log("아이의 정답: ",voicedata);
     //정답을 맞췄을 경우
-    if(voice_input.indexOf(quizAnswer) != -1){
+    if(voicedata.text.includes(quizAnswer)){
       const replayNum = getRandomInt(0,quiz_correct_reply.length);
       TTS(quiz_correct_reply[replayNum]);
       quizMode = 0;
@@ -555,15 +724,18 @@ function quiz(voice_input){
       quizHint = "";
       quizAnswer = "";
 
-      data = {
-        "cmd": "default",
-        "content": "",
-      }
 
-      wss.broadcast(JSON.stringify(data));
+      setTimeout(() => {
+        data = {
+          "cmd": "default",
+          "content": "",
+        }
+  
+        wss.broadcast(JSON.stringify(data));
+      }, 4000);
 
     }
-    else if(voice_input === "answer_neutral"){ // 모른다고 했을때
+    else if(voicedata.cmd === "answer_neutral"){ // 모른다고 했을때
       TTS(quizHint);
     }
     else{
@@ -578,7 +750,14 @@ function easteregg(){
   const name = callName_ga(user_data.nickname);
   var str = "물론 우리 " + name + "세상에서 가장 예쁘지이?";
   TTS(str);
+  waitingOrders = false;
+}
 
+function whatTime(){
+  var today = new Date();
+  var str = "지금은 " + (today.getMonth() + 1) + "월 " + today.getDate() + "일 " + today.getHours() + "시 " + today.getMinutes() + "분 입니다."
+  TTS(str);
+  waitingOrders = false;
 }
 
 
