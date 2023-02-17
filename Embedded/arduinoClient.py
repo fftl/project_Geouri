@@ -16,7 +16,7 @@ def main():
 
     TIME_UNTIL_RECOG = 3    # 초음파 센서에 사람이 일정 거리 이내 들어왔을때 작동하는 시간
     TIME_UNTIL_RESET = 10   # 초음파 센서에 사람이 인식되지 않을 때 절전까지 대기하는 시간
-    RECOG_DIST = 30         # 초음파 센서에 사람이 인식되는 거리
+    RECOG_DIST = 65         # 초음파 센서에 사람이 인식되는 거리
 
     person_detected = False
     detect_cnt = 0
@@ -58,7 +58,7 @@ def main():
                 else:   # 사람이 인식되어 카운트 되는 도중에 다시 사람이 나갔을 때, 카운트 초기화
                     detect_cnt = 0
             else:
-                if distance > 20:
+                if distance > RECOG_DIST:
                     detect_cnt = detect_cnt + 1
 
                     if detect_cnt > TIME_UNTIL_RESET:
