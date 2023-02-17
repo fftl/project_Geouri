@@ -72,11 +72,14 @@ class FaceRecog():
 
 
 if __name__ == '__main__':
-    face_recog = FaceRecog()
-    while not face_recog.found_face:
-        face_recog.get_frame()
-        cv2.waitKey(10)
+    try:
+        face_recog = FaceRecog()
+        while not face_recog.found_face:
+            face_recog.get_frame()
+            cv2.waitKey(10)
 
-    face_recog.destroycamera()
-    cv2.destroyAllWindows()
-    print(face_recog.face_name)
+        face_recog.destroycamera()
+        cv2.destroyAllWindows()
+        print(face_recog.face_name)
+    except:
+        print("camera error")
