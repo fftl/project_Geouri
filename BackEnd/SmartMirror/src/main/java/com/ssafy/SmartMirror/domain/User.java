@@ -26,4 +26,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Member> memberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Mirror> mirrorList = new ArrayList<>();
 }
