@@ -1,0 +1,23 @@
+.member-div {
+    display: grid;
+    grid-template-rows: 1fr 0.2fr;
+}
+.HomeHeader{
+    height: 60px;
+    position: relative;
+}
+.hamburger-button{
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+}
+
+.BasicHeader {
+    height: 60px;
+    position: relative;
+}
+.go-back-button{
+    position: absolute;
+    left: .5rem;
+    top: .5rem;
+}

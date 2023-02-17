@@ -1,0 +1,35 @@
+.gal {
+  margin: auto;
+  height: 300px;
+  display: flex;
+  padding: 10px;
+}
+
+.thumbnail {
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 3px;
+  margin-top: 20px;
+
+  @media all {
+  }
+
+  @media all and (max-width: 992px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media all and (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media all and(max-width: 350px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.imgComp {
+  /* display: flex; */
+  width: 100%;
+  height: 320px;
+}

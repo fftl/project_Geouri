@@ -1,0 +1,19 @@
+{
+  "name": "embedded",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/language": "^5.2.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "python-shell": "^3.0.1",
+    "request": "^2.88.2",
+    "ws": "^8.12.0"
+  }
+}

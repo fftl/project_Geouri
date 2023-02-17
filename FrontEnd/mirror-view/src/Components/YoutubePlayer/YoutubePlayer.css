@@ -1,0 +1,14 @@
+
+  .youtube-box {
+      position: absolute;
+      margin-top: 10rem;
+      width: 35%;
+      height: 0;
+  }
+  /* 부모요소에서 padding-top: 56% 을 넣어줌으로써 높이를 차지하게 만들어준다. 이 경우는 영상이 16:9의 비율인 경우이다. 만약 영상이 4:3 비율인 경우에 padding-top: 75% 로 설정해준다. */
+
+  .no-calendar-youtube-box {
+    position: absolute;
+    width: 35%;
+    height: 0;
+  }
