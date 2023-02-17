@@ -40,7 +40,7 @@ public class VisitService {
 
     public String getLastVisit(Member member) {
         List<Visit> visitList = visitRepository.findByMemberOrderByVisitKeyDesc(member);
-        if(visitList == null) return null;
+        if(visitList == null || visitList.size() == 0) return null;
         return visitList.get(0).getVisitTime();
     }
 }

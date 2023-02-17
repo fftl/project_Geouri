@@ -190,6 +190,20 @@ public class WebController {
         System.out.println(userKey);
         User user = userService.findByUserKey(userKey);
 
+        List<Mirror> mirrorEntityList = user.getMirrorList();
+        List<ResponseMirror> mirrorList = null;
+        if(mirrorEntityList != null) {
+            mirrorList = new ArrayList<>();
+            for (Mirror mirror : mirrorEntityList) {
+                mirrorList.add(ResponseMirror.builder()
+                        .serialNumber(mirror.getSerialNumber())
+                        .nickname(mirror.getNickname())
+                        .build());
+            }
+        }
+
+
+
         if(user == null){
             responseDefault = ResponseDefault.builder()
                     .success(false)
@@ -202,6 +216,7 @@ public class WebController {
                     .email(user.getEmail())
                     .tel(user.getTel())
                     .birth(user.getBirth())
+                    .mirrorList(mirrorList)
                     .build();
 
             responseDefault = ResponseDefault.builder()
