@@ -149,7 +149,7 @@ public class MirrorController {
         String lastVisit = visitService.getLastVisit(member);
 
         // 방문기록 저장
-        if(!"GhhR-Habi".equals(memberKey)) { // 정윤언니 제외
+        if(!"nh3b-494F".equals(memberKey)) { // 소영언니 제외
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String visitTime = formatter.format(date);
@@ -249,7 +249,7 @@ public class MirrorController {
                 // 일단 양치 기록 추가
                 int count = 0;
 
-                if(!"GhhR-Habi".equals(memberKey)) {
+                if(!"nh3b-494F".equals(memberKey)) {
                     brushingService.saveBrushing(member, visitTime, 1);
 // 경험치를 제공하기 위해선 오늘 한 양치 횟수가 3번 미만이어야 합니다.
                     // 오늘의 양치기록 세기
@@ -271,15 +271,15 @@ public class MirrorController {
                 }
 
 
-                // 정윤 언니라면 exp 와 lv 만 더합니다
-                if("GhhR-Habi".equals(memberKey)) {
+                // 소영 언니라면 exp 와 lv 만 더합니다
+                if("nh3b-494F".equals(memberKey)) {
                  exp += 5;
                 }
 
 
                 break;
             case "hand_washing": // 손씻기
-                if(!"GhhR-Habi".equals(memberKey)) {
+                if(!"nh3b-494F".equals(memberKey)) {
 
 
                     // 일단 손씻기 기록 추가
@@ -297,8 +297,8 @@ public class MirrorController {
                     }
                 }
 
-                // 정윤 언니라면 exp 와 lv 만 더합니다
-                if("GhhR-Habi".equals(memberKey)) {
+                // 소영 언니라면 exp 와 lv 만 더합니다
+                if("nh3b-494F".equals(memberKey)) {
                     exp += 2;
                 }
                 break;
@@ -310,13 +310,13 @@ public class MirrorController {
         if(exp >= 100) {
             exp -= 100;
             lv += 1;
-            if(!"GhhR-Habi".equals(memberKey)) {
+            if(!"nh3b-494F".equals(memberKey)) {
                 levelService.updateLv(lv, memberKey);
             }
             levelUp = true;
         }
 
-        if(!"GhhR-Habi".equals(memberKey)) {
+        if(!"nh3b-494F".equals(memberKey)) {
             levelService.updateExp(exp, memberKey);
         }
 
