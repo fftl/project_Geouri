@@ -60,9 +60,9 @@ function Schedule () {
           new_result? 
             new_result.map((item, idx) => {
               return (
-                <React.Fragment key={idx}>
-                  <ScheduleItem item={item}/>
-                </React.Fragment>
+                // <React.Fragment key={idx}>
+                  <ScheduleItem key={idx} item={item}/>
+                // </React.Fragment>
               )
             })
           :
