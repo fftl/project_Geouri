@@ -74,6 +74,7 @@ wss.on('connection', function (ws, request) {
 
 
     else if (command === "voice_input") {
+      if (onSpeach) return; //말하는 도중이라면 받지 않음
       const voice_input = await STT(obj.content);
       console.log("voice command : ", voice_input);
       currentStatusCheck(voice_input);
@@ -205,7 +206,8 @@ async function STT(voice_input) {
 
 
 
-function TTS(str) {
+async function TTS(str) {
+  onSpeach = true;
   var options = {
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
@@ -215,6 +217,7 @@ function TTS(str) {
 
   PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
     if (err) throw err;
+    onSpeach = false;
   });
 }
 
