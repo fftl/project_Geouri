@@ -682,7 +682,7 @@ async function takePicture(){
     wss.broadcast(JSON.stringify(data));
   });
 
-  await new Promise((resolve, reject) => setTimeout(resolve, 5000));
+  await new Promise((resolve, reject) => setTimeout(resolve, 8000));
 
   console.log("사진 촬영 끝");
 }
