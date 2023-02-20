@@ -74,7 +74,10 @@ wss.on('connection', function (ws, request) {
 
 
     else if (command === "voice_input") {
-      if (onSpeach) return; //말하는 도중이라면 받지 않음
+      if (onSpeach){
+        console.log("voice input blocked!")
+        return; //말하는 도중이라면 받지 않음
+      } 
       const voice_input = await STT(obj.content);
       console.log("voice command : ", voice_input);
       currentStatusCheck(voice_input);
@@ -206,8 +209,9 @@ async function STT(voice_input) {
 
 
 
-async function TTS(str) {
+function TTS(str) {
   onSpeach = true;
+  console.log("onspeach true");
   var options = {
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
@@ -215,9 +219,12 @@ async function TTS(str) {
     args: [str]
   };
 
-  PythonShell.PythonShell.run('tts_streaming.py', options, function (err, results) {
+  PythonShell.PythonShell.run('tts_streaming.py', options, async function (err, results) {
     if (err) throw err;
+    // await new Promise((resolve, reject) => setTimeout(resolve, 500));
     onSpeach = false;
+    console.log("onspeach false");
+    
   });
 }
 
@@ -537,7 +544,7 @@ function person_leave() {
     if (kidsMode)
       TTS("잘가" + callName_ya(user_data.nickname));
     else
-      TTS("안녕히 가세요, " + user_data.nickname + "님");
+      TTS(user_data.nickname + "님 안녕히 가세요");
   }
 
 
