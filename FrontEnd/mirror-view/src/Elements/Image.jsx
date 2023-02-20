@@ -7,7 +7,7 @@ const Image = ( props ) => {
     useEffect(() => {
       const timer = setTimeout(() => {
         setComp('none')
-      }, 3000)
+      }, 5000)
     
       return () => {
         clearTimeout(timer);

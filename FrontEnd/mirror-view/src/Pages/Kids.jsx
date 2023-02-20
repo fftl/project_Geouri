@@ -47,8 +47,8 @@ function Kids(props) {
     if (mirror_action === "alert") {
       setComp("alert");
     }
-    if (mirror_action === "photo_taken") {
-      setComp("photo");
+    if (mirror_action === "photo") {
+      setComp("image");
     }
     if (mirror_action === "default") {
       setComp("kidsDefault");
