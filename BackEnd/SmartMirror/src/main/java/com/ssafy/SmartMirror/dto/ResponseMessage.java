@@ -10,4 +10,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ResponseMessage {
+    private String nameFrom;
+    private String nameTo;
+
+    private String content;
 }

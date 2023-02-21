@@ -16,6 +16,7 @@ import javax.persistence.Id;
 @Getter
 @Entity
 public class AdultResponse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adultResponseKey;

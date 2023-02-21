@@ -389,9 +389,6 @@ public class MirrorController {
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 
-
-
-
     /* ***************************** Script ***************************** */
 
     /**
@@ -586,6 +583,32 @@ public class MirrorController {
         }
     }
 
+    /**
+     * 멤버키를 통해서 읽지않은 메시지 목록 가져오기
+     * */
+    @GetMapping("/getMessage")
+    public ResponseEntity getMessage(@RequestParam("memberKey") String memberKey){
+        ResponseDefault responseDefault = null;
+        List<Message> message = messageService.getMessage(memberKey);
+        if(message == null){
+            return errorResponse("메시지가 없습니다.");
+        } else {
+            return successResponse(message);
+        }
+    }
+
+    /**
+     * 메시지 키를 통해서 해당 메시지를 읽음처리 하기
+     * */
+    @PutMapping("/readMessage")
+    public ResponseEntity readMessage(@RequestParam("messageKey") Long messageKey){
+        ResponseDefault responseDefault = null;
+        if(messageService.readCheck(messageKey)){
+            return successResponse(null);
+        } else {
+            return errorResponse("변경에 실패 하였습니다.");
+        }
+    }
 
     public ResponseEntity errorResponse(String msg) {
         ResponseDefault responseDefault = ResponseDefault.builder()

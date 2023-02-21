@@ -760,14 +760,14 @@ public class WebController {
     }
 
     @PostMapping("/sendMessage")
-    public ResponseEntity insertMessage(@RequestHeader("user-key") String userKey, @RequestBody RequestMessage requestMessage){
+    public ResponseEntity insertMessage(@RequestHeader("user-key") String userKey, @RequestBody RequestAddMessage requestAddMessage){
         ResponseDefault responseDefault = null;
         Message message = messageService.addMessage(
-                requestMessage.getMember_key_from(),
-                requestMessage.getMember_key_to(),
-                requestMessage.getName_from(),
-                requestMessage.getName_to(),
-                requestMessage.getContent()
+                requestAddMessage.getMember_key_from(),
+                requestAddMessage.getMember_key_to(),
+                requestAddMessage.getName_from(),
+                requestAddMessage.getName_to(),
+                requestAddMessage.getContent()
         );
 
         if(message == null){
