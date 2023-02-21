@@ -37,4 +37,5 @@ public class ResponseMember {
 
     private List<ResponseNews> news;
 
+    private int messageCnt;
 }

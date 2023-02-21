@@ -38,9 +38,10 @@ public class WebController {
     private Utils utils;
     private SnapshotService snapshotService;
     private EmailCheckService emailCheckService;
+    private MessageService messageService;
 
     @Autowired
-    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils, SnapshotService snapshotService, EmailCheckService emailCheckService) {
+    public WebController(UserService userService, KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, Utils utils, SnapshotService snapshotService, EmailCheckService emailCheckService, MessageService messageService) {
         this.userService = userService;
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
@@ -58,6 +59,7 @@ public class WebController {
         this.utils = utils;
         this.snapshotService = snapshotService;
         this.emailCheckService = emailCheckService;
+        this.messageService = messageService;
     }
 
     /* ***************************** User ***************************** */
@@ -752,6 +754,24 @@ public class WebController {
         }
 
         // 반환!
+        return new ResponseEntity(responseDefault, HttpStatus.OK);
+    }
+
+    @PostMapping("/sendMessage")
+    public ResponseEntity insertMessage(@RequestHeader("user-key") String userKey, @RequestBody RequestMessage requestMessage){
+        ResponseDefault responseDefault = null;
+        Message message = messageService.addMessage(requestMessage.getMember_key_from(), requestMessage.getMember_key_to(), requestMessage.getContent());
+
+        if(message == null){
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("메시지 등록에 실패하였습니다.")
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .build();
+        }
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
 }

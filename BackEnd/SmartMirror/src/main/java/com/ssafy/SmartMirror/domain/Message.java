@@ -24,7 +24,7 @@ public class Message {
     private String content;
     private boolean read_or_not;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "member_key", name = "memberKey")
-    private Member member;
+    public void readMessage(){
+        this.read_or_not = true;
+    }
 }
