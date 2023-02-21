@@ -542,9 +542,9 @@ function person_leave() {
 
   if (current_user != "") {
     if (kidsMode)
-      TTS("잘가" + callName_ya(user_data.nickname));
+      TTS("잘가" + callName_ya(user_data.nickname)+ ". 다음에 또 보자.");
     else
-      TTS(user_data.nickname + "님 안녕히 가세요");
+      TTS(user_data.nickname + "님 안녕히 가세요.");
   }
 
 
