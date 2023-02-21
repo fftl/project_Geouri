@@ -33,12 +33,12 @@ const WashHandsVideo = (props) => {
   return (
     <div className="container">
       <ReactPlayer
-        url={process.env.PUBLIC_URL + "./videos/handwash.mp4"}
+        url={process.env.PUBLIC_URL + "./videos/liveWash.mp4"}
         width="1000px"
         height="700px"
         playing={true}
         autoPlay={true}
-        volume = {0.3}
+        volume={0.3}
         id="player"
         onEnded={videoOff}
       />
