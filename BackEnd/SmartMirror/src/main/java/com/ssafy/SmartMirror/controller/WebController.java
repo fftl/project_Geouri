@@ -577,11 +577,20 @@ public class WebController {
                 break;
         }
 
-        responseDefault = ResponseDefault.builder()
-                .success(true)
-                .msg(null)
-                .data(null)
-                .build();
+        if(res == 1) {
+            responseDefault = ResponseDefault.builder()
+                    .success(true)
+                    .msg(null)
+                    .data(null)
+                    .build();
+        } else {
+            responseDefault = ResponseDefault.builder()
+                    .success(false)
+                    .msg("변경에 실패했습니다.")
+                    .data(null)
+                    .build();
+        }
+
 
         return new ResponseEntity(responseDefault, HttpStatus.OK);
     }
