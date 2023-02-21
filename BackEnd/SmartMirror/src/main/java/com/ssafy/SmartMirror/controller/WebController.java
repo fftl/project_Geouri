@@ -549,6 +549,9 @@ public class WebController {
 
         // 아이모드(kidsMode), 재생목록(playlist), 뉴스/기사(news), 캘린더(calendar), 재생목록링크(playlistLink), 캘린더링크(calendarLink), 지역(region)
         switch(cmd) {
+            case "noticeMode":
+                res = memberService.updateNoticeMode(value, memberKey);
+                break;
             case "kidsMode":
                 res = memberService.updateKidsMode(value, memberKey);
                 break;

@@ -42,4 +42,9 @@ public class MemberService {
         Member newMember = memberRepository.save(member);
         return newMember;
     }
+
+    public int updateNoticeMode(String value, String memberKey) {
+        int result = memberRepository.updateNoticeMode(value.equals("true")?true:false, memberKey);
+        return result;
+    }
 }
