@@ -57,13 +57,13 @@ const BrushTeethVideo = (props) => {
         />
       ) : (
         <ReactPlayer
-          url={process.env.PUBLIC_URL + "/videos/brushguide.mp4"}
+          url={process.env.PUBLIC_URL + "/videos/liveBrush.mp4"}
           width="1000px"
           height="700px"
           autoPlay={true}
           playing={true}
           id="player"
-          volume = {0.8}
+          volume={0.8}
           onEnded={videoOff}
         />
       )}
