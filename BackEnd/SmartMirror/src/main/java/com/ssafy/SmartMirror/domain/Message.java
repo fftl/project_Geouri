@@ -20,6 +20,9 @@ public class Message {
     private String memberKeyFrom;
     private String memberKeyTo;
 
+    private String nameFrom;
+    private String nameTo;
+
     private String time;
     private String content;
     private boolean read_or_not;

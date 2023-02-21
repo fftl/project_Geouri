@@ -119,6 +119,8 @@ public class MirrorController {
         String fortune = fortuneService.getFortune(memberKey); // 포춘
         int messageCnt = messageService.getMessage(memberKey).size();
 
+        System.out.println("메시지 개수!! >> " +  messageCnt);
+
 
         List<ResponseCalendar> responseCalendars = null;
         if(calendar != null && calendar.length()>0)

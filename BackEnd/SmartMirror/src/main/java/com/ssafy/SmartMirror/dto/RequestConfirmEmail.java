@@ -13,4 +13,5 @@ public class RequestConfirmEmail {
 
     private String email;
     private String token;
+
 }
