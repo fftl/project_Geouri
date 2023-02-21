@@ -174,6 +174,7 @@ public class MirrorController {
                 .nickname(member.getNickname())
                 .birth(member.getBirth())
                 .kidsMode(member.isKidsMode())
+                .noticeMode(member.isNoticeMode())
                 .widget(responseWidget)
                 .playlist(playlist)
                 .calendarUrl(calendar)
