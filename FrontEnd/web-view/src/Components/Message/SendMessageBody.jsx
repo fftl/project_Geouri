@@ -17,25 +17,33 @@ const SendMessageBody = () => {
     const userKey = localStorage.getItem('userKey');
 
     const [sendTo, setSendTo] = useState("");
+    const [sendToName, setSendToName] = useState("");
     const [text, setText] = useState("");
 
     const changeText = (e) => {
         setText(e.target.value);
     }
     const changeSendTo = (e) => {
-        setSendTo(e.currentTarget.value);
+        const data = JSON.parse(e.target.value);
+        setSendTo(data.memberKey);
+        setSendToName(data.nickname);
     }
 
     const sendMsg = (e) => {
         e.preventDefault();
         api.post('/web/sendMessage', {
-            headers: {
-                "user-key": userKey,
-            },
             member_key_from: member_key,
             member_key_to: sendTo,
             content: text,
-        }).then(() => {
+            member_name_from: sendToName,
+        }, 
+        {
+            headers: {
+                "user-key": userKey,
+            },
+        },
+
+        ).then(() => {
             window.alert('성공적으로 메시지를 보냈습니다.');
             navigate(-1);
         }).catch((err) => {
@@ -49,11 +57,18 @@ const SendMessageBody = () => {
             <div className="send-to-whom-div">
                 <label className="send-to-label" htmlFor="sendTo">누구에게 보내실건가요?</label>
                 <div>
-                  <select name="sendTo" id="sendTo" onChange={changeSendTo}>
+                  <select 
+                    name="sendTo" 
+                    id="sendTo" 
+                    onChange={changeSendTo}>
                     <option value="">선택</option>
                     {memberList?.map((x) => {
                         return (
-                            <option key={x.memberKey} value={x.memberKey}>{x.nickname}</option>
+                            <option 
+                                key={x.memberKey} 
+                                value={JSON.stringify(x)}>
+                                    {x.nickname}
+                            </option>
                         )
                     })}
                   </select>

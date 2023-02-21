@@ -20,6 +20,7 @@ function MemberPage () {
   const member = useSelector((state) => state?.user?.member);
   
   const [kidsMode, setKidsMode] = useState();
+  const [noticeMode, setNoticeMode] = useState();
   const [region, setRegion] = useState();
   const [youtubeMode, setYoutubeMode] = useState();
   const [youtubeLink, setYoutubeLink] = useState();
@@ -28,14 +29,13 @@ function MemberPage () {
   const [newsMode, setNewsMode] = useState();
   
   const changeMode = (tar, val) => {
-    console.log(tar, val)
     api.put("/web/widget", {
-      headers:{
-        "member-key" : member?.memberKey,
-        "Content-Type": "text/plain",
-      },
       cmd: tar,
       value: val
+    }, {
+      headers:{
+        "member-key" : member?.memberKey,
+      },
     }).then(() => {
       window.alert('위젯 설정이 변경되었습니다.');
     }).catch((err) => {
@@ -46,6 +46,10 @@ function MemberPage () {
   const changeKidsMode = () => {
     setKidsMode(!kidsMode);
     changeMode('kidsMode', String(!kidsMode));
+  }
+  const changeNoticeMode = () => {
+    setNoticeMode(!noticeMode);
+    changeMode('noticeMode', String(!noticeMode));
   }
   const changeYoutubeMode = () => {
     setYoutubeMode(!youtubeMode);
@@ -74,6 +78,7 @@ function MemberPage () {
   useEffect(() => {
     if(member){
       setKidsMode(member?.kidsMode);
+      setNoticeMode(member?.widget?.noticeMode);
       setRegion(member?.region);
       setYoutubeLink(member?.playlist);
       setYoutubeMode(member?.widget?.playlist);
@@ -136,6 +141,27 @@ function MemberPage () {
               </label>
             }
           </div>
+          {/* 안부 추적 */}
+          <div className="toggle-box">
+            {member?.widget?.noticeMode === true || noticeMode === true? 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    defaultChecked
+                    onChange={changeNoticeMode}/>
+                </label>
+                : 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    onChange={changeNoticeMode}/>
+                </label>
+              }
+          </div>
           <div 
             className="photo-book-link"
             onClick={naviagteToPhotoBook}>
@@ -183,6 +209,27 @@ function MemberPage () {
                   onChange={changeKidsMode}/>
               </label>
             }
+          </div>
+          {/* 안부 추적 */}
+          <div className="toggle-box">
+            {member?.widget?.noticeMode === true || noticeMode === true? 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    defaultChecked
+                    onChange={changeNoticeMode}/>
+                </label>
+                : 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    onChange={changeNoticeMode}/>
+                </label>
+              }
           </div>
           {/* 위치정보 */}
           <div className="link-label">

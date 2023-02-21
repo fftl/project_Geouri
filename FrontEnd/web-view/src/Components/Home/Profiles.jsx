@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@mui/material";
-import Profile from "./Profile";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./Profile.css";
-import HomeHeader from "./HomeHeader";
 import { userActions } from "../../Redux/modules/user";
+import axios from "axios";
+import Profile from "./Profile";
+import HomeHeader from "./HomeHeader";
+import "./Profile.css";
+import { Button } from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const api = axios.create({
   baseURL : 'http://i8a201.p.ssafy.io'
@@ -36,10 +37,6 @@ function Profiles() {
   }, []);
   
   const navigate = useNavigate();
-  const handleAddMemberClick = (e) => {
-    e.preventDefault();
-    navigate('/member/add');
-  }
 
   const handleClick = (e) => {
     e.preventDefault();
