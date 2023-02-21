@@ -6,13 +6,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Profile.css";
 import HomeHeader from "./HomeHeader";
+import { userActions } from "../../Redux/modules/user";
 
 const api = axios.create({
   baseURL : 'http://i8a201.p.ssafy.io'
 }, {withCredentials: true})
 
 function Profiles() {
+  const dispatch = useDispatch();
   const [memberList, setMemberList] = useState([]);
+
   // const userKey = localStorage.getItem('userKey');
   const serialNumber = localStorage.getItem('serialNumber');
   // const serialNumber = "8DLL-44yh-x7vB-VuWK";
@@ -26,6 +29,7 @@ function Profiles() {
       }
     }).then((response) => {
       setMemberList(response?.data?.data?.memberList);
+      dispatch(userActions.setMemberList(response?.data?.data?.memberList));
     }).catch((err) => {
       console.log(err);
     })
@@ -47,7 +51,7 @@ function Profiles() {
       <HomeHeader type="HomeHeader"/>
       <p className="profile-list-title">멤버</p>
       <div className="profile-list">
-        {memberList.map((member) => {
+        {memberList?.map((member) => {
           return (
             <React.Fragment 
               key={member?.memberKey}>
