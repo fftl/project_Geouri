@@ -21,7 +21,7 @@ function HomeHeader (props) {
         return (
             <div className="HomeHeader">
               <div className="hamburger-button">
-                <MenuIcon onClick={openSidBar}/>
+                {/* <MenuIcon onClick={openSidBar}/> */}
               </div>
             </div>
         )

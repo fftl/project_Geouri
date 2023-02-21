@@ -66,6 +66,8 @@
 }
 .widget-title{
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 .photo-book-link{
   border-top: 1px solid lightgrey;

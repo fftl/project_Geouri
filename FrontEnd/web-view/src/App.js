@@ -1,4 +1,4 @@
-import { Home, Login, FindUser, NotFound404, MemberPage, AddMember, AddMirror, Photobook } from "./Pages";
+import { Home, Login, FindUser, NotFound404, MemberPage, AddMember, AddMirror, Photobook, SendMessage } from "./Pages";
 import SignUp from "./Pages/SignUp";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
@@ -11,11 +11,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/find-user" element={<FindUser />} />
+        <Route path="/member" element={<MemberPage />} />
+        <Route path="/message" element={<SendMessage />} />
+        <Route path="/snapshot" element={<Photobook />} />
         <Route path="/member/add" element={<AddMember />} />
         <Route path="/mirror/add" element={<AddMirror />} />
-        <Route path="/member" element={<MemberPage />} />
-        <Route path="/snapshot" element={<Photobook />} />
-        <Route path="/member" element={<MemberPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
     </div>

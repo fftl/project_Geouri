@@ -14,7 +14,7 @@ const registerUser = createAction(REGISTER_USER);
 
 //InitialState
 const initialState = {
-  user: null,
+  memberList: {},
   member: {},
   is_login: false,
   status: "idle",
@@ -67,6 +67,9 @@ export const asyncGetMember = createAsyncThunk(
     if(!response){
       throw new Error('error');
     }
+    if(response.success === false){
+      throw new Error('error');
+    }
     return response.data.data;
   }
 );
@@ -108,12 +111,15 @@ export const userSlice = createSlice({
         state.is_login = false;
       }
     },
+    setMemberList: (state, action) => {
+      state.memberList = action.payload;
+    }
   },
   // 비동기 작업의 reducers
   extraReducers: (builder) => {
     builder.addCase(asyncLogin.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.userKey = action.payload;
+        state.userKey = action.payload;
+        localStorage.setItem('userKey', action.payload);
       }
     );
     

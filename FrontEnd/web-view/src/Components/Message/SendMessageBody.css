@@ -1,0 +1,30 @@
+.send-message-title{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem auto;
+}
+
+.send-to-whom-div, .send-content-box{
+    width: 100%;
+    padding: 1rem;
+    text-align: start;
+}
+.send-to-label{
+    width: 80%;
+    margin: 0 .7rem;
+    font-weight: 600;
+}
+#sendTo{
+    width: 95%;
+    padding: .5rem ;
+    margin: .5rem ;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+.send-content-box p{
+    width: 80%;
+    margin: 0 .7rem .5rem .7rem;
+    font-weight: 600;
+
+}
