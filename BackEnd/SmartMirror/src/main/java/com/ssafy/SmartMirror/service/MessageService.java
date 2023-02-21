@@ -22,7 +22,7 @@ public class MessageService {
     }
 
     //메시지를 등록합니다.
-    public Message addMessage(String messageKeyFrom, String messageKeyTo, String content){
+    public Message addMessage(String messageKeyFrom, String messageKeyTo, String nameFrom, String nameTo,String content){
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String insertTime = formatter.format(date);
@@ -31,6 +31,8 @@ public class MessageService {
                 .memberKeyFrom(messageKeyFrom)
                 .memberKeyTo(messageKeyTo)
                 .content(content)
+                .nameFrom(nameFrom)
+                .nameTo(nameTo)
                 .time(insertTime)
                 .build();
 

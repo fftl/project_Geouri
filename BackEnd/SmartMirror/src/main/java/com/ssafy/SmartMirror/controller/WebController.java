@@ -717,7 +717,6 @@ public class WebController {
                     .data(null)
                     .build();
 
-            // 사진이 하나라도 있다면
         } else {
 
             // 사진 정보를 담을 List를 선언해주고 사진들의 순서를 섞어줍니다.
@@ -751,7 +750,13 @@ public class WebController {
     @PostMapping("/sendMessage")
     public ResponseEntity insertMessage(@RequestHeader("user-key") String userKey, @RequestBody RequestMessage requestMessage){
         ResponseDefault responseDefault = null;
-        Message message = messageService.addMessage(requestMessage.getMember_key_from(), requestMessage.getMember_key_to(), requestMessage.getContent());
+        Message message = messageService.addMessage(
+                requestMessage.getMember_key_from(),
+                requestMessage.getMember_key_to(),
+                requestMessage.getName_from(),
+                requestMessage.getName_to(),
+                requestMessage.getContent()
+        );
 
         if(message == null){
             responseDefault = ResponseDefault.builder()
