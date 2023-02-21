@@ -21,6 +21,7 @@ public class ResponseMember {
     private String birth;
     private String imgUrl;
     private boolean kidsMode;
+    private boolean noticeMode;
 
     // 위젯 정보
     private String playlist; // 링크
