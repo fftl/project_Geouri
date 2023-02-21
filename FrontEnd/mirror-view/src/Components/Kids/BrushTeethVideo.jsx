@@ -28,6 +28,8 @@ const BrushTeethVideo = (props) => {
     webSocket.send(jsonMsg);
   };
   const [teethver, setTeethver] = useState(true);
+  const [volume, setVolume] = useState(0.8);
+  const [brushingOff, setBrushingOff] = useState(false);
 
   const serialNumber = "8DLL-44yh-x7vB-VuWK";
   const memberKey = member_info?.memberKey;
@@ -41,6 +43,8 @@ const BrushTeethVideo = (props) => {
   levelApi
     .getLevel(requestBody)
     .then((res) => dispatch(mirrorActions.getLev(res.data.data)));
+
+  setBrushingOff(dispatch(mirrorActions.changeVolume));
 
   return (
     <div className="container">
@@ -63,7 +67,7 @@ const BrushTeethVideo = (props) => {
           autoPlay={true}
           playing={true}
           id="player"
-          volume={0.8}
+          volume={brushingOff ? setVolume(0) : volume(0.8)}
           onEnded={videoOff}
         />
       )}
