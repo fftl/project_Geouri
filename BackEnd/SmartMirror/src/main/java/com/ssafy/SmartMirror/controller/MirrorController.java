@@ -55,9 +55,10 @@ public class MirrorController {
     private Utils utils;
     private LevelService levelService;
     private StoryService storyService;
+    private MessageService messageService;
 
     @Autowired
-    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, HandWashingService handWashingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, ScriptDetail scriptDetail, Utils utils, LevelService levelService, StoryService storyService) {
+    public MirrorController(KidsScriptService kidsScriptService, KidsResponseService kidsResponseService, MemberService memberService, MirrorService mirrorService, WidgetService widgetService, PlaylistService playlistService, CalendarService calendarService, RegionService regionService, DongCodeService dongCodeService, BrushingService brushingService, HandWashingService handWashingService, FireBaseService fireBaseService, VisitService visitService, NewsService newsService, SnapshotService snapshotService, QuizService quizService, FortuneService fortuneService, ScriptDetail scriptDetail, Utils utils, LevelService levelService, StoryService storyService, MessageService messageService) {
         this.kidsScriptService = kidsScriptService;
         this.kidsResponseService = kidsResponseService;
         this.memberService = memberService;
@@ -79,6 +80,7 @@ public class MirrorController {
         this.utils = utils;
         this.levelService = levelService;
         this.storyService = storyService;
+        this.messageService = messageService;
     }
 
     /* ***************************** Member ***************************** */
@@ -115,6 +117,8 @@ public class MirrorController {
         String calendar = calendarService.findByMemberKey(memberKey); // 캘린더
         String dongCode = dongCodeService.findByMemberKey(memberKey); // 지역
         String fortune = fortuneService.getFortune(memberKey); // 포춘
+        int messageCnt = messageService.getMessage(memberKey).size();
+
 
         List<ResponseCalendar> responseCalendars = null;
         if(calendar != null && calendar.length()>0)
@@ -183,6 +187,7 @@ public class MirrorController {
                 .fortune(fortune)
                 .level(responseLevel)
                 .lastVisit(lastVisit)
+                .messageCnt(messageCnt)
                 .build();
 
         responseDefault = ResponseDefault.builder()
