@@ -695,24 +695,22 @@ async function takePicture() {
     args: [serialNumber, current_user]
   };
 
-  PythonShell.PythonShell.run('capture_img_db.py', options, await function (err, results) {
+  PythonShell.PythonShell.run('capture_img_db.py', options, async function (err, results) {
     if (err) throw err;
     console.log('results: %j', results);
 
     const parsedata = JSON.parse(results);
     console.log(parsedata)
+    await new Promise((resolve, reject) => setTimeout(resolve, 8000));
+
 
     var data = {
       "cmd": "photo_taken",
       "content": parsedata.data,
     }
-
+    console.log("사진 촬영 끝");
     wss.broadcast(JSON.stringify(data));
   });
-
-  await new Promise((resolve, reject) => setTimeout(resolve, 8000));
-
-  console.log("사진 촬영 끝");
 }
 
 
