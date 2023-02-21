@@ -347,9 +347,12 @@ function currentStatusCheck(voicedata) {
           body: {
             "serialNumber": serialNumber,
             "memberKey": current_user,
-            "reqKey": 0,
-            "type": 7,
+            "reqKey": 67,
+            "type": 6,
             "reaction": 1
+            // "reqKey": 0,
+            // "type": 7,
+            // "reaction": 1
           },
           json: true,
         };
