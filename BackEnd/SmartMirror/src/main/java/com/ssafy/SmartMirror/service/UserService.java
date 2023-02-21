@@ -6,6 +6,8 @@ import com.ssafy.SmartMirror.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private UserRepository userRepository;
@@ -48,5 +50,10 @@ public class UserService {
     public User findByEmailAndPassword(String email, String password) {
         User user = userRepository.findByEmailAndPassword(email, password);
         return user;
+    }
+
+    public List<User> findAllByNoticeMode(boolean noticeMode) {
+        List<User> userList = userRepository.findAllByNoticeMode(noticeMode);
+        return userList;
     }
 }

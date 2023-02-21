@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@RequestMapping("/mirror")
-@RestController
 public class MirrorController {
 
     static final int START = 0;         // 시작

@@ -23,6 +23,7 @@ public class User {
     private String tel;
     private String birth;
     private String pwdToken;
+    private boolean noticeMode;
 
     @OneToMany(mappedBy = "user")
     private List<Member> memberList = new ArrayList<>();
