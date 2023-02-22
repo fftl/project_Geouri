@@ -479,8 +479,8 @@ function mirrorCall() {
 
       console.log("face_name => ", results);
       const face_name = results[0];
-      current_user = face_name;
-      // current_user = "fSBS-lCHb";
+      // current_user = face_name;
+      current_user = "nh3b-494F";
 
 
       personFrontOfMirror = true;
@@ -701,15 +701,14 @@ async function takePicture() {
 
     const parsedata = JSON.parse(results);
     console.log(parsedata)
-    await new Promise((resolve, reject) => setTimeout(resolve, 8000));
-
-
     var data = {
       "cmd": "photo_taken",
       "content": parsedata.data,
     }
     console.log("사진 촬영 끝");
     wss.broadcast(JSON.stringify(data));
+
+  await new Promise((resolve, reject) => setTimeout(resolve, 8000));
   });
 }
 
@@ -717,8 +716,8 @@ async function takePicture() {
 // status 0 : 질문을 물어보는 단계, 1: 질문을 받는 단계?
 function quiz(voicedata) {
 
-  const quiz_wrong_reply = ["다시 생각해보자~", "아닌것 같아, 다시 생각해보자."];
-  const quiz_correct_reply = ["정답이야! 잘 맞추는걸?", "정답이야!"]
+  const quiz_wrong_reply = ["아닌것 같아, 다시 생각해보자."];
+  const quiz_correct_reply = ["정답이야! 잘 맞추는걸?"]
   //퀴즈 정보를 받아온 후, 음성 출력
   if (quizMode == 0) {
 
