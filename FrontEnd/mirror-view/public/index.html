@@ -38,7 +38,6 @@
     var flag = 0;
 
     async function init() {
-      console.log("작동되긴함?")
       const modelURL = url + "model.json";
       const metadataURL = url + "metadata.json";
       model = await tmPose.load(modelURL, metadataURL); //모델 불러오기
@@ -74,7 +73,7 @@
         brushing_off = 0;
         brushing_on = 0;
         cameraOff(webcam);
-      }, 10000);
+      }, 3000);
 
       // append/get elements to the DOM
       var canvas = document.getElementById("canvas");
