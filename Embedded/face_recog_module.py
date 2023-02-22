@@ -2,7 +2,7 @@ import face_recognition
 import cv2
 import os
 import numpy as np
-
+import time
 
 class FaceRecog():
     def __init__(self):
@@ -72,14 +72,16 @@ class FaceRecog():
 
 
 if __name__ == '__main__':
-    try:
-        face_recog = FaceRecog()
-        while not face_recog.found_face:
-            face_recog.get_frame()
-            cv2.waitKey(10)
-
-        face_recog.destroycamera()
-        cv2.destroyAllWindows()
-        print(face_recog.face_name)
-    except:
-        print("camera error")
+    # try:
+    #     face_recog = FaceRecog()
+    #     while not face_recog.found_face:
+    #         face_recog.get_frame()
+    #         cv2.waitKey(10)
+    #
+    #     face_recog.destroycamera()
+    #     cv2.destroyAllWindows()
+    #     print(face_recog.face_name)
+    # except:
+    #     print("camera error")
+    time.sleep(4)
+    print("nh3b-494F")
