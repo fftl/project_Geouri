@@ -5,11 +5,10 @@ import Photolist from "../Components/Photo/Photolist";
 const Photobook = () => {
 
   return (
-    <>
-      {/* <Photolist /> */}
+    <div className="container">
       <HomeHeader type="BasicHeader"/>
       <Photolist />
-    </>
+    </div>
   );
 };
 

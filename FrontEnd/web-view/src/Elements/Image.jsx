@@ -23,6 +23,26 @@ function Image(props){
             </div>
         )
     }
+    if ( type === 'photo' ) {
+        return (
+            <div 
+                className="photo-item-image"
+                onClick={onClick}
+                style={{
+                    backgroundImage:`url(${imgUrl})`}}>
+
+            </div>
+        )
+    }
+    if ( type === 'photo_bigger' ){
+        console.log('a')
+        return (
+            <div 
+                className="photo-item-bigger-image"
+                style={{
+                    backgroundImage:`url(${imgUrl})`}}></div>
+        )
+    }
 }
 
 export default Image;

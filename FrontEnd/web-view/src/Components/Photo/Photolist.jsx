@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Photolist.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { Dimmer, Image } from "../../Elements";
+import PhotoItem from "./PhotoItem";
+import CloseIcon from '@mui/icons-material/Close';
 
 const api = axios.create(
   {
@@ -10,33 +14,49 @@ const api = axios.create(
 );
 
 const Photolist = () => {
-  const [url, setUrl] = useState(null);
+  const member = useSelector((state) => state?.user?.member)
   const [memberKey, setMemberKey] = useState("fSBS-lCHb");
   const [list, setList] = useState([]);
   const [imageList, setImageList] = useState([]);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openPhotoUrl, setOpenPhotoUrl] = useState("");
 
   const [currentIndex, setCurrentIndex] = useState(0);
   
-    // api 통신으로 사진 url 리스트 받아옴
-    useEffect(() => {
-      api
-        .get("web/snapShot/all", {
-          headers: {
-            "member-key": memberKey,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          const data = response.data.data;
-          setList((prev) => [...prev, ...data]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, []);
+  const changeModal = () => {
+    if(openModal){
+      setOpenModal(false)
+    }else{
+      setOpenModal(true)
+    }
+  }
+  // api 통신으로 사진 url 리스트 받아옴
+  useEffect(() => {
+    api
+      .get("web/snapShot/all", {
+        headers: {
+          "member-key": memberKey,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        const data = response.data.data;
+        setList((prev) => [...prev, ...data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
+  useEffect(() => {
+    if(openModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [openModal]);
+  
   // const handlePrevClick = () => {
   //   setCurrentIndex((currentIndex + imageList.length - 1) % imageList.length);
 
@@ -121,9 +141,59 @@ const Photolist = () => {
   // );
 
   return (
-    <div>
-      
-    </div>
+    <>
+      <div>
+        <div className="member-header">
+          <Image type="member" src={member?.imgUrl}/>
+          <div className="is_flex">
+            <p style={{alignItems:'center', display:'flex'}}>{member?.nickname}</p>
+          </div>
+        </div>
+        <div className="gallery-box">
+          {
+            list?.map((item, idx) => {
+              const created = item.created;
+              const imgUrl = item.imgUrl;
+              const memberKey = item.memberKey;
+
+              return (
+                <PhotoItem 
+                  key={idx} 
+                  created={created} 
+                  imgUrl={imgUrl} 
+                  memberKey={memberKey}
+                  setOpenModal={setOpenModal}
+                  setOpenPhotoUrl={setOpenPhotoUrl}
+                  openPhotoUrl={openPhotoUrl}/>
+              )
+            })
+          }
+        </div>
+        {openModal &&
+        <>
+          <Dimmer onClick={() => changeModal()} />
+          <div 
+            style={{
+              width:"fit-content", 
+              height:"fit-content", 
+              zIndex:"200", 
+              position:"fixed", 
+              right:"0", 
+              left:"0",
+              margin:"0 auto",
+              bottom:"300px",
+            }}
+            onClick={e => e.stopPropagation()}
+            >
+              <div 
+                className="close-icon"
+                onClick={() => changeModal()}><CloseIcon /></div>
+              <Image type="photo_bigger" imgUrl={openPhotoUrl}/>
+            </div>
+        </>
+        }
+      </div>
+    </>
   )
 };
 

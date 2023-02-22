@@ -129,7 +129,6 @@ export const userSlice = createSlice({
     // asyncGetMember
     builder.addCase(asyncGetMember.pending, (state) => {
       state.member = {};
-      console.log('pending');
     });
     builder.addCase(asyncGetMember.fulfilled, (state, action) => {
       state.member = action.payload;
@@ -140,7 +139,6 @@ export const userSlice = createSlice({
 
     //signup
     builder.addCase(signup.pending, (state, action) => {
-      console.log("pending");
     });
     builder.addCase(signup.fulfilled, (state, action) => {
       state.signupDone = true;

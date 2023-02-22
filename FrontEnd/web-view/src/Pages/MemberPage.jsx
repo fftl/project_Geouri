@@ -78,7 +78,7 @@ function MemberPage () {
   useEffect(() => {
     if(member){
       setKidsMode(member?.kidsMode);
-      setNoticeMode(member?.widget?.noticeMode);
+      setNoticeMode(member?.noticeMode);
       setRegion(member?.region);
       setYoutubeLink(member?.playlist);
       setYoutubeMode(member?.widget?.playlist);
@@ -139,11 +139,11 @@ function MemberPage () {
                 <span className="widget-title">아이모드</span>
                 <input type="checkbox" role="switch" onClick={changeKidsMode}/>
               </label>
-            }
+          }
           </div>
           {/* 안부 추적 */}
           <div className="toggle-box">
-            {member?.widget?.noticeMode === true || noticeMode === true? 
+            {member?.noticeMode === true? 
                 <label className="toggle-label link-label">
                   <span className="widget-title">안부 모드</span>
                   <input 

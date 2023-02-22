@@ -22,7 +22,6 @@ function Profiles() {
   // const userKey = useSelector((state) => state.user.userKey);
 
   useEffect(() => {
-    console.log('memberList get')
     api.get('/web/user/memberlist', {
       headers: {
         "user-key": userKey,
