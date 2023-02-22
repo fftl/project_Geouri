@@ -22,11 +22,14 @@ function Join(props) {
   const [name, setName] = useState("");
   const [birthday, setBirthday] = useState("");
   const [checked, setChecked] = useState(false);
+  const [mobile, setMobile] = useState();
 
   const onEmailHandler = useCallback((e) => {
     setEmail(e.target.value);
   });
-
+  const onMobileHandler = useCallback((e) => {
+    setMobile(e.target.value);
+  });
   const onPasswordHandler = useCallback((e) => {
     setPassword(e.target.value);
   });
@@ -36,7 +39,6 @@ function Join(props) {
   const onNameHandler = useCallback((e) => {
     setName(e.target.value);
   });
-  //생년월일 8자리로 입력 받을건지?? String?
   const onBirthdayHandler = useCallback((e) => {
     setBirthday(e.target.value);
   });
@@ -57,6 +59,7 @@ function Join(props) {
         confirmPassword: confirmPassword,
         name: name,
         birthday: birthday,
+        mobile: mobile,
         checked: checked,
       };
       if (!checked){
@@ -74,7 +77,7 @@ function Join(props) {
       //   }
       // });
     },
-    [email, password, name]
+    [email, password, name, birthday, mobile]
   );
 
   return (
@@ -133,13 +136,24 @@ function Join(props) {
                 onChange={onBirthdayHandler}/>
             </div>
           </div>
+          <div className="input-box">
+            <label htmlFor="mobile">휴대폰번호</label>
+            <div className="input-div">
+              <input 
+                id="mobile" name="mobile" type="number" 
+                value={mobile} required
+                onChange={onMobileHandler}/>
+            </div>
+          </div>
           <div className="term-div">
             <p>이용약관, 개인정보 수집 및 이용,위치정보 이용약관(선택),<br/> 프로모션 안내 메일 수신(선택)에 모두 동의합니다.</p>
           </div>
         </div>
         <div className="agree_div">
-          <input type="checkbox" onChange={onCheckedHandler}></input>
-          <label htmlFor="check">동의합니다</label>
+          <div className="agree_inner_div">
+            <input id="agree_checkbox" type="checkbox" onChange={onCheckedHandler}></input>
+            <label htmlFor="check">동의합니다</label>
+          </div>
         </div>
         <div className="login-btn-box">
           {email.trim() != "" && password.trim() != "" && confirmPassword.trim() != "" && birthday.trim() != "" && name.trim() != "" ? 

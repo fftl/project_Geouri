@@ -20,7 +20,7 @@
   padding-bottom: 20px;
 }
 
-#password, #password_check, #name, #birthday {
+#password, #password_check, #name, #birthday, #mobile {
   border: none;
   width: 100%;
   height: 100%;
@@ -35,4 +35,14 @@
   color: #808080;
 }
 .agree_div {
+  display: flex;
+  align-items: center;
+}
+.agree_inner_div{
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+#agree_checkbox{
+  margin-right: .5rem;
 }

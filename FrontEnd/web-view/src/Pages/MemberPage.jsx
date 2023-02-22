@@ -241,9 +241,9 @@ function MemberPage () {
                   type="text" 
                   placeholder="시군동을 입력해주세요" 
                   defaultValue={`${member?.region?.sidoName} ${member?.region?.gugunName} ${member?.region?.dongName}`} />
-                <Button 
-                  onClick={changeLocationLink}
-                  style={{margin:"0", padding:"0"}}>수정</Button>
+                <button 
+                  className="edit_btn"
+                  onClick={changeLocationLink}>수정</button>
 
               </div>
               {/* <div onClick={setOpenLocationModal}>위치</div>
@@ -273,11 +273,11 @@ function MemberPage () {
                   defaultValue={youtubeLink}
                   onChange={(e) => setYoutubeLink(e.target.value)}
                   placeholder="youtube 재생목록 링크를 적어주세요."/>
-                <div style={{width:'100%', display:'flex', justifyContent:'end'}}>
-                  <Button 
-                    onClick={changeYoutubeLink}
-                    style={{margin:"0", paddingRight:"0", paddingLeft:"0"}}>수정</Button>
-                </div>
+                {/* <div style={{width:'100%', display:'flex', justifyContent:'end'}}> */}
+                  <button 
+                    className="edit_btn"
+                    onClick={changeYoutubeLink}>수정</button>
+                {/* </div> */}
               </>
                 : 
                 <label className="toggle-label">
@@ -330,11 +330,11 @@ function MemberPage () {
                 defaultValue={calenderLink}
                 onChange={(e) => setCalendarLink(e.target.value)}
                 placeholder="달력 공유 링크를 적어주세요."/>
-              <div style={{width:'100%', display:'flex', justifyContent:'end'}}>
-                <Button 
-                  onClick={changeCalendarLink}
-                  style={{margin:"0", paddingRight:"0", paddingLeft:"0"}}>수정</Button>
-              </div>
+              {/* <div style={{width:'100%', display:'flex', justifyContent:'end'}}> */}
+                <button 
+                  className="edit_btn"
+                  onClick={changeCalendarLink}>수정</button>
+              {/* </div> */}
               </>
               : 
               <label className="toggle-label link-label">
