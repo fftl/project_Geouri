@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { useSelector } from "react-redux";
 
 const KidsMessage = () => {
-  useEffect(() => {});
-
+  const member = useSelector((state) => state?.mirror?.member);
+  const msgCnt = member?.messageCnt;
+  const msgStyle = { display: "flex", float: "right" };
   return (
-    <>
+    <div style={msgStyle}>
       <MailOutlineIcon />
-    </>
+      {msgCnt}
+    </div>
   );
 };
 
