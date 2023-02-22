@@ -513,6 +513,7 @@ public class WebController {
                 .calendarUrl(calUrl)
                 .calender(responseCalendars)
                 .kidsMode(member.isKidsMode())
+                .noticeMode(member.isNoticeMode())
                 .widget(responseWidget)
                 .region(responseRegion)
                 .build();
