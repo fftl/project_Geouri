@@ -587,8 +587,16 @@ public class MirrorController {
      * 멤버키를 통해서 읽지않은 메시지 목록 가져오기
      * */
     @GetMapping("/getMessage")
-    public ResponseEntity getMessage(@RequestParam("memberKey") String memberKey){
+    public ResponseEntity getMessage(@RequestBody RequestInfo requestInfo){
         ResponseDefault responseDefault = null;
+
+        //멤버의 유효성 검사
+        String serialNumber = requestInfo.getSerialNumber();
+        String memberKey = requestInfo.getMemberKey();
+        if(!utils.isValidAccess(serialNumber, memberKey)) {
+            return new ResponseEntity("유효하지 않은 접근입니다. (멤버키 없음, 거울없음, 불일치)",HttpStatus.OK);
+        }
+
         List<Message> message = messageService.getMessage(memberKey);
         if(message == null){
             return errorResponse("메시지가 없습니다.");
