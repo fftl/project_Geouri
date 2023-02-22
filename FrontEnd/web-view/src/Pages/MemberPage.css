@@ -46,7 +46,7 @@
     border-color: #007be5;
 }
 #youtube-link-input, #calendar-link-input{
-  width: 88.5%;
+  width: 100%;
 }
 
 .widget-input{
@@ -85,6 +85,11 @@
 .edit_btn{
   border: none;
   background-color: transparent;
-  margin: .25rem 0 .25rem 1px;
+  /* position: absolute; */
+  margin: .5rem 0 .5rem 0;
+  /* right: 0; */
   color: #007be5;
+}
+#location-input{
+  width: 70%;
 }
