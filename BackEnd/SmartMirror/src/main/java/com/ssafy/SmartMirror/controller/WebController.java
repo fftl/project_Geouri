@@ -72,6 +72,7 @@ public class WebController {
 
         // email 과 password 에 맞는 계정이 있는지 확인
         User user = userService.findByEmailAndPassword(email, password);
+        Mirror getMirror = mirrorService.findByUser(user);
 
         // 해당 유저의 유저키 반환
         if(user == null) {
@@ -83,7 +84,9 @@ public class WebController {
         } else {
             ResponseLogin responseLogin = ResponseLogin.builder()
                     .userKey(user.getUserKey())
+                    .serialNumber(getMirror.getSerialNumber())
                     .build();
+
             responseDefault = ResponseDefault.builder()
                     .success(true)
                     .msg(null)

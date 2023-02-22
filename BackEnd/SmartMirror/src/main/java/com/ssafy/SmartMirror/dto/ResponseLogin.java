@@ -9,4 +9,5 @@ import lombok.*;
 @Builder
 public class ResponseLogin {
     private String userKey;
+    private String serialNumber;
 }
