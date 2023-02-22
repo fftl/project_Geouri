@@ -43,6 +43,7 @@ const Socket = (props) => {
       }, 3000);
     }
     else if (msg.cmd === 'photo_taken') {
+      console.log("받음.")
       dispatch(mirrorActions.getPhoto(msg));
     }
     else {

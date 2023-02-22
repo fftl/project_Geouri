@@ -40,6 +40,9 @@ var user_data = {
   },
 };
 
+const wait = (timeToDelay) => new Promise((resolve) => {
+  setTimeout(resolve, timeToDelay);
+  console.log(timeToDelay+"초 기다리는중");})
 
 
 //접속되어 있는 모든 클라이언트들에게 동일한 메세지를 보내는 함수
@@ -98,7 +101,7 @@ wss.on('connection', function (ws, request) {
     //양치가 끝나면,3 초후 사진을 찍은 다음 평시 상황으로 돌아간다.
     else if (command === "brush_teeth_finish") {
       await takePicture();
-
+      await wait(12000);
       var data = {
         "cmd": "default",
         "content": "",
@@ -428,7 +431,7 @@ function afterStatusCheck() {
     // 이제 양치를 시작해보자~ 라고 말할때 잠시 대기
     setTimeout(() => {
       wss.broadcast(JSON.stringify(data));
-    }, 6000);
+    }, 8000);
   }
 
   else if (currentStatus == 8) {
@@ -686,8 +689,13 @@ function answerAndReply(reaction) {
 
 
 async function takePicture() {
-  console.log("사진 촬영 시작");
-  await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+
+
+
+
+  await wait(3000);
+
+
   var options = {
     mode: 'text',
     pythonPath: process.env.PYTHON_PATH,
@@ -697,8 +705,6 @@ async function takePicture() {
 
   PythonShell.PythonShell.run('capture_img_db.py', options, async function (err, results) {
     if (err) throw err;
-    console.log('results: %j', results);
-
     const parsedata = JSON.parse(results);
     console.log(parsedata)
     var data = {
@@ -707,8 +713,7 @@ async function takePicture() {
     }
     console.log("사진 촬영 끝");
     wss.broadcast(JSON.stringify(data));
-
-  await new Promise((resolve, reject) => setTimeout(resolve, 8000));
+    
   });
 }
 
