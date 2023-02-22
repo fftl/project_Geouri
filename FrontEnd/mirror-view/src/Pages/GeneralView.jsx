@@ -3,13 +3,14 @@ import NewsPlayer from "../Components/NewsPlayer/NewsPlayer";
 import Schedule from "../Components/Schedule/Schedule";
 import './Home.css';
 import { useSelector } from "react-redux";
-import { FortuneTeller, HomeHeader } from "../Components";
+import { HomeHeader, FortuneTeller } from "../Components";
 
 function GeneralView(props) {
     const { webSocket } = props;
     const member_info_widget = useSelector((state) => state?.mirror?.member?.widget);
     const fortune = useSelector((state) => state?.mirror?.member?.fortune);
     const no_calendar = member_info_widget?.calender;
+
     
     return (
         <>
