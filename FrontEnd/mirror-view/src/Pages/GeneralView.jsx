@@ -8,8 +8,7 @@ import { HomeHeader, FortuneTeller } from "../Components";
 function GeneralView(props) {
     const { webSocket } = props;
     const member_info_widget = useSelector((state) => state?.mirror?.member?.widget);
-    // const fortune = useSelector((state) => state?.mirror?.member?.fortune);
-    const fortune = '이 고비를 잘 넘겨야 합니다.'
+    const fortune = useSelector((state) => state?.mirror?.member?.fortune);
     const no_calendar = member_info_widget?.calender;
 
     
