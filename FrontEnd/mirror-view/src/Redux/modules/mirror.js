@@ -14,17 +14,17 @@ const mirrorSlice = createSlice({
         shot: false,
         calender: false,
       },
-      playlist: "",
-      calender: [],
+      playlist:
+        "",
+      calender:[],
       region: {
         sidoName: "서울시",
         gugunName: "강남구",
         dongName: "역삼동",
         lng: 127.03,
-        lat: 37.5,
+        lat: 37.500,
       },
       news: [],
-      messageCnt: null,
     },
     message: "",
     content: "",
@@ -33,8 +33,7 @@ const mirrorSlice = createSlice({
     level: null,
     point: null,
     levelUp: null,
-    image: "",
-    brushingOff: null,
+    image: '',
   },
 
   reducers: {
@@ -70,7 +69,7 @@ const mirrorSlice = createSlice({
       state.action = "";
       state.image = "";
     },
-    getPhoto(state, action) {
+    getPhoto(state, action){
       state.action = action.payload.cmd;
       state.image = action.payload.content;
     },
@@ -78,12 +77,6 @@ const mirrorSlice = createSlice({
       state.level = action.payload.lv;
       state.point = action.payload.exp;
       state.levelUp = action.payload.levelUp;
-    },
-    changeVolume(state, action) {
-      state.brushingOff = action.payload;
-    },
-    getMsgCnt(state, action) {
-      state.messageCnt = action.payload.messageCnt;
     },
   },
 });
