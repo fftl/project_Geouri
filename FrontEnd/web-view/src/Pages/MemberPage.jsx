@@ -5,36 +5,81 @@ import { HomeHeader } from "../Components";
 import { Image, Text } from "../Elements";
 import './MemberPage.css';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import axios from "axios";
+import { Button } from "@mui/material";
 // import DaumPostcode from 'react-daum-postcode';
 
+const api = axios.create({
+  baseURL : 'http://i8a201.p.ssafy.io'
+}, {withCredentials: true})
+
 function MemberPage () {
+  const navigate = useNavigate();
+
   // 현재 멤버의 정보 
   const member = useSelector((state) => state?.user?.member);
   
   const [kidsMode, setKidsMode] = useState();
+  const [noticeMode, setNoticeMode] = useState();
+  const [region, setRegion] = useState();
   const [youtubeMode, setYoutubeMode] = useState();
   const [youtubeLink, setYoutubeLink] = useState();
   const [calenderMode, setCalendarMode] = useState();
   const [calenderLink, setCalendarLink] = useState();
   const [newsMode, setNewsMode] = useState();
   
+  const changeMode = (tar, val) => {
+    api.put("/web/widget", {
+      cmd: tar,
+      value: val
+    }, {
+      headers:{
+        "member-key" : member?.memberKey,
+      },
+    }).then(() => {
+      window.alert('위젯 설정이 변경되었습니다.');
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
   //click하면 value change
   const changeKidsMode = () => {
     setKidsMode(!kidsMode);
+    changeMode('kidsMode', String(!kidsMode));
+  }
+  const changeNoticeMode = () => {
+    setNoticeMode(!noticeMode);
+    changeMode('noticeMode', String(!noticeMode));
   }
   const changeYoutubeMode = () => {
     setYoutubeMode(!youtubeMode);
+    changeMode('youtube', String(!youtubeMode));
   }
   const changeNewsMode = () => {
     setNewsMode(!newsMode);
+    changeMode('news', String(!newsMode));
   }
   const changeCalendarMode = () => {
     setCalendarMode(!calenderMode);
+    changeMode('calender', String(!calenderMode));
   }
-
+  const changeLocationLink = (e) => {
+    e.preventDefault();
+    changeMode('region', region);
+  }
+  const changeYoutubeLink = (e) => {
+    e.preventDefault();
+    changeMode('playlist', youtubeLink)
+  }
+  const changeCalendarLink = (e) => {
+    e.preventDefault();
+    changeMode('calendarUrl', calenderLink)
+  }
   useEffect(() => {
     if(member){
       setKidsMode(member?.kidsMode);
+      setNoticeMode(member?.widget?.noticeMode);
+      setRegion(member?.region);
       setYoutubeLink(member?.playlist);
       setYoutubeMode(member?.widget?.playlist);
       setNewsMode(member?.widget?.news);
@@ -44,7 +89,9 @@ function MemberPage () {
     }
   }, [member]);
   
-  const navigate = useNavigate();
+  const navigateToMsgPage = () => {
+    navigate('/message');
+  }
   const naviagteToPhotoBook = (e) => {
     e.preventDefault();
     navigate('/snapshot');
@@ -94,6 +141,27 @@ function MemberPage () {
               </label>
             }
           </div>
+          {/* 안부 추적 */}
+          <div className="toggle-box">
+            {member?.widget?.noticeMode === true || noticeMode === true? 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    defaultChecked
+                    onChange={changeNoticeMode}/>
+                </label>
+                : 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    onChange={changeNoticeMode}/>
+                </label>
+              }
+          </div>
           <div 
             className="photo-book-link"
             onClick={naviagteToPhotoBook}>
@@ -142,15 +210,42 @@ function MemberPage () {
               </label>
             }
           </div>
+          {/* 안부 추적 */}
+          <div className="toggle-box">
+            {member?.widget?.noticeMode === true || noticeMode === true? 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    defaultChecked
+                    onChange={changeNoticeMode}/>
+                </label>
+                : 
+                <label className="toggle-label link-label">
+                  <span className="widget-title">안부 모드</span>
+                  <input 
+                    type="checkbox" 
+                    role="switch"
+                    onChange={changeNoticeMode}/>
+                </label>
+              }
+          </div>
           {/* 위치정보 */}
           <div className="link-label">
             <div className="toggle-box is_flex">
               <div className="widget-title">위치</div>
-              <input 
-                className="widget-input"
-                type="text" 
-                placeholder="시군동을 입력해주세요" 
-                defaultValue={`${member?.region?.sidoName} ${member?.region?.gugunName} ${member?.region?.dongName}`} />
+              <div>
+                <input 
+                  className="widget-input"
+                  type="text" 
+                  placeholder="시군동을 입력해주세요" 
+                  defaultValue={`${member?.region?.sidoName} ${member?.region?.gugunName} ${member?.region?.dongName}`} />
+                <Button 
+                  onClick={changeLocationLink}
+                  style={{margin:"0", padding:"0"}}>수정</Button>
+
+              </div>
               {/* <div onClick={setOpenLocationModal}>위치</div>
               {openLocationModal&& 
               <DaumPostcode
@@ -176,7 +271,13 @@ function MemberPage () {
                   className="widget-input"
                   type="text" 
                   defaultValue={youtubeLink}
+                  onChange={(e) => setYoutubeLink(e.target.value)}
                   placeholder="youtube 재생목록 링크를 적어주세요."/>
+                <div style={{width:'100%', display:'flex', justifyContent:'end'}}>
+                  <Button 
+                    onClick={changeYoutubeLink}
+                    style={{margin:"0", paddingRight:"0", paddingLeft:"0"}}>수정</Button>
+                </div>
               </>
                 : 
                 <label className="toggle-label">
@@ -185,6 +286,7 @@ function MemberPage () {
                   type="checkbox" 
                   role="switch"
                   onChange={changeYoutubeMode}/>
+                  
               </label>
             }
           </div>
@@ -226,7 +328,13 @@ function MemberPage () {
                 type="text" 
                 className="widget-input"
                 defaultValue={calenderLink}
+                onChange={(e) => setCalendarLink(e.target.value)}
                 placeholder="달력 공유 링크를 적어주세요."/>
+              <div style={{width:'100%', display:'flex', justifyContent:'end'}}>
+                <Button 
+                  onClick={changeCalendarLink}
+                  style={{margin:"0", paddingRight:"0", paddingLeft:"0"}}>수정</Button>
+              </div>
               </>
               : 
               <label className="toggle-label link-label">
@@ -237,6 +345,11 @@ function MemberPage () {
                   onChange={changeCalendarMode}/>
               </label>
             }
+          </div>
+          <div 
+            className="photo-book-link"
+            onClick={navigateToMsgPage}>
+            멤버에게 메시지 보내기
           </div>
         </div>
         <div className="delete-member">멤버 삭제하기</div>
