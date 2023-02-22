@@ -12,7 +12,7 @@ const BrushTeethVideo = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       window.init();
-    }, 15000);
+    }, 2000);
     return () => {
       clearInterval(timer);
     };
