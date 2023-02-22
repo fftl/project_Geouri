@@ -1,6 +1,7 @@
 package com.ssafy.SmartMirror.service;
 
 import com.ssafy.SmartMirror.domain.Mirror;
+import com.ssafy.SmartMirror.domain.User;
 import com.ssafy.SmartMirror.repository.MirrorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,12 @@ public class MirrorService {
     public Mirror findBySerialNumber(String serialNumber) {
         // serial_number 에 해당하는 거울 정보 DB 에서 read
         Mirror mirror = mirrorRepository.findById(serialNumber).orElse(null);
+        return mirror;
+    }
+
+    public Mirror findByUser(User user) {
+        // serial_number 에 해당하는 거울 정보 DB 에서 read
+        Mirror mirror = mirrorRepository.findByUser(user);
         return mirror;
     }
 
