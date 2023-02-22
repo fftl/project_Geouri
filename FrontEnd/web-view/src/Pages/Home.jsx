@@ -6,26 +6,22 @@ import { HomeHeader, Profiles } from "../Components/index";
 
 function Home() {
   const navigate = useNavigate();
-  const is_login = sessionStorage.getItem("jwt") ? true : false;
+  const is_login = localStorage.getItem("userKey") ? true : false;
 
-  // useEffect(() => {
-  //   if (is_login) {
-  //     return (
-  //       <div className="container">
-  //         <HomeHeader />
-  //         <Profiles />
-  //       </div>
-  //     );
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, []);
-  return (
-    <div className="container">
-      <HomeHeader />
-      <Profiles />
-    </div>
-  )
+  useEffect(() => {
+    if (!is_login) {
+      navigate("/login");
+    }
+  }, []);
+
+  if(is_login) {
+    return (
+      <div className="container">
+        <HomeHeader type="HomeHeader" />
+        <Profiles />
+      </div>
+    )
+  }
 }
 
 export default Home;

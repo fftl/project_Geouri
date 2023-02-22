@@ -48,7 +48,7 @@ export const asyncLogin = createAsyncThunk(
     if(!response){
       throw new Error('err');
     }
-    return response.data.data.userKey;
+    return response.data.data;
     
   }
 );
@@ -118,8 +118,10 @@ export const userSlice = createSlice({
   // 비동기 작업의 reducers
   extraReducers: (builder) => {
     builder.addCase(asyncLogin.fulfilled, (state, action) => {
-        state.userKey = action.payload;
-        localStorage.setItem('userKey', action.payload);
+        state.userKey = action.payload.userKey;
+        console.log( action.payload)
+        localStorage.setItem('userKey', action.payload.userKey);
+        localStorage.setItem('serialNumber', action.payload.serialNumber);
       }
     );
     

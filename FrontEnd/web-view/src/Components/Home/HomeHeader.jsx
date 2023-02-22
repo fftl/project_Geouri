@@ -13,7 +13,7 @@ function HomeHeader (props) {
         navigate(-1);
     }
     const [sideBar, setSideBar] = useState(false);
-    const openSidBar = () => {
+    const openSideBar = () => {
       setSideBar(!sideBar);
     }
 
@@ -21,7 +21,7 @@ function HomeHeader (props) {
         return (
             <div className="HomeHeader">
               <div className="hamburger-button">
-                {/* <MenuIcon onClick={openSidBar}/> */}
+                {/* <MenuIcon onClick={openSideBar}/> */}
               </div>
             </div>
         )
