@@ -24,9 +24,7 @@ function App() {
         {/* 아이모드 */}
         <Route path="/kids" element={<Kids webSocket={webSocket} />} />
         {/* 일반모드 */}
-        <Route
-          path="/general"
-          element={<GeneralView webSocket={webSocket} />}
+        <Route path="/general" element={<GeneralView webSocket={webSocket} />}
         />
       </Routes>
     </React.Fragment>

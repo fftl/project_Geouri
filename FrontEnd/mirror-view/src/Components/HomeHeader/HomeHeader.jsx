@@ -144,9 +144,10 @@ function HomeHeader() {
               </div>
             </div>
               : 
-              <div style={{fontSize: '2rem', margin: '4rem'}}>
-                --
-              </div>
+              null
+              // <div style={{fontSize: '2rem', margin: '4rem'}}>
+              //   --
+              // </div>
           }
         </div>
       );
