@@ -14,7 +14,9 @@ const api = axios.create(
 );
 
 const Photolist = () => {
-  const member = useSelector((state) => state?.user?.member)
+  const member = useSelector((state) => state?.user?.member);
+  const imgUrl = "https://firebasestorage.googleapis.com/v0/b/ddok-mirror.appspot.com/o/유소영.png?alt=media";
+  const nickname = "쏘영";
   const [memberKey, setMemberKey] = useState("fSBS-lCHb");
   const [list, setList] = useState([]);
   const [imageList, setImageList] = useState([]);
@@ -144,9 +146,11 @@ const Photolist = () => {
     <>
       <div>
         <div className="member-header">
-          <Image type="member" src={member?.imgUrl}/>
+          <Image type="member" src={imgUrl}/>
+          {/* <Image type="member" src={member?.imgUrl}/> */}
           <div className="is_flex">
-            <p style={{alignItems:'center', display:'flex'}}>{member?.nickname}</p>
+            <p style={{alignItems:'center', display:'flex'}}>{nickname}</p>
+            {/* <p style={{alignItems:'center', display:'flex'}}>{member?.nickname}</p> */}
           </div>
         </div>
         <div className="gallery-box">
